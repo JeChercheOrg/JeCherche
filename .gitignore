@@ -23,7 +23,10 @@
 # misc
 .DS_Store
 *.pem
+
+# AI config (local only)
 CLAUDE.md
+AGENTS.md
 
 # debug
 npm-debug.log*
