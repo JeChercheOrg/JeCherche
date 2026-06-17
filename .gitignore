@@ -27,6 +27,7 @@
 # AI config (local only)
 CLAUDE.md
 AGENTS.md
+.agents
 
 # debug
 npm-debug.log*

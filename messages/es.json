@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Últimos anuncios",
+    "noListings": "No hay anuncios todavía."
+  },
+  "Layout": {
+    "title": "JeCherche",
+    "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti."
+  }
+}

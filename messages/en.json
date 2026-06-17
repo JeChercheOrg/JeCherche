@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Latest listings",
+    "noListings": "No listings yet."
+  },
+  "Layout": {
+    "title": "JeCherche",
+    "description": "Find what you are looking for. Post what you want to buy, let sellers come to you."
+  }
+}
