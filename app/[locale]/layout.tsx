@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { createClient } from "@/utils/supabase/server";
+import { logout } from "@/app/actions/auth";
 import Link from "next/link";
 import "../globals.css";
 
@@ -50,6 +52,13 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
 
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const tAuth = await getTranslations("Auth");
+
   return (
     <html
       lang={locale}
@@ -57,10 +66,40 @@ export default async function LocaleLayout({
     >
       <body className="min-h-full flex flex-col">
         <header className="border-b border-gray-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-4">
+          <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
             <Link href={`/${locale}`} className="text-xl font-bold text-gray-900">
               JeCherche
             </Link>
+            <nav className="flex items-center gap-4">
+              {user ? (
+                <>
+                  <span className="text-sm text-gray-600">{user.email}</span>
+                  <form action={logout.bind(null, locale)}>
+                    <button
+                      type="submit"
+                      className="text-sm text-red-600 hover:text-red-800"
+                    >
+                      {tAuth("logout")}
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href={`/${locale}/login`}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    {tAuth("login")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/signup`}
+                    className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                  >
+                    {tAuth("signup")}
+                  </Link>
+                </>
+              )}
+            </nav>
           </div>
         </header>
         <main className="flex-1">

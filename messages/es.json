@@ -6,5 +6,22 @@
   "Layout": {
     "title": "JeCherche",
     "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti."
+  },
+  "Auth": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loginTitle": "Iniciar sesión",
+    "signupTitle": "Crear una cuenta",
+    "loginSubmit": "Iniciar sesión",
+    "signupSubmit": "Crear mi cuenta",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "checkEmail": "Revisa tu correo electrónico para confirmar tu registro.",
+    "errorInvalidCredentials": "Correo o contraseña incorrectos.",
+    "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+    "generatePassword": "Generar"
   }
 }

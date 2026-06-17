@@ -6,5 +6,22 @@
   "Layout": {
     "title": "JeCherche",
     "description": "Trouvez ce que vous cherchez. Publiez ce que vous voulez acheter, laissez les vendeurs venir à vous."
+  },
+  "Auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "logout": "Déconnexion",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "loginTitle": "Se connecter",
+    "signupTitle": "Créer un compte",
+    "loginSubmit": "Se connecter",
+    "signupSubmit": "Créer mon compte",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Déjà un compte ?",
+    "checkEmail": "Vérifiez votre boîte e-mail pour confirmer votre inscription.",
+    "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+    "generatePassword": "Générer"
   }
 }

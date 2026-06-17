@@ -6,5 +6,22 @@
   "Layout": {
     "title": "JeCherche",
     "description": "Find what you are looking for. Post what you want to buy, let sellers come to you."
+  },
+  "Auth": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "email": "Email address",
+    "password": "Password",
+    "loginTitle": "Log in",
+    "signupTitle": "Create an account",
+    "loginSubmit": "Log in",
+    "signupSubmit": "Create my account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "checkEmail": "Check your email to confirm your registration.",
+    "errorInvalidCredentials": "Invalid email or password.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "generatePassword": "Generate"
   }
 }
