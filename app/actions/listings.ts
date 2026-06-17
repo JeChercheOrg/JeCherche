@@ -1,0 +1,123 @@
+"use server";
+
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_IMAGES = 5;
+
+export async function createListing(
+  locale: string,
+  formData: FormData
+): Promise<{ error?: string; fieldErrors?: Record<string, string> }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const priceStr = formData.get("price") as string;
+  const categoryId = formData.get("category_id") as string;
+  const images = formData.getAll("images") as File[];
+
+  const fieldErrors: Record<string, string> = {};
+
+  if (!title || title.trim().length === 0) {
+    fieldErrors.title = "fieldRequired";
+  }
+
+  const price = Math.round(parseFloat(priceStr) * 100);
+  if (isNaN(price) || price <= 0) {
+    fieldErrors.price = "pricePositive";
+  }
+
+  if (!categoryId) {
+    fieldErrors.category_id = "fieldRequired";
+  }
+
+  const validImages = images.filter((f) => f.size > 0);
+
+  if (validImages.length === 0) {
+    fieldErrors.images = "fieldRequired";
+  } else if (validImages.length > MAX_IMAGES) {
+    fieldErrors.images = "imageLimitError";
+  }
+
+  for (const file of validImages) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      fieldErrors.images = "imageFormatError";
+      break;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      fieldErrors.images = "imageSizeError";
+      break;
+    }
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors };
+  }
+
+  const { data: listing, error: insertError } = await supabase
+    .from("listings")
+    .insert({
+      title: title.trim(),
+      description: description?.trim() || null,
+      price,
+      category_id: categoryId,
+      user_id: user.id,
+    })
+    .select("id")
+    .single();
+
+  if (insertError || !listing) {
+    return { error: "errorGeneric" };
+  }
+
+  const uploadedPaths: string[] = [];
+
+  for (let i = 0; i < validImages.length; i++) {
+    const file = validImages[i];
+    const ext = file.name.split(".").pop() || "jpg";
+    const storagePath = `${user.id}/${listing.id}/${i}_${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("listing-images")
+      .upload(storagePath, file, { contentType: file.type });
+
+    if (uploadError) {
+      for (const path of uploadedPaths) {
+        await supabase.storage.from("listing-images").remove([path]);
+      }
+      await supabase.from("listings").delete().eq("id", listing.id);
+      return { error: "errorGeneric" };
+    }
+
+    uploadedPaths.push(storagePath);
+
+    const { error: imageInsertError } = await supabase
+      .from("listing_images")
+      .insert({
+        listing_id: listing.id,
+        storage_path: storagePath,
+        position: i,
+      });
+
+    if (imageInsertError) {
+      for (const path of uploadedPaths) {
+        await supabase.storage.from("listing-images").remove([path]);
+      }
+      await supabase.from("listings").delete().eq("id", listing.id);
+      return { error: "errorGeneric" };
+    }
+  }
+
+  redirect(`/${locale}`);
+}

@@ -5,7 +5,8 @@
   },
   "Layout": {
     "title": "JeCherche",
-    "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti."
+    "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti.",
+    "publish": "Publicar"
   },
   "Auth": {
     "login": "Iniciar sesión",
@@ -23,5 +24,26 @@
     "errorInvalidCredentials": "Correo o contraseña incorrectos.",
     "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
     "generatePassword": "Generar"
+  },
+  "CreateListing": {
+    "pageTitle": "Publicar un anuncio",
+    "title": "Título",
+    "description": "Descripción",
+    "price": "Precio",
+    "category": "Categoría",
+    "images": "Fotos",
+    "selectCategory": "Elegir una categoría",
+    "addImages": "Añadir fotos",
+    "coverLabel": "Portada",
+    "maxImages": "5 fotos máximo, 5 MB por foto (JPG, PNG, WebP)",
+    "submit": "Publicar anuncio",
+    "submitting": "Publicando…",
+    "errorAuth": "Debes iniciar sesión para publicar.",
+    "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+    "fieldRequired": "Este campo es obligatorio.",
+    "pricePositive": "El precio debe ser mayor a 0.",
+    "imageFormatError": "Formato no soportado. Usa JPG, PNG o WebP.",
+    "imageSizeError": "La imagen supera el límite de 5 MB.",
+    "imageLimitError": "Puedes añadir hasta 5 fotos."
   }
 }

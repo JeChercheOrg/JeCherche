@@ -5,7 +5,8 @@
   },
   "Layout": {
     "title": "JeCherche",
-    "description": "Trouvez ce que vous cherchez. Publiez ce que vous voulez acheter, laissez les vendeurs venir à vous."
+    "description": "Trouvez ce que vous cherchez. Publiez ce que vous voulez acheter, laissez les vendeurs venir à vous.",
+    "publish": "Publier"
   },
   "Auth": {
     "login": "Connexion",
@@ -23,5 +24,26 @@
     "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
     "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
     "generatePassword": "Générer"
+  },
+  "CreateListing": {
+    "pageTitle": "Publier une annonce",
+    "title": "Titre",
+    "description": "Description",
+    "price": "Prix",
+    "category": "Catégorie",
+    "images": "Photos",
+    "selectCategory": "Choisir une catégorie",
+    "addImages": "Ajouter des photos",
+    "coverLabel": "Couverture",
+    "maxImages": "5 photos maximum, 5 Mo par photo (JPG, PNG, WebP)",
+    "submit": "Publier l'annonce",
+    "submitting": "Publication en cours…",
+    "errorAuth": "Vous devez être connecté pour publier.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+    "fieldRequired": "Ce champ est requis.",
+    "pricePositive": "Le prix doit être supérieur à 0.",
+    "imageFormatError": "Format non supporté. Utilisez JPG, PNG ou WebP.",
+    "imageSizeError": "L'image dépasse la taille maximale de 5 Mo.",
+    "imageLimitError": "Vous pouvez ajouter 5 photos maximum."
   }
 }

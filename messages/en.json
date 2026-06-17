@@ -5,7 +5,8 @@
   },
   "Layout": {
     "title": "JeCherche",
-    "description": "Find what you are looking for. Post what you want to buy, let sellers come to you."
+    "description": "Find what you are looking for. Post what you want to buy, let sellers come to you.",
+    "publish": "Publish"
   },
   "Auth": {
     "login": "Log in",
@@ -23,5 +24,26 @@
     "errorInvalidCredentials": "Invalid email or password.",
     "errorGeneric": "Something went wrong. Please try again.",
     "generatePassword": "Generate"
+  },
+  "CreateListing": {
+    "pageTitle": "Publish a listing",
+    "title": "Title",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "images": "Photos",
+    "selectCategory": "Choose a category",
+    "addImages": "Add photos",
+    "coverLabel": "Cover",
+    "maxImages": "5 photos max, 5 MB per photo (JPG, PNG, WebP)",
+    "submit": "Publish listing",
+    "submitting": "Publishing…",
+    "errorAuth": "You must be logged in to publish.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "fieldRequired": "This field is required.",
+    "pricePositive": "Price must be greater than 0.",
+    "imageFormatError": "Unsupported format. Use JPG, PNG or WebP.",
+    "imageSizeError": "Image exceeds the 5 MB size limit.",
+    "imageLimitError": "You can add up to 5 photos."
   }
 }

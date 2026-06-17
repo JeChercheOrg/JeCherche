@@ -58,6 +58,7 @@ export default async function LocaleLayout({
   } = await supabase.auth.getUser();
 
   const tAuth = await getTranslations("Auth");
+  const tLayout = await getTranslations("Layout");
 
   return (
     <html
@@ -73,6 +74,12 @@ export default async function LocaleLayout({
             <nav className="flex items-center gap-4">
               {user ? (
                 <>
+                  <Link
+                    href={`/${locale}/listings/create`}
+                    className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                  >
+                    {tLayout("publish")}
+                  </Link>
                   <span className="text-sm text-gray-600">{user.email}</span>
                   <form action={logout.bind(null, locale)}>
                     <button

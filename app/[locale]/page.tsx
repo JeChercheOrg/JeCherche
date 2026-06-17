@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
+import Image from "next/image";
 
 function getCategoryName(
   category: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null },
@@ -25,7 +26,7 @@ export default async function Home({
 
   const { data: listings } = await supabase
     .from("listings")
-    .select("*, categories(name, name_fr, name_es, name_de)")
+    .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position)")
     .order("created_at", { ascending: false });
 
   return (
@@ -38,11 +39,27 @@ export default async function Home({
         <p className="text-gray-500 text-center py-12">{t("noListings")}</p>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((listing) => (
+          {listings.map((listing) => {
+            const coverImage = listing.listing_images?.find(
+              (img: { position: number }) => img.position === 0
+            );
+            return (
             <div
               key={listing.id}
-              className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
+              className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden"
             >
+              {coverImage && (
+                <div className="relative w-full h-48">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${coverImage.storage_path}`}
+                    alt={listing.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                </div>
+              )}
+              <div className="p-5">
               <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 mb-3">
                 {listing.categories && getCategoryName(listing.categories, locale)}
               </span>
@@ -69,8 +86,10 @@ export default async function Home({
                   })}
                 </span>
               </div>
+              </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
