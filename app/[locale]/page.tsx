@@ -1,97 +1,121 @@
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
-
-function getCategoryName(
-  category: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null },
-  locale: string
-): string {
-  if (locale === "fr" && category.name_fr) return category.name_fr;
-  if (locale === "es" && category.name_es) return category.name_es;
-  if (locale === "de" && category.name_de) return category.name_de;
-  return category.name;
-}
+import { HeroSection } from "@/components/hero-section";
+import { CategoryBar } from "@/components/category-bar";
+import { ListingCard } from "@/components/listing-card";
+import { X } from "lucide-react";
 
 export default async function Home({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string; category?: string }>;
 }) {
   const { locale } = await params;
+  const { q, category } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations("HomePage");
   const format = await getFormatter();
   const supabase = await createClient();
 
-  const { data: listings } = await supabase
+  const searchQuery = q?.trim() || "";
+  const hasFilters = searchQuery.length > 0 || !!category;
+
+  let query = supabase
     .from("listings")
     .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position)")
     .order("created_at", { ascending: false });
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
-        {t("title")}
-      </h1>
+  if (searchQuery) {
+    const escaped = searchQuery.replace(/%/g, "\\%").replace(/_/g, "\\_");
+    query = query.ilike("title", `%${escaped}%`);
+  }
 
-      {!listings || listings.length === 0 ? (
-        <p className="text-gray-500 text-center py-12">{t("noListings")}</p>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((listing) => {
-            const coverImage = listing.listing_images?.find(
-              (img: { position: number }) => img.position === 0
-            );
-            return (
-            <div
-              key={listing.id}
-              className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-            >
-              {coverImage && (
-                <div className="relative w-full h-48">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${coverImage.storage_path}`}
-                    alt={listing.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-              )}
-              <div className="p-5">
-              <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 mb-3">
-                {listing.categories && getCategoryName(listing.categories, locale)}
-              </span>
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                {listing.title}
-              </h2>
-              {listing.description && (
-                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                  {listing.description}
-                </p>
-              )}
-              <div className="flex items-center justify-between mt-auto">
-                <span className="text-lg font-bold text-green-700">
-                  {format.number(listing.price / 100, {
-                    style: "currency",
-                    currency: "EUR",
-                  })}
-                </span>
-                <span className="text-xs text-gray-400">
-                  {format.dateTime(new Date(listing.created_at), {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
-              </div>
-              </div>
-            </div>
-            );
-          })}
-        </div>
+  if (category) {
+    query = query.eq("category_id", category);
+  }
+
+  const { data: listings } = await query;
+
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name, name_fr, name_es, name_de")
+    .order("name");
+
+  const formatPrice = (price: number) =>
+    format.number(price / 100, { style: "currency", currency: "EUR" });
+
+  const formatDate = (date: Date) =>
+    format.dateTime(date, { day: "numeric", month: "short" });
+
+  return (
+    <>
+      {!hasFilters && (
+        <HeroSection
+          locale={locale}
+          translations={{
+            title: t("heroTitle"),
+            subtitle: t("heroSubtitle"),
+            cta: t("heroCta"),
+          }}
+        />
       )}
-    </div>
+
+      <div className="mx-auto max-w-7xl px-4 py-6">
+        {categories && (
+          <CategoryBar
+            categories={categories}
+            locale={locale}
+            currentCategory={category}
+            currentQuery={searchQuery}
+            allLabel={t("allCategories")}
+          />
+        )}
+
+        <section className="mt-6">
+          {hasFilters ? (
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-text-primary">
+                {searchQuery
+                  ? t("searchResults", { query: searchQuery })
+                  : t("title")}
+              </h2>
+              <Link
+                href={`/${locale}`}
+                className="inline-flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <X className="h-3.5 w-3.5" />
+                {t("clearFilters")}
+              </Link>
+            </div>
+          ) : (
+            <h2 className="text-lg font-semibold text-text-primary mb-4">
+              {t("title")}
+            </h2>
+          )}
+
+          {!listings || listings.length === 0 ? (
+            <p className="text-text-secondary text-center py-16">
+              {hasFilters ? t("noResults") : t("noListings")}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {listings.map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  locale={locale}
+                  formatPrice={formatPrice}
+                  formatDate={formatDate}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </>
   );
 }
