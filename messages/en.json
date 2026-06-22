@@ -1,12 +1,21 @@
 {
   "HomePage": {
     "title": "Latest listings",
-    "noListings": "No listings yet."
+    "noListings": "No listings yet.",
+    "heroTitle": "Tell us what you're looking for",
+    "heroSubtitle": "Post your request, let sellers come to you.",
+    "heroCta": "Post a request",
+    "allCategories": "All",
+    "searchResults": "Results for \"{query}\"",
+    "noResults": "No results found.",
+    "clearFilters": "Clear filters"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Find what you are looking for. Post what you want to buy, let sellers come to you.",
-    "publish": "Publish"
+    "publish": "Publish",
+    "searchPlaceholder": "What are you looking for?",
+    "myAccount": "My account"
   },
   "Auth": {
     "login": "Log in",
@@ -45,5 +54,68 @@
     "imageFormatError": "Unsupported format. Use JPG, PNG or WebP.",
     "imageSizeError": "Image exceeds the 5 MB size limit.",
     "imageLimitError": "You can add up to 5 photos."
+  },
+  "ListingDetail": {
+    "budget": "Budget",
+    "postedOn": "Posted on",
+    "category": "Category",
+    "backToListings": "Back to listings",
+    "description": "Description",
+    "noDescription": "No description provided.",
+    "postedBy": "Posted by",
+    "viewProfile": "View profile"
+  },
+  "MyListings": {
+    "pageTitle": "My listings",
+    "noListings": "You haven't published any listing yet.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this listing?",
+    "cancelDelete": "Cancel",
+    "deleting": "Deleting…",
+    "editPageTitle": "Edit listing",
+    "save": "Save",
+    "saving": "Saving…",
+    "myListings": "My listings"
+  },
+  "Account": {
+    "pageTitle": "My account",
+    "profileSection": "Profile",
+    "displayName": "Display name",
+    "displayNameHint": "Visible to other users.",
+    "changeAvatar": "Change photo",
+    "avatarHint": "JPG, PNG or WebP, 2 MB max.",
+    "emailSection": "Email address",
+    "newEmail": "New email",
+    "emailHint": "A confirmation email will be sent to the new address.",
+    "emailConfirmSent": "A confirmation email has been sent.",
+    "passwordSection": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match.",
+    "wrongPassword": "Current password is incorrect.",
+    "passwordTooShort": "Password must be at least 6 characters.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "dangerZone": "Danger zone",
+    "deleteAccount": "Delete my account",
+    "confirmDeleteAccount": "Confirm deletion",
+    "deleteWarning": "This action is irreversible. All your listings, images and data will be permanently deleted.",
+    "cancelDelete": "Cancel",
+    "deleting": "Deleting…",
+    "errorAuth": "You must be logged in.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "invalidEmail": "Invalid email address.",
+    "avatarTooLarge": "Image exceeds the 2 MB size limit.",
+    "avatarFormatError": "Unsupported format. Use JPG, PNG or WebP.",
+    "logout": "Log out"
+  },
+  "PublicProfile": {
+    "memberSince": "Member since {date}",
+    "listings": "Listings",
+    "noListings": "This user hasn't published any listing yet.",
+    "anonymousUser": "User"
   }
 }

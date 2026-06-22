@@ -1,12 +1,21 @@
 {
   "HomePage": {
     "title": "Dernières annonces",
-    "noListings": "Aucune annonce pour le moment."
+    "noListings": "Aucune annonce pour le moment.",
+    "heroTitle": "Dites ce que vous cherchez",
+    "heroSubtitle": "Publiez votre demande, les vendeurs viendront à vous.",
+    "heroCta": "Publier une demande",
+    "allCategories": "Toutes",
+    "searchResults": "Résultats pour « {query} »",
+    "noResults": "Aucun résultat trouvé.",
+    "clearFilters": "Effacer les filtres"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Trouvez ce que vous cherchez. Publiez ce que vous voulez acheter, laissez les vendeurs venir à vous.",
-    "publish": "Publier"
+    "publish": "Publier",
+    "searchPlaceholder": "Que cherchez-vous ?",
+    "myAccount": "Mon compte"
   },
   "Auth": {
     "login": "Connexion",
@@ -45,5 +54,68 @@
     "imageFormatError": "Format non supporté. Utilisez JPG, PNG ou WebP.",
     "imageSizeError": "L'image dépasse la taille maximale de 5 Mo.",
     "imageLimitError": "Vous pouvez ajouter 5 photos maximum."
+  },
+  "ListingDetail": {
+    "budget": "Budget",
+    "postedOn": "Publié le",
+    "category": "Catégorie",
+    "backToListings": "Retour aux annonces",
+    "description": "Description",
+    "noDescription": "Aucune description fournie.",
+    "postedBy": "Publié par",
+    "viewProfile": "Voir le profil"
+  },
+  "MyListings": {
+    "pageTitle": "Mes annonces",
+    "noListings": "Vous n'avez pas encore publié d'annonce.",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "confirmDelete": "Voulez-vous vraiment supprimer cette annonce ?",
+    "cancelDelete": "Annuler",
+    "deleting": "Suppression…",
+    "editPageTitle": "Modifier l'annonce",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "myListings": "Mes annonces"
+  },
+  "Account": {
+    "pageTitle": "Mon compte",
+    "profileSection": "Profil",
+    "displayName": "Nom d'affichage",
+    "displayNameHint": "Visible par les autres utilisateurs.",
+    "changeAvatar": "Changer la photo",
+    "avatarHint": "JPG, PNG ou WebP, 2 Mo max.",
+    "emailSection": "Adresse e-mail",
+    "newEmail": "Nouvel e-mail",
+    "emailHint": "Un e-mail de confirmation sera envoyé à la nouvelle adresse.",
+    "emailConfirmSent": "Un e-mail de confirmation a été envoyé.",
+    "passwordSection": "Mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "wrongPassword": "Le mot de passe actuel est incorrect.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré",
+    "dangerZone": "Zone dangereuse",
+    "deleteAccount": "Supprimer mon compte",
+    "confirmDeleteAccount": "Confirmer la suppression",
+    "deleteWarning": "Cette action est irréversible. Toutes vos annonces, images et données seront définitivement supprimées.",
+    "cancelDelete": "Annuler",
+    "deleting": "Suppression…",
+    "errorAuth": "Vous devez être connecté.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+    "invalidEmail": "Adresse e-mail invalide.",
+    "avatarTooLarge": "L'image dépasse la taille maximale de 2 Mo.",
+    "avatarFormatError": "Format non supporté. Utilisez JPG, PNG ou WebP.",
+    "logout": "Se déconnecter"
+  },
+  "PublicProfile": {
+    "memberSince": "Membre depuis {date}",
+    "listings": "Annonces",
+    "noListings": "Cet utilisateur n'a publié aucune annonce.",
+    "anonymousUser": "Utilisateur"
   }
 }

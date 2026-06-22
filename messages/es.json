@@ -1,12 +1,21 @@
 {
   "HomePage": {
     "title": "Últimos anuncios",
-    "noListings": "No hay anuncios todavía."
+    "noListings": "No hay anuncios todavía.",
+    "heroTitle": "Dinos qué buscas",
+    "heroSubtitle": "Publica tu solicitud, los vendedores vendrán a ti.",
+    "heroCta": "Publicar una solicitud",
+    "allCategories": "Todas",
+    "searchResults": "Resultados para \"{query}\"",
+    "noResults": "No se encontraron resultados.",
+    "clearFilters": "Borrar filtros"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti.",
-    "publish": "Publicar"
+    "publish": "Publicar",
+    "searchPlaceholder": "¿Qué buscas?",
+    "myAccount": "Mi cuenta"
   },
   "Auth": {
     "login": "Iniciar sesión",
@@ -45,5 +54,68 @@
     "imageFormatError": "Formato no soportado. Usa JPG, PNG o WebP.",
     "imageSizeError": "La imagen supera el límite de 5 MB.",
     "imageLimitError": "Puedes añadir hasta 5 fotos."
+  },
+  "ListingDetail": {
+    "budget": "Presupuesto",
+    "postedOn": "Publicado el",
+    "category": "Categoría",
+    "backToListings": "Volver a los anuncios",
+    "description": "Descripción",
+    "noDescription": "No se proporcionó descripción.",
+    "postedBy": "Publicado por",
+    "viewProfile": "Ver perfil"
+  },
+  "MyListings": {
+    "pageTitle": "Mis anuncios",
+    "noListings": "Aún no has publicado ningún anuncio.",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Seguro que quieres eliminar este anuncio?",
+    "cancelDelete": "Cancelar",
+    "deleting": "Eliminando…",
+    "editPageTitle": "Editar anuncio",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "myListings": "Mis anuncios"
+  },
+  "Account": {
+    "pageTitle": "Mi cuenta",
+    "profileSection": "Perfil",
+    "displayName": "Nombre visible",
+    "displayNameHint": "Visible para otros usuarios.",
+    "changeAvatar": "Cambiar foto",
+    "avatarHint": "JPG, PNG o WebP, 2 MB máximo.",
+    "emailSection": "Correo electrónico",
+    "newEmail": "Nuevo correo",
+    "emailHint": "Se enviará un correo de confirmación a la nueva dirección.",
+    "emailConfirmSent": "Se ha enviado un correo de confirmación.",
+    "passwordSection": "Contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "wrongPassword": "La contraseña actual es incorrecta.",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Guardado",
+    "dangerZone": "Zona peligrosa",
+    "deleteAccount": "Eliminar mi cuenta",
+    "confirmDeleteAccount": "Confirmar eliminación",
+    "deleteWarning": "Esta acción es irreversible. Todos tus anuncios, imágenes y datos serán eliminados permanentemente.",
+    "cancelDelete": "Cancelar",
+    "deleting": "Eliminando…",
+    "errorAuth": "Debes iniciar sesión.",
+    "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+    "invalidEmail": "Correo electrónico no válido.",
+    "avatarTooLarge": "La imagen supera el límite de 2 MB.",
+    "avatarFormatError": "Formato no soportado. Usa JPG, PNG o WebP.",
+    "logout": "Cerrar sesión"
+  },
+  "PublicProfile": {
+    "memberSince": "Miembro desde {date}",
+    "listings": "Anuncios",
+    "noListings": "Este usuario no ha publicado ningún anuncio.",
+    "anonymousUser": "Usuario"
   }
 }

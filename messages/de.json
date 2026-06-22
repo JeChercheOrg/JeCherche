@@ -1,12 +1,21 @@
 {
   "HomePage": {
     "title": "Neueste Anzeigen",
-    "noListings": "Noch keine Anzeigen vorhanden."
+    "noListings": "Noch keine Anzeigen vorhanden.",
+    "heroTitle": "Sagen Sie uns, was Sie suchen",
+    "heroSubtitle": "Veröffentlichen Sie Ihre Anfrage, die Verkäufer kommen zu Ihnen.",
+    "heroCta": "Anfrage veröffentlichen",
+    "allCategories": "Alle",
+    "searchResults": "Ergebnisse für \u201E{query}\u201C",
+    "noResults": "Keine Ergebnisse gefunden.",
+    "clearFilters": "Filter löschen"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Finden Sie, was Sie suchen. Veröffentlichen Sie, was Sie kaufen möchten, und lassen Sie die Verkäufer zu Ihnen kommen.",
-    "publish": "Veröffentlichen"
+    "publish": "Veröffentlichen",
+    "searchPlaceholder": "Was suchen Sie?",
+    "myAccount": "Mein Konto"
   },
   "Auth": {
     "login": "Anmelden",
@@ -45,5 +54,68 @@
     "imageFormatError": "Format nicht unterstützt. Verwenden Sie JPG, PNG oder WebP.",
     "imageSizeError": "Das Bild überschreitet die maximale Größe von 5 MB.",
     "imageLimitError": "Sie können maximal 5 Fotos hinzufügen."
+  },
+  "ListingDetail": {
+    "budget": "Budget",
+    "postedOn": "Veröffentlicht am",
+    "category": "Kategorie",
+    "backToListings": "Zurück zu den Anzeigen",
+    "description": "Beschreibung",
+    "noDescription": "Keine Beschreibung angegeben.",
+    "postedBy": "Veröffentlicht von",
+    "viewProfile": "Profil ansehen"
+  },
+  "MyListings": {
+    "pageTitle": "Meine Anzeigen",
+    "noListings": "Sie haben noch keine Anzeige veröffentlicht.",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "confirmDelete": "Möchten Sie diese Anzeige wirklich löschen?",
+    "cancelDelete": "Abbrechen",
+    "deleting": "Wird gelöscht…",
+    "editPageTitle": "Anzeige bearbeiten",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "myListings": "Meine Anzeigen"
+  },
+  "Account": {
+    "pageTitle": "Mein Konto",
+    "profileSection": "Profil",
+    "displayName": "Anzeigename",
+    "displayNameHint": "Sichtbar für andere Benutzer.",
+    "changeAvatar": "Foto ändern",
+    "avatarHint": "JPG, PNG oder WebP, max. 2 MB.",
+    "emailSection": "E-Mail-Adresse",
+    "newEmail": "Neue E-Mail",
+    "emailHint": "Eine Bestätigungs-E-Mail wird an die neue Adresse gesendet.",
+    "emailConfirmSent": "Eine Bestätigungs-E-Mail wurde gesendet.",
+    "passwordSection": "Passwort",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+    "wrongPassword": "Das aktuelle Passwort ist falsch.",
+    "passwordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert",
+    "dangerZone": "Gefahrenzone",
+    "deleteAccount": "Mein Konto löschen",
+    "confirmDeleteAccount": "Löschung bestätigen",
+    "deleteWarning": "Diese Aktion ist unwiderruflich. Alle Ihre Anzeigen, Bilder und Daten werden dauerhaft gelöscht.",
+    "cancelDelete": "Abbrechen",
+    "deleting": "Wird gelöscht…",
+    "errorAuth": "Sie müssen angemeldet sein.",
+    "errorGeneric": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "invalidEmail": "Ungültige E-Mail-Adresse.",
+    "avatarTooLarge": "Das Bild überschreitet die maximale Größe von 2 MB.",
+    "avatarFormatError": "Format nicht unterstützt. Verwenden Sie JPG, PNG oder WebP.",
+    "logout": "Abmelden"
+  },
+  "PublicProfile": {
+    "memberSince": "Mitglied seit {date}",
+    "listings": "Anzeigen",
+    "noListings": "Dieser Benutzer hat noch keine Anzeige veröffentlicht.",
+    "anonymousUser": "Benutzer"
   }
 }
