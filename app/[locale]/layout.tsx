@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
 import { Header } from "@/components/header";
+import { ToastProvider } from "@/components/toast";
+import { getUnreadCount } from "@/app/actions/messages";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -75,6 +77,9 @@ export default async function LocaleLayout({
   const tAuth = await getTranslations("Auth");
   const tLayout = await getTranslations("Layout");
   const tMyListings = await getTranslations("MyListings");
+  const tMessages = await getTranslations("Messages");
+
+  const unreadCount = user ? await getUnreadCount() : 0;
 
   return (
     <html
@@ -87,16 +92,20 @@ export default async function LocaleLayout({
           locale={locale}
           avatarUrl={avatarUrl}
           displayName={displayName}
+          unreadCount={unreadCount}
           translations={{
             login: tAuth("login"),
             signup: tAuth("signup"),
             publish: tLayout("publish"),
             myListings: tMyListings("myListings"),
+            messages: tMessages("messages"),
             searchPlaceholder: tLayout("searchPlaceholder"),
           }}
         />
         <main className="flex-1">
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          <NextIntlClientProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </NextIntlClientProvider>
         </main>
       </body>
     </html>

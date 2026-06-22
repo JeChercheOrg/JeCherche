@@ -1,21 +1,25 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
+import { UnreadBadge } from "@/components/unread-badge";
+import { MessageCircle } from "lucide-react";
 
 interface UserMenuProps {
-  user: { email?: string } | null;
+  user: { id?: string; email?: string } | null;
   locale: string;
   avatarUrl?: string | null;
   displayName?: string | null;
+  unreadCount?: number;
   translations: {
     login: string;
     signup: string;
     publish: string;
     myListings: string;
+    messages: string;
   };
 }
 
-export function UserMenu({ user, locale, avatarUrl, displayName, translations }: UserMenuProps) {
+export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, translations }: UserMenuProps) {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
@@ -44,6 +48,15 @@ export function UserMenu({ user, locale, avatarUrl, displayName, translations }:
         <Button variant="ghost" size="sm">
           {translations.myListings}
         </Button>
+      </Link>
+      <Link href={`/${locale}/messages`} className="relative">
+        <Button variant="ghost" size="sm" className="gap-1.5">
+          <MessageCircle className="h-4 w-4" />
+          {translations.messages}
+        </Button>
+        {user.id && (
+          <UnreadBadge initialCount={unreadCount ?? 0} currentUserId={user.id} />
+        )}
       </Link>
       <Link href={`/${locale}/account`}>
         <UserAvatar

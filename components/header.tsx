@@ -4,20 +4,22 @@ import { SearchBar } from "@/components/search-bar";
 import { UserMenu } from "@/components/user-menu";
 
 interface HeaderProps {
-  user: { email?: string } | null;
+  user: { id?: string; email?: string } | null;
   locale: string;
   avatarUrl?: string | null;
   displayName?: string | null;
+  unreadCount?: number;
   translations: {
     login: string;
     signup: string;
     publish: string;
     myListings: string;
+    messages: string;
     searchPlaceholder: string;
   };
 }
 
-export function Header({ user, locale, avatarUrl, displayName, translations }: HeaderProps) {
+export function Header({ user, locale, avatarUrl, displayName, unreadCount, translations }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface">
       <div className="mx-auto max-w-7xl px-4 h-16 flex items-center gap-4">
@@ -34,7 +36,7 @@ export function Header({ user, locale, avatarUrl, displayName, translations }: H
             action={`/${locale}`}
           />
         </Suspense>
-        <UserMenu user={user} locale={locale} avatarUrl={avatarUrl} displayName={displayName} translations={translations} />
+        <UserMenu user={user} locale={locale} avatarUrl={avatarUrl} displayName={displayName} unreadCount={unreadCount} translations={translations} />
       </div>
     </header>
   );

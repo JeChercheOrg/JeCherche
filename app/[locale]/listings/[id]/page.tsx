@@ -6,6 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/image-gallery";
 import { UserAvatar } from "@/components/user-avatar";
+import { ResponseForm } from "@/components/response-form";
+import { ResponseCard } from "@/components/response-card";
+import { ListingActions } from "@/components/listing-actions";
 
 function getCategoryName(
   category: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null },
@@ -26,6 +29,7 @@ export default async function ListingDetailPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("ListingDetail");
+  const tR = await getTranslations("Responses");
   const format = await getFormatter();
   const supabase = await createClient();
 
@@ -53,6 +57,49 @@ export default async function ListingDetailPage({
   const images = listing.listing_images || [];
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data: responses } = await supabase
+    .from("responses")
+    .select("*, profiles:responses_user_id_profiles_fkey(display_name, avatar_path), response_images(storage_path, position)")
+    .eq("listing_id", id)
+    .order("price", { ascending: true });
+
+  const isOwner = user?.id === listing.user_id;
+
+  let hasResponded = false;
+  if (user && !isOwner) {
+    const { data: existingResponse } = await supabase
+      .from("responses")
+      .select("id")
+      .eq("listing_id", id)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    hasResponded = !!existingResponse;
+  }
+
+  const canRespond = !!user && !isOwner && !hasResponded;
+
+  const responseTranslations = {
+    yourOffer: tR("yourOffer"),
+    offeredPrice: tR("offeredPrice"),
+    statusPending: tR("statusPending"),
+    statusAccepted: tR("statusAccepted"),
+    statusRejected: tR("statusRejected"),
+  };
+
+  const formatResponseDate = (dateStr: string) =>
+    format.dateTime(new Date(dateStr), {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+  const formatPrice = (price: number) =>
+    format.number(price / 100, { style: "currency", currency: "EUR" });
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <Link
@@ -64,16 +111,75 @@ export default async function ListingDetailPage({
       </Link>
 
       <div className="lg:grid lg:grid-cols-5 lg:gap-8">
-        {/* Gallery — left 60% */}
-        <div className="lg:col-span-3 mb-6 lg:mb-0">
+        {/* Left column — gallery + responses */}
+        <div className="lg:col-span-3 mb-6 lg:mb-0 space-y-10">
           <ImageGallery
             images={images}
             alt={listing.title}
             supabaseUrl={supabaseUrl}
           />
+
+          {/* Responses section */}
+          <div>
+            <h2 className="text-lg font-semibold text-text-primary mb-6">
+              {tR("sectionTitle")}
+              {responses && responses.length > 0 && (
+                <span className="ml-1.5 text-text-tertiary font-normal">
+                  ({responses.length})
+                </span>
+              )}
+            </h2>
+
+            {canRespond && (
+              <div className="mb-8">
+                <ResponseForm locale={locale} listingId={id} listingPrice={listing.price} />
+              </div>
+            )}
+
+            {!user && (
+              <p className="text-sm text-text-tertiary mb-6">
+                <Link
+                  href={`/${locale}/login`}
+                  className="text-primary hover:underline font-medium"
+                >
+                  {tR("loginToOffer")}
+                </Link>
+              </p>
+            )}
+
+            {user && isOwner && (
+              <p className="text-sm text-text-tertiary italic mb-6">
+                {tR("ownListing")}
+              </p>
+            )}
+
+            {!responses || responses.length === 0 ? (
+              <p className="text-sm text-text-tertiary text-center py-8">
+                {tR("noResponses")}
+              </p>
+            ) : (
+              <div className="space-y-4">
+                {responses.map((response) => (
+                  <ResponseCard
+                    key={response.id}
+                    response={response}
+                    locale={locale}
+                    listingId={id}
+                    listingPrice={listing.price}
+                    formatPrice={formatPrice}
+                    formatDate={formatResponseDate}
+                    supabaseUrl={supabaseUrl}
+                    isOwn={response.user_id === user?.id}
+                    isListingOwner={isOwner}
+                    translations={responseTranslations}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Info — right 40% */}
+        {/* Right column — sticky info card */}
         <div className="lg:col-span-2">
           <div className="rounded-xl border border-border bg-surface p-6 space-y-4 lg:sticky lg:top-20">
             {listing.categories && (
@@ -144,6 +250,24 @@ export default async function ListingDetailPage({
                 </p>
               </div>
             </Link>
+
+            {canRespond && (
+              <>
+                <hr className="border-border" />
+                <ListingActions locale={locale} listingId={id} />
+              </>
+            )}
+
+            {user && hasResponded && (
+              <>
+                <hr className="border-border" />
+                <div className="rounded-lg border border-primary/30 bg-primary-light/30 px-4 py-3 text-center">
+                  <p className="text-sm font-medium text-primary-text">
+                    {tR("alreadyResponded")}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
