@@ -6,8 +6,7 @@ import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
-import { logout } from "@/app/actions/auth";
-import Link from "next/link";
+import { Header } from "@/components/header";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -57,58 +56,45 @@ export default async function LocaleLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  let avatarUrl: string | null = null;
+  let displayName: string | null = null;
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("avatar_path, display_name")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.avatar_path) {
+      avatarUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars/${profile.avatar_path}`;
+    }
+    displayName = profile?.display_name || null;
+  }
+
   const tAuth = await getTranslations("Auth");
   const tLayout = await getTranslations("Layout");
+  const tMyListings = await getTranslations("MyListings");
 
   return (
     <html
       lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <header className="border-b border-gray-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-            <Link href={`/${locale}`} className="text-xl font-bold text-gray-900">
-              JeCherche
-            </Link>
-            <nav className="flex items-center gap-4">
-              {user ? (
-                <>
-                  <Link
-                    href={`/${locale}/listings/create`}
-                    className="text-sm bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                  >
-                    {tLayout("publish")}
-                  </Link>
-                  <span className="text-sm text-gray-600">{user.email}</span>
-                  <form action={logout.bind(null, locale)}>
-                    <button
-                      type="submit"
-                      className="text-sm text-red-600 hover:text-red-800"
-                    >
-                      {tAuth("logout")}
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href={`/${locale}/login`}
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                  >
-                    {tAuth("login")}
-                  </Link>
-                  <Link
-                    href={`/${locale}/signup`}
-                    className="text-sm bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                  >
-                    {tAuth("signup")}
-                  </Link>
-                </>
-              )}
-            </nav>
-          </div>
-        </header>
+      <body className="min-h-full flex flex-col bg-background">
+        <Header
+          user={user}
+          locale={locale}
+          avatarUrl={avatarUrl}
+          displayName={displayName}
+          translations={{
+            login: tAuth("login"),
+            signup: tAuth("signup"),
+            publish: tLayout("publish"),
+            myListings: tMyListings("myListings"),
+            searchPlaceholder: tLayout("searchPlaceholder"),
+          }}
+        />
         <main className="flex-1">
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </main>

@@ -121,3 +121,166 @@ export async function createListing(
 
   redirect(`/${locale}`);
 }
+
+export async function deleteListing(
+  locale: string,
+  listingId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("id, user_id, listing_images(storage_path)")
+    .eq("id", listingId)
+    .single();
+
+  if (!listing || listing.user_id !== user.id) {
+    return { error: "errorGeneric" };
+  }
+
+  const imagePaths = (listing.listing_images || []).map(
+    (img: { storage_path: string }) => img.storage_path
+  );
+
+  if (imagePaths.length > 0) {
+    await supabase.storage.from("listing-images").remove(imagePaths);
+  }
+
+  const { error: deleteError } = await supabase
+    .from("listings")
+    .delete()
+    .eq("id", listingId);
+
+  if (deleteError) {
+    return { error: "errorGeneric" };
+  }
+
+  redirect(`/${locale}/my-listings`);
+}
+
+export async function updateListing(
+  locale: string,
+  listingId: string,
+  formData: FormData
+): Promise<{ error?: string; fieldErrors?: Record<string, string> }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const { data: existing } = await supabase
+    .from("listings")
+    .select("id, user_id")
+    .eq("id", listingId)
+    .single();
+
+  if (!existing || existing.user_id !== user.id) {
+    return { error: "errorGeneric" };
+  }
+
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const priceStr = formData.get("price") as string;
+  const categoryId = formData.get("category_id") as string;
+  const imagesToDelete = formData.getAll("images_to_delete") as string[];
+  const newImages = (formData.getAll("new_images") as File[]).filter(
+    (f) => f.size > 0
+  );
+
+  const fieldErrors: Record<string, string> = {};
+
+  if (!title || title.trim().length === 0) {
+    fieldErrors.title = "fieldRequired";
+  }
+
+  const price = Math.round(parseFloat(priceStr) * 100);
+  if (isNaN(price) || price <= 0) {
+    fieldErrors.price = "pricePositive";
+  }
+
+  if (!categoryId) {
+    fieldErrors.category_id = "fieldRequired";
+  }
+
+  for (const file of newImages) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      fieldErrors.images = "imageFormatError";
+      break;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      fieldErrors.images = "imageSizeError";
+      break;
+    }
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors };
+  }
+
+  const { error: updateError } = await supabase
+    .from("listings")
+    .update({
+      title: title.trim(),
+      description: description?.trim() || null,
+      price,
+      category_id: categoryId,
+    })
+    .eq("id", listingId);
+
+  if (updateError) {
+    return { error: "errorGeneric" };
+  }
+
+  if (imagesToDelete.length > 0) {
+    await supabase.storage.from("listing-images").remove(imagesToDelete);
+    await supabase
+      .from("listing_images")
+      .delete()
+      .in("storage_path", imagesToDelete);
+  }
+
+  if (newImages.length > 0) {
+    const { data: existingImages } = await supabase
+      .from("listing_images")
+      .select("position")
+      .eq("listing_id", listingId)
+      .order("position", { ascending: false })
+      .limit(1);
+
+    let nextPosition = (existingImages?.[0]?.position ?? -1) + 1;
+
+    for (const file of newImages) {
+      const ext = file.name.split(".").pop() || "jpg";
+      const storagePath = `${user.id}/${listingId}/${nextPosition}_${Date.now()}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("listing-images")
+        .upload(storagePath, file, { contentType: file.type });
+
+      if (uploadError) continue;
+
+      await supabase.from("listing_images").insert({
+        listing_id: listingId,
+        storage_path: storagePath,
+        position: nextPosition,
+      });
+
+      nextPosition++;
+    }
+  }
+
+  redirect(`/${locale}/my-listings`);
+}

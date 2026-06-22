@@ -1,10 +1,15 @@
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import CreateListingForm from "./create-listing-form";
+import EditListingForm from "./edit-listing-form";
 
 function getCategoryName(
-  category: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null },
+  category: {
+    name: string;
+    name_fr: string | null;
+    name_es: string | null;
+    name_de: string | null;
+  },
   locale: string
 ): string {
   if (locale === "fr" && category.name_fr) return category.name_fr;
@@ -13,12 +18,12 @@ function getCategoryName(
   return category.name;
 }
 
-export default async function CreateListingPage({
+export default async function EditListingPage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { locale } = await params;
+  const { locale, id } = await params;
   setRequestLocale(locale);
 
   const supabase = await createClient();
@@ -30,7 +35,19 @@ export default async function CreateListingPage({
     redirect(`/${locale}/login`);
   }
 
-  const t = await getTranslations("CreateListing");
+  const { data: listing } = await supabase
+    .from("listings")
+    .select(
+      "id, title, description, price, category_id, user_id, listing_images(id, storage_path, position)"
+    )
+    .eq("id", id)
+    .single();
+
+  if (!listing || listing.user_id !== user.id) {
+    notFound();
+  }
+
+  const t = await getTranslations("MyListings");
 
   const { data: categories } = await supabase
     .from("categories")
@@ -45,9 +62,13 @@ export default async function CreateListingPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <h1 className="text-2xl font-bold text-text-primary mb-6">
-        {t("pageTitle")}
+        {t("editPageTitle")}
       </h1>
-      <CreateListingForm locale={locale} categories={localizedCategories} />
+      <EditListingForm
+        locale={locale}
+        listing={listing}
+        categories={localizedCategories}
+      />
     </div>
   );
 }

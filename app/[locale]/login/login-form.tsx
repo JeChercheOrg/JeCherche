@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { login } from "@/app/actions/auth";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 export default function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
@@ -26,52 +29,51 @@ export default function LoginForm({ locale }: { locale: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t("loginTitle")}</h1>
-
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          {t("email")}
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-        />
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="text-center mb-6">
+        <div className="flex justify-center mb-3">
+          <Logo href={`/${locale}`} />
+        </div>
+        <h1 className="text-xl font-bold text-text-primary">
+          {t("loginTitle")}
+        </h1>
       </div>
 
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium">
-          {t("password")}
-        </label>
-        <input
-          id="password"
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-        />
-      </div>
+      {error && (
+        <div className="rounded-md bg-error-light border border-error/20 px-4 py-3">
+          <p className="text-sm text-error">{error}</p>
+        </div>
+      )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-      >
+      <Input
+        label={t("email")}
+        id="email"
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        autoComplete="email"
+      />
+
+      <Input
+        label={t("password")}
+        id="password"
+        type="password"
+        required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        autoComplete="current-password"
+      />
+
+      <Button type="submit" disabled={loading} fullWidth size="lg">
         {t("loginSubmit")}
-      </button>
+      </Button>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-center text-text-secondary">
         {t("noAccount")}{" "}
         <Link
           href={`/${locale}/signup`}
-          className="text-blue-600 hover:underline"
+          className="text-primary-text font-medium hover:underline"
         >
           {t("signup")}
         </Link>

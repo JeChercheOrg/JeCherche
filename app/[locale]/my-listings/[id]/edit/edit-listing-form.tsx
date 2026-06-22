@@ -2,55 +2,88 @@
 
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { createListing } from "@/app/actions/listings";
+import Image from "next/image";
+import { updateListing } from "@/app/actions/listings";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Camera, X } from "lucide-react";
 
+interface ExistingImage {
+  id: string;
+  storage_path: string;
+  position: number;
+}
+
 interface Category {
   id: string;
   name: string;
 }
 
-export default function CreateListingForm({
+interface Listing {
+  id: string;
+  title: string;
+  description: string | null;
+  price: number;
+  category_id: string;
+  listing_images?: ExistingImage[];
+}
+
+export default function EditListingForm({
   locale,
+  listing,
   categories,
 }: {
   locale: string;
+  listing: Listing;
   categories: Category[];
 }) {
   const t = useTranslations("CreateListing");
+  const tMy = useTranslations("MyListings");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [images, setImages] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [title, setTitle] = useState(listing.title);
+  const [description, setDescription] = useState(listing.description || "");
+  const [price, setPrice] = useState((listing.price / 100).toString());
+  const [categoryId, setCategoryId] = useState(listing.category_id);
+
+  const [existingImages, setExistingImages] = useState<ExistingImage[]>(
+    (listing.listing_images || []).sort((a, b) => a.position - b.position)
+  );
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [newPreviews, setNewPreviews] = useState<string[]>([]);
+
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || []);
-    const totalImages = images.length + files.length;
+  const totalImages =
+    existingImages.length - imagesToDelete.length + newImages.length;
 
-    if (totalImages > 5) {
+  function handleRemoveExisting(storagePath: string) {
+    setImagesToDelete((prev) => [...prev, storagePath]);
+  }
+
+  function handleRestoreExisting(storagePath: string) {
+    setImagesToDelete((prev) => prev.filter((p) => p !== storagePath));
+  }
+
+  function handleNewImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    const allowed = 5 - totalImages;
+
+    if (files.length > allowed) {
       setFieldErrors((prev) => ({ ...prev, images: t("imageLimitError") }));
       return;
     }
 
-    const newImages = [...images, ...files];
-    const newPreviews = [
-      ...previews,
+    setNewImages((prev) => [...prev, ...files]);
+    setNewPreviews((prev) => [
+      ...prev,
       ...files.map((f) => URL.createObjectURL(f)),
-    ];
-
-    setImages(newImages);
-    setPreviews(newPreviews);
+    ]);
     setFieldErrors((prev) => {
       const { images: _, ...rest } = prev;
       return rest;
@@ -61,10 +94,10 @@ export default function CreateListingForm({
     }
   }
 
-  function removeImage(index: number) {
-    URL.revokeObjectURL(previews[index]);
-    setImages(images.filter((_, i) => i !== index));
-    setPreviews(previews.filter((_, i) => i !== index));
+  function removeNewImage(index: number) {
+    URL.revokeObjectURL(newPreviews[index]);
+    setNewImages(newImages.filter((_, i) => i !== index));
+    setNewPreviews(newPreviews.filter((_, i) => i !== index));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -78,9 +111,12 @@ export default function CreateListingForm({
     formData.set("description", description);
     formData.set("price", price);
     formData.set("category_id", categoryId);
-    images.forEach((img) => formData.append("images", img));
+    imagesToDelete.forEach((path) =>
+      formData.append("images_to_delete", path)
+    );
+    newImages.forEach((img) => formData.append("new_images", img));
 
-    const result = await createListing(locale, formData);
+    const result = await updateListing(locale, listing.id, formData);
 
     if (result?.fieldErrors) {
       const translated: Record<string, string> = {};
@@ -106,7 +142,6 @@ export default function CreateListingForm({
         </div>
       )}
 
-      {/* Details section */}
       <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
         <Input
           label={t("title")}
@@ -143,10 +178,12 @@ export default function CreateListingForm({
         </Select>
       </section>
 
-      {/* Budget & Photos section */}
       <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
         <div className="space-y-1.5">
-          <label htmlFor="price" className="text-sm font-medium text-text-primary">
+          <label
+            htmlFor="price"
+            className="text-sm font-medium text-text-primary"
+          >
             {t("price")}
           </label>
           <div className="relative">
@@ -175,23 +212,62 @@ export default function CreateListingForm({
           </label>
           <p className="text-xs text-text-tertiary">{t("maxImages")}</p>
 
-          {previews.length > 0 && (
+          {existingImages.length > 0 && (
             <div className="flex gap-3 overflow-x-auto pb-2">
-              {previews.map((src, i) => (
-                <div key={i} className="relative shrink-0 group">
+              {existingImages.map((img) => {
+                const isMarkedForDelete = imagesToDelete.includes(
+                  img.storage_path
+                );
+                return (
+                  <div key={img.id} className="relative shrink-0 group">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${img.storage_path}`}
+                      alt={`Image ${img.position + 1}`}
+                      width={80}
+                      height={80}
+                      className={`w-20 h-20 object-cover rounded-lg border border-border ${isMarkedForDelete ? "opacity-30" : ""
+                        }`}
+                    />
+                    {img.position === 0 && !isMarkedForDelete && (
+                      <span className="absolute bottom-1 left-1 bg-primary text-text-primary text-[10px] px-1.5 py-0.5 rounded font-medium">
+                        {t("coverLabel")}
+                      </span>
+                    )}
+                    {isMarkedForDelete ? (
+                      <button
+                        type="button"
+                        onClick={() => handleRestoreExisting(img.storage_path)}
+                        className="absolute inset-0 flex items-center justify-center text-xs font-medium text-text-secondary bg-surface/60 rounded-lg"
+                      >
+                        Undo
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveExisting(img.storage_path)}
+                        className="absolute -top-1.5 -right-1.5 bg-error text-text-inverse rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {newPreviews.length > 0 && (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {newPreviews.map((src, i) => (
+                <div key={`new-${i}`} className="relative shrink-0 group">
                   <img
                     src={src}
-                    alt={`Preview ${i + 1}`}
+                    alt={`New ${i + 1}`}
                     className="w-20 h-20 object-cover rounded-lg border border-border"
                   />
-                  {i === 0 && (
-                    <span className="absolute bottom-1 left-1 bg-primary text-text-primary text-[10px] px-1.5 py-0.5 rounded font-medium">
-                      {t("coverLabel")}
-                    </span>
-                  )}
                   <button
                     type="button"
-                    onClick={() => removeImage(i)}
+                    onClick={() => removeNewImage(i)}
                     className="absolute -top-1.5 -right-1.5 bg-error text-text-inverse rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X className="h-3 w-3" />
@@ -201,7 +277,7 @@ export default function CreateListingForm({
             </div>
           )}
 
-          {images.length < 5 && (
+          {totalImages < 5 && (
             <label className="flex flex-col items-center justify-center cursor-pointer border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary hover:bg-primary-light/50 transition-colors">
               <Camera className="h-8 w-8 text-text-tertiary mb-2" />
               <span className="text-sm font-medium text-text-secondary">
@@ -212,7 +288,7 @@ export default function CreateListingForm({
                 type="file"
                 multiple
                 accept="image/jpeg,image/png,image/webp"
-                onChange={handleImageChange}
+                onChange={handleNewImageChange}
                 className="hidden"
               />
             </label>
@@ -224,10 +300,9 @@ export default function CreateListingForm({
         </div>
       </section>
 
-      {/* Submit */}
       <div className="sticky bottom-4 sm:static">
         <Button type="submit" disabled={loading} fullWidth size="lg">
-          {loading ? t("submitting") : t("submit")}
+          {loading ? tMy("saving") : tMy("save")}
         </Button>
       </div>
     </form>

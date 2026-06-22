@@ -27,6 +27,7 @@
 # AI config (local only)
 CLAUDE.md
 AGENTS.md
+PROGRESS.md
 .agents
 
 # debug

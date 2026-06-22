@@ -10,8 +10,10 @@ export default async function LoginPage({
   setRequestLocale(locale);
 
   return (
-    <div className="mx-auto max-w-md px-4 py-16">
-      <LoginForm locale={locale} />
+    <div className="flex-1 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[420px] rounded-xl border border-border bg-surface p-8 shadow-sm">
+        <LoginForm locale={locale} />
+      </div>
     </div>
   );
 }

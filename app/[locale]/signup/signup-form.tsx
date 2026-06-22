@@ -4,6 +4,10 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { signup } from "@/app/actions/auth";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
+import { CheckCircle } from "lucide-react";
 
 export default function SignupForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
@@ -43,38 +47,55 @@ export default function SignupForm({ locale }: { locale: string }) {
 
   if (success) {
     return (
-      <div className="text-center py-8">
-        <h1 className="text-2xl font-bold mb-4">{t("signupTitle")}</h1>
-        <p className="text-green-700">{t("checkEmail")}</p>
+      <div className="text-center py-4">
+        <div className="flex justify-center mb-4">
+          <div className="h-12 w-12 rounded-full bg-tertiary-light flex items-center justify-center">
+            <CheckCircle className="h-6 w-6 text-success" />
+          </div>
+        </div>
+        <h1 className="text-xl font-bold text-text-primary mb-2">
+          {t("signupTitle")}
+        </h1>
+        <p className="text-text-secondary">{t("checkEmail")}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t("signupTitle")}</h1>
-
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          {t("email")}
-        </label>
-        <input
-          id="email"
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-        />
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="text-center mb-6">
+        <div className="flex justify-center mb-3">
+          <Logo href={`/${locale}`} />
+        </div>
+        <h1 className="text-xl font-bold text-text-primary">
+          {t("signupTitle")}
+        </h1>
       </div>
 
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium">
+      {error && (
+        <div className="rounded-md bg-error-light border border-error/20 px-4 py-3">
+          <p className="text-sm text-error">{error}</p>
+        </div>
+      )}
+
+      <Input
+        label={t("email")}
+        id="email"
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        autoComplete="email"
+      />
+
+      <div className="space-y-1.5">
+        <label
+          htmlFor="password"
+          className="text-sm font-medium text-text-primary"
+        >
           {t("password")}
         </label>
-        <div className="mt-1 flex gap-2">
+        <div className="flex gap-2">
           <input
             id="password"
             type={showPassword ? "text" : "password"}
@@ -82,31 +103,30 @@ export default function SignupForm({ locale }: { locale: string }) {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 px-3 py-2"
+            autoComplete="new-password"
+            className="h-11 w-full rounded-md border border-border bg-surface px-3 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
           />
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="sm"
             onClick={generatePassword}
-            className="shrink-0 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            className="shrink-0 h-11 rounded-md"
           >
             {t("generatePassword")}
-          </button>
+          </Button>
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading} fullWidth size="lg">
         {t("signupSubmit")}
-      </button>
+      </Button>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-center text-text-secondary">
         {t("hasAccount")}{" "}
         <Link
           href={`/${locale}/login`}
-          className="text-blue-600 hover:underline"
+          className="text-primary-text font-medium hover:underline"
         >
           {t("login")}
         </Link>
