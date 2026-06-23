@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { login } from "@/app/actions/auth";
 import Link from "next/link";
@@ -9,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 
 export default function LoginForm({ locale }: { locale: string }) {
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +23,7 @@ export default function LoginForm({ locale }: { locale: string }) {
     setLoading(true);
     setError(null);
 
-    const result = await login(locale, email, password);
+    const result = await login(locale, email, password, redirectTo);
 
     if (result?.error) {
       setError(t("errorInvalidCredentials"));

@@ -136,17 +136,6 @@ export default async function ListingDetailPage({
               </div>
             )}
 
-            {!user && (
-              <p className="text-sm text-text-tertiary mb-6">
-                <Link
-                  href={`/${locale}/login`}
-                  className="text-primary hover:underline font-medium"
-                >
-                  {tR("loginToOffer")}
-                </Link>
-              </p>
-            )}
-
             {user && isOwner && (
               <p className="text-sm text-text-tertiary italic mb-6">
                 {tR("ownListing")}
@@ -255,6 +244,20 @@ export default async function ListingDetailPage({
               <>
                 <hr className="border-border" />
                 <ListingActions locale={locale} listingId={id} />
+              </>
+            )}
+
+            {!user && (
+              <>
+                <hr className="border-border" />
+                <Link
+                  href={`/${locale}/login?redirectTo=/${locale}/listings/${id}`}
+                  className="block rounded-lg border border-primary/30 bg-primary-light/30 px-4 py-3 text-center hover:bg-primary-light/50 transition-colors"
+                >
+                  <p className="text-sm font-medium text-primary-text">
+                    {tR("loginToOffer")}
+                  </p>
+                </Link>
               </>
             )}
 

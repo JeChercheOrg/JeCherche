@@ -31,7 +31,12 @@ export async function signup(
   return { error: null };
 }
 
-export async function login(locale: string, email: string, password: string) {
+export async function login(
+  locale: string,
+  email: string,
+  password: string,
+  redirectTo?: string
+) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -42,5 +47,5 @@ export async function login(locale: string, email: string, password: string) {
     return { error: error.message };
   }
 
-  redirect(`/${locale}`);
+  redirect(redirectTo && redirectTo.startsWith("/") ? redirectTo : `/${locale}`);
 }

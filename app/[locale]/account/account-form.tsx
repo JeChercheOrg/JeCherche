@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Camera, Check, Trash2, LogOut } from "lucide-react";
+import { Camera, Check, Trash2, LogOut, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,6 +51,7 @@ export default function AccountForm({
 
   const [deleteConfirming, setDeleteConfirming] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [dangerOpen, setDangerOpen] = useState(false);
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -307,44 +308,57 @@ export default function AccountForm({
 
       {/* Danger zone */}
       <div className="rounded-xl border border-error/30 bg-surface p-6 space-y-4">
-        <h2 className="text-lg font-semibold text-error">
-          {t("dangerZone")}
-        </h2>
+        <button
+          type="button"
+          onClick={() => setDangerOpen(!dangerOpen)}
+          className="flex w-full items-center justify-between"
+        >
+          <h2 className="text-lg font-semibold text-error">
+            {t("dangerZone")}
+          </h2>
+          <ChevronDown
+            className={`h-5 w-5 text-error transition-transform ${dangerOpen ? "rotate-0" : "-rotate-90"}`}
+          />
+        </button>
 
-        {deleteConfirming ? (
-          <div className="space-y-3">
-            <p className="text-sm text-text-secondary">
-              {t("deleteWarning")}
-            </p>
-            <div className="flex gap-2">
+        {dangerOpen && (
+          <>
+            {deleteConfirming ? (
+              <div className="space-y-3">
+                <p className="text-sm text-text-secondary">
+                  {t("deleteWarning")}
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleDelete}
+                    disabled={deleteLoading}
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-1" />
+                    {deleteLoading ? t("deleting") : t("confirmDeleteAccount")}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setDeleteConfirming(false)}
+                    disabled={deleteLoading}
+                  >
+                    {t("cancelDelete")}
+                  </Button>
+                </div>
+              </div>
+            ) : (
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={handleDelete}
-                disabled={deleteLoading}
+                onClick={() => setDeleteConfirming(true)}
               >
                 <Trash2 className="h-3.5 w-3.5 mr-1" />
-                {deleteLoading ? t("deleting") : t("confirmDeleteAccount")}
+                {t("deleteAccount")}
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setDeleteConfirming(false)}
-                disabled={deleteLoading}
-              >
-                {t("cancelDelete")}
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteConfirming(true)}
-          >
-            <Trash2 className="h-3.5 w-3.5 mr-1" />
-            {t("deleteAccount")}
-          </Button>
+            )}
+          </>
         )}
       </div>
     </div>
