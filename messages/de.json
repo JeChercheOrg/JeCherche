@@ -201,5 +201,23 @@
     "cityFilter": "Stadt",
     "deliveryFilter": "Lieferung möglich",
     "radiusLabel": "Umkreis"
+  },
+  "SEO": {
+    "homeTitle": "Veröffentlichen Sie, was Sie suchen — Verkäufer kommen zu Ihnen",
+    "homeDescription": "JeCherche ist der umgekehrte Marktplatz: Veröffentlichen Sie Ihre Kaufanfrage und erhalten Sie Angebote von Verkäufern. Finden Sie mühelos alles, was Sie brauchen.",
+    "listingsTitle": "Alle Anzeigen",
+    "listingsDescription": "Durchsuchen Sie Kaufanfragen auf JeCherche. Verkäufer, senden Sie Ihre Angebote an Käufer, die Ihre Produkte suchen.",
+    "listingDetailDescription": "{title} — Budget: {price}. {description}",
+    "profileTitle": "Profil von {name}",
+    "profileDescription": "Entdecken Sie die Anzeigen von {name} auf JeCherche."
+  },
+  "HowItWorks": {
+    "title": "So funktioniert's",
+    "step1Title": "Veröffentlichen Sie Ihre Anfrage",
+    "step1Description": "Beschreiben Sie, was Sie suchen, legen Sie Ihr Budget fest und fügen Sie bei Bedarf Fotos hinzu.",
+    "step2Title": "Erhalten Sie Angebote",
+    "step2Description": "Verkäufer sehen Ihre Anfrage und bieten Ihnen ihre Produkte mit einem Preis an.",
+    "step3Title": "Wählen Sie das beste Angebot",
+    "step3Description": "Vergleichen Sie Angebote, chatten Sie mit Verkäufern und schließen Sie Ihren Kauf ab."
   }
 }

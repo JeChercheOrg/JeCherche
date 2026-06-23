@@ -10,6 +10,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ToastProvider } from "@/components/toast";
 import { getUnreadCount } from "@/app/actions/messages";
+import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -34,8 +35,23 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Layout" });
   return {
-    title: t("title"),
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: SITE_NAME,
+      template: `%s — ${SITE_NAME}`,
+    },
     description: t("description"),
+    alternates: {
+      canonical: `${SITE_URL}/${locale}`,
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}`])
+      ),
+    },
+    openGraph: {
+      siteName: SITE_NAME,
+      locale,
+      type: "website",
+    },
   };
 }
 

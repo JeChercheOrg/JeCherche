@@ -201,5 +201,23 @@
     "cityFilter": "Ciudad",
     "deliveryFilter": "Envío disponible",
     "radiusLabel": "Radio"
+  },
+  "SEO": {
+    "homeTitle": "Publica lo que buscas, los vendedores vienen a ti",
+    "homeDescription": "JeCherche es el marketplace inverso: publica tu solicitud de compra y recibe ofertas de vendedores. Encuentra todo lo que necesitas sin esfuerzo.",
+    "listingsTitle": "Todos los anuncios",
+    "listingsDescription": "Explora las solicitudes de compra publicadas en JeCherche. Vendedores, envíen sus ofertas a los compradores que buscan sus productos.",
+    "listingDetailDescription": "{title} — Presupuesto: {price}. {description}",
+    "profileTitle": "Perfil de {name}",
+    "profileDescription": "Descubre los anuncios publicados por {name} en JeCherche."
+  },
+  "HowItWorks": {
+    "title": "Cómo funciona",
+    "step1Title": "Publica tu solicitud",
+    "step1Description": "Describe lo que buscas, fija tu presupuesto y añade fotos si es necesario.",
+    "step2Title": "Recibe ofertas",
+    "step2Description": "Los vendedores ven tu solicitud y te proponen sus productos con un precio.",
+    "step3Title": "Elige la mejor oferta",
+    "step3Description": "Compara ofertas, chatea con los vendedores y finaliza tu compra."
   }
 }

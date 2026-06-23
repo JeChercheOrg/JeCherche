@@ -1,8 +1,51 @@
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { UserAvatar } from "@/components/user-avatar";
 import { ListingCard } from "@/components/listing-card";
+import { JsonLd } from "@/components/json-ld";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SITE_URL } from "@/lib/constants";
+import { routing } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { locale, id } = await params;
+  const supabase = await createClient();
+  const t = await getTranslations({ locale, namespace: "SEO" });
+  const tP = await getTranslations({ locale, namespace: "PublicProfile" });
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("id", id)
+    .single();
+
+  const name = profile?.display_name || tP("anonymousUser");
+  const title = t("profileTitle", { name });
+  const description = t("profileDescription", { name });
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/users/${id}`,
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}/users/${id}`])
+      ),
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/${locale}/users/${id}`,
+      type: "profile",
+    },
+  };
+}
 
 export default async function PublicProfilePage({
   params,
@@ -50,7 +93,28 @@ export default async function PublicProfilePage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="flex items-center gap-5 mb-8">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          mainEntity: {
+            "@type": "Person",
+            name: displayName,
+            url: `${SITE_URL}/${locale}/users/${id}`,
+            ...(avatarUrl && { image: avatarUrl }),
+          },
+        }}
+      />
+
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { label: "JeCherche", href: "" },
+          { label: displayName },
+        ]}
+      />
+
+      <div className="flex items-center gap-5 mb-8 mt-4">
         <UserAvatar
           displayName={displayName}
           avatarUrl={avatarUrl}

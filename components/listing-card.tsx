@@ -72,9 +72,9 @@ export function ListingCard({ listing, locale, formatPrice, formatDate }: Listin
               {listing.city} {listing.postal_code}
             </span>
           )}
-          <span className="text-xs text-text-tertiary mt-1 block">
+          <time dateTime={listing.created_at} className="text-xs text-text-tertiary mt-1 block">
             {formatDate(new Date(listing.created_at))}
-          </span>
+          </time>
         </div>
       </article>
     </Link>

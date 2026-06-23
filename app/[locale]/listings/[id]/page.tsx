@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -9,6 +10,59 @@ import { UserAvatar } from "@/components/user-avatar";
 import { ResponseForm } from "@/components/response-form";
 import { ResponseCard } from "@/components/response-card";
 import { ListingActions } from "@/components/listing-actions";
+import { JsonLd } from "@/components/json-ld";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SITE_URL } from "@/lib/constants";
+import { routing } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { locale, id } = await params;
+  const supabase = await createClient();
+  const t = await getTranslations({ locale, namespace: "SEO" });
+
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("title, description, price, listing_images(storage_path, position)")
+    .eq("id", id)
+    .single();
+
+  if (!listing) return { title: "Not found" };
+
+  const description = t("listingDetailDescription", {
+    title: listing.title,
+    price: `${(listing.price / 100).toFixed(0)}€`,
+    description: (listing.description || "").slice(0, 120),
+  });
+
+  const firstImage = listing.listing_images?.sort(
+    (a: { position: number }, b: { position: number }) => a.position - b.position
+  )[0];
+  const ogImage = firstImage
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${firstImage.storage_path}`
+    : undefined;
+
+  return {
+    title: listing.title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/listings/${id}`,
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}/listings/${id}`])
+      ),
+    },
+    openGraph: {
+      title: listing.title,
+      description,
+      url: `${SITE_URL}/${locale}/listings/${id}`,
+      type: "article",
+      ...(ogImage && { images: [{ url: ogImage }] }),
+    },
+  };
+}
 
 function getCategoryName(
   category: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null },
@@ -102,15 +156,37 @@ export default async function ListingDetailPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      <Link
-        href={`/${locale}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        {t("backToListings")}
-      </Link>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WantAction",
+          name: listing.title,
+          description: listing.description || undefined,
+          agent: { "@type": "Person", name: authorName },
+          object: {
+            "@type": "Product",
+            name: listing.title,
+            offers: {
+              "@type": "Demand",
+              priceCurrency: "EUR",
+              price: (listing.price / 100).toFixed(2),
+            },
+          },
+          ...(listing.city && {
+            location: { "@type": "Place", address: listing.city },
+          }),
+        }}
+      />
 
-      <div className="lg:grid lg:grid-cols-5 lg:gap-8">
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { label: t("backToListings"), href: "/listings" },
+          { label: listing.title },
+        ]}
+      />
+
+      <div className="mt-4 lg:grid lg:grid-cols-5 lg:gap-8">
         {/* Left column — gallery + responses */}
         <div className="lg:col-span-3 mb-6 lg:mb-0 space-y-10">
           <ImageGallery
@@ -195,11 +271,13 @@ export default async function ListingDetailPage({
 
             <p className="text-sm text-text-tertiary">
               {t("postedOn")}{" "}
-              {format.dateTime(new Date(listing.created_at), {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              <time dateTime={listing.created_at}>
+                {format.dateTime(new Date(listing.created_at), {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
             </p>
 
             {(listing.city || listing.delivery_available) && (

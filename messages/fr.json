@@ -201,5 +201,23 @@
     "cityFilter": "Ville",
     "deliveryFilter": "Livraison possible",
     "radiusLabel": "Rayon"
+  },
+  "SEO": {
+    "homeTitle": "Publiez ce que vous cherchez, les vendeurs viennent à vous",
+    "homeDescription": "JeCherche est la marketplace inversée : publiez votre demande d'achat et recevez des offres de vendeurs. Trouvez tout ce que vous cherchez sans effort.",
+    "listingsTitle": "Toutes les annonces",
+    "listingsDescription": "Parcourez les demandes d'achat publiées sur JeCherche. Vendeurs, proposez vos offres aux acheteurs qui cherchent vos produits.",
+    "listingDetailDescription": "{title} — Budget : {price}. {description}",
+    "profileTitle": "Profil de {name}",
+    "profileDescription": "Découvrez les annonces publiées par {name} sur JeCherche."
+  },
+  "HowItWorks": {
+    "title": "Comment ça marche",
+    "step1Title": "Publiez votre demande",
+    "step1Description": "Décrivez ce que vous cherchez, fixez votre budget et ajoutez des photos si nécessaire.",
+    "step2Title": "Recevez des offres",
+    "step2Description": "Les vendeurs voient votre demande et vous proposent leurs produits avec un prix.",
+    "step3Title": "Choisissez la meilleure offre",
+    "step3Description": "Comparez les offres, échangez avec les vendeurs et finalisez votre achat."
   }
 }

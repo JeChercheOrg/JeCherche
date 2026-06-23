@@ -1,12 +1,49 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { SearchBar } from "@/components/search-bar";
 import { CategoryBar } from "@/components/category-bar";
 import { ListingsFilters } from "@/components/listings-filters";
 import { ListingCard } from "@/components/listing-card";
+import { JsonLd } from "@/components/json-ld";
 import { X } from "lucide-react";
+import { SITE_URL } from "@/lib/constants";
+import { routing } from "@/i18n/routing";
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ q?: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const { q } = await searchParams;
+  const t = await getTranslations({ locale, namespace: "SEO" });
+  const tL = await getTranslations({ locale, namespace: "Listings" });
+
+  const title = q ? tL("searchResults", { query: q }) : t("listingsTitle");
+  const description = t("listingsDescription");
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/listings`,
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}/listings`])
+      ),
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/${locale}/listings`,
+      type: "website",
+    },
+  };
+}
 
 export default async function ListingsPage({
   params,
@@ -107,6 +144,22 @@ export default async function ListingsPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
+      {listings && listings.length > 0 && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            numberOfItems: listings.length,
+            itemListElement: listings.slice(0, 10).map((listing, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              url: `${SITE_URL}/${locale}/listings/${listing.id}`,
+              name: listing.title,
+            })),
+          }}
+        />
+      )}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
         <h1 className="text-2xl font-bold text-text-primary">
           {searchQuery ? t("searchResults", { query: searchQuery }) : t("title")}
