@@ -131,7 +131,7 @@ export async function createListing(
     }
   }
 
-  redirect(`/${locale}`);
+  redirect(`/${locale}/listings/${listing.id}`);
 }
 
 export async function deleteListing(
