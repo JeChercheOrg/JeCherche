@@ -6,9 +6,10 @@ import { Search, X } from "lucide-react";
 interface SearchBarProps {
   placeholder: string;
   action: string;
+  className?: string;
 }
 
-export function SearchBar({ placeholder, action }: SearchBarProps) {
+export function SearchBar({ placeholder, action, className }: SearchBarProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const currentQuery = searchParams.get("q") || "";
@@ -22,7 +23,7 @@ export function SearchBar({ placeholder, action }: SearchBarProps) {
   }
 
   return (
-    <form method="GET" action={action} className="relative flex-1 max-w-xl">
+    <form method="GET" action={action} className={className || "relative flex-1 max-w-xl"}>
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-tertiary" />
       <input
         type="search"

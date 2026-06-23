@@ -5,17 +5,15 @@
     "heroTitle": "Tell us what you're looking for",
     "heroSubtitle": "Post your request, let sellers come to you.",
     "heroCta": "Post a request",
-    "allCategories": "All",
-    "searchResults": "Results for \"{query}\"",
-    "noResults": "No results found.",
-    "clearFilters": "Clear filters"
+    "viewAll": "Browse all listings"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Find what you are looking for. Post what you want to buy, let sellers come to you.",
     "publish": "Publish",
     "searchPlaceholder": "What are you looking for?",
-    "myAccount": "My account"
+    "myAccount": "My account",
+    "listings": "Listings"
   },
   "Auth": {
     "login": "Log in",
@@ -176,5 +174,20 @@
     "errorEmpty": "Message cannot be empty.",
     "errorTooLong": "Message is too long (2000 characters max).",
     "messages": "Messages"
+  },
+  "Listings": {
+    "title": "All listings",
+    "resultsCount": "{count, plural, =0 {No listings} =1 {1 listing found} other {# listings found}}",
+    "allCategories": "All",
+    "searchResults": "Results for \"{query}\"",
+    "noResults": "No results found.",
+    "clearFilters": "Clear filters",
+    "priceMin": "Min price",
+    "priceMax": "Max price",
+    "sortNewest": "Newest",
+    "sortOldest": "Oldest",
+    "sortCheapest": "Cheapest",
+    "sortExpensive": "Most expensive",
+    "sortLabel": "Sort by"
   }
 }

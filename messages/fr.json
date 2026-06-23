@@ -5,17 +5,15 @@
     "heroTitle": "Dites ce que vous cherchez",
     "heroSubtitle": "Publiez votre demande, les vendeurs viendront à vous.",
     "heroCta": "Publier une demande",
-    "allCategories": "Toutes",
-    "searchResults": "Résultats pour « {query} »",
-    "noResults": "Aucun résultat trouvé.",
-    "clearFilters": "Effacer les filtres"
+    "viewAll": "Voir toutes les annonces"
   },
   "Layout": {
     "title": "JeCherche",
     "description": "Trouvez ce que vous cherchez. Publiez ce que vous voulez acheter, laissez les vendeurs venir à vous.",
     "publish": "Publier",
     "searchPlaceholder": "Que cherchez-vous ?",
-    "myAccount": "Mon compte"
+    "myAccount": "Mon compte",
+    "listings": "Annonces"
   },
   "Auth": {
     "login": "Connexion",
@@ -176,5 +174,20 @@
     "errorEmpty": "Le message ne peut pas être vide.",
     "errorTooLong": "Le message est trop long (2000 caractères max).",
     "messages": "Messages"
+  },
+  "Listings": {
+    "title": "Toutes les annonces",
+    "resultsCount": "{count, plural, =0 {Aucune annonce} =1 {1 annonce trouvée} other {# annonces trouvées}}",
+    "allCategories": "Toutes",
+    "searchResults": "Résultats pour « {query} »",
+    "noResults": "Aucun résultat trouvé.",
+    "clearFilters": "Effacer les filtres",
+    "priceMin": "Prix min",
+    "priceMax": "Prix max",
+    "sortNewest": "Plus récentes",
+    "sortOldest": "Plus anciennes",
+    "sortCheapest": "Moins chères",
+    "sortExpensive": "Plus chères",
+    "sortLabel": "Trier par"
   }
 }

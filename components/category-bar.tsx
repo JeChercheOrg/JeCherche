@@ -7,6 +7,7 @@ interface CategoryBarProps {
   currentCategory?: string;
   currentQuery?: string;
   allLabel: string;
+  basePath?: string;
 }
 
 function getCategoryName(
@@ -19,12 +20,13 @@ function getCategoryName(
   return category.name;
 }
 
-function buildHref(locale: string, query?: string, categoryId?: string): string {
+function buildHref(locale: string, query?: string, categoryId?: string, basePath?: string): string {
   const params = new URLSearchParams();
   if (query) params.set("q", query);
   if (categoryId) params.set("category", categoryId);
   const qs = params.toString();
-  return qs ? `/${locale}?${qs}` : `/${locale}`;
+  const base = basePath || `/${locale}`;
+  return qs ? `${base}?${qs}` : base;
 }
 
 export function CategoryBar({
@@ -33,12 +35,13 @@ export function CategoryBar({
   currentCategory,
   currentQuery,
   allLabel,
+  basePath,
 }: CategoryBarProps) {
   if (!categories || categories.length === 0) return null;
 
   return (
     <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-      <Link href={buildHref(locale, currentQuery)}>
+      <Link href={buildHref(locale, currentQuery, undefined, basePath)}>
         <Badge
           variant={!currentCategory ? "primary" : "default"}
           className="whitespace-nowrap cursor-pointer hover:bg-primary-light hover:text-primary-text transition-colors shrink-0"
@@ -49,7 +52,7 @@ export function CategoryBar({
       {categories.map((category) => (
         <Link
           key={category.id}
-          href={buildHref(locale, currentQuery, category.id)}
+          href={buildHref(locale, currentQuery, category.id, basePath)}
         >
           <Badge
             variant={currentCategory === category.id ? "primary" : "default"}

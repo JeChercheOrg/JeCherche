@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { ToastProvider } from "@/components/toast";
 import { getUnreadCount } from "@/app/actions/messages";
 import "../globals.css";
@@ -99,6 +100,7 @@ export default async function LocaleLayout({
             publish: tLayout("publish"),
             myListings: tMyListings("myListings"),
             messages: tMessages("messages"),
+            listings: tLayout("listings"),
             searchPlaceholder: tLayout("searchPlaceholder"),
           }}
         />
@@ -107,6 +109,13 @@ export default async function LocaleLayout({
             <ToastProvider>{children}</ToastProvider>
           </NextIntlClientProvider>
         </main>
+        <Footer
+          locale={locale}
+          translations={{
+            listings: tLayout("listings"),
+            publish: tLayout("publish"),
+          }}
+        />
       </body>
     </html>
   );

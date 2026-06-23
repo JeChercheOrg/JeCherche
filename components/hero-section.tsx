@@ -8,6 +8,7 @@ interface HeroSectionProps {
     title: string;
     subtitle: string;
     cta: string;
+    viewAll: string;
   };
 }
 
@@ -26,9 +27,14 @@ export function HeroSection({ locale, translations }: HeroSectionProps) {
         <p className="text-text-secondary text-base sm:text-lg mb-6 max-w-md mx-auto">
           {translations.subtitle}
         </p>
-        <Link href={`/${locale}/listings/create`}>
-          <Button size="lg">{translations.cta}</Button>
-        </Link>
+        <div className="flex flex-col items-center gap-3">
+          <Link href={`/${locale}/listings/create`}>
+            <Button size="lg">{translations.cta}</Button>
+          </Link>
+          <Link href={`/${locale}/listings`}>
+            <Button variant="ghost" size="lg">{translations.viewAll}</Button>
+          </Link>
+        </div>
       </div>
     </section>
   );
