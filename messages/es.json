@@ -35,7 +35,9 @@
   "CreateListing": {
     "pageTitle": "Publicar un anuncio",
     "title": "Título",
+    "titlePlaceholder": "Busco…",
     "description": "Descripción",
+    "descriptionPlaceholder": "Describo lo que busco…",
     "price": "Precio",
     "category": "Categoría",
     "images": "Fotos",
@@ -51,7 +53,12 @@
     "pricePositive": "El precio debe ser mayor a 0.",
     "imageFormatError": "Formato no soportado. Usa JPG, PNG o WebP.",
     "imageSizeError": "La imagen supera el límite de 5 MB.",
-    "imageLimitError": "Puedes añadir hasta 5 fotos."
+    "imageLimitError": "Puedes añadir hasta 5 fotos.",
+    "city": "Ciudad",
+    "cityPlaceholder": "Buscar una ciudad…",
+    "delivery": "Envío",
+    "deliveryLabel": "Envío disponible",
+    "geolocate": "Usar mi ubicación"
   },
   "ListingDetail": {
     "budget": "Presupuesto",
@@ -61,7 +68,9 @@
     "description": "Descripción",
     "noDescription": "No se proporcionó descripción.",
     "postedBy": "Publicado por",
-    "viewProfile": "Ver perfil"
+    "viewProfile": "Ver perfil",
+    "location": "Ubicación",
+    "deliveryAvailable": "Envío disponible"
   },
   "MyListings": {
     "pageTitle": "Mis anuncios",
@@ -188,6 +197,9 @@
     "sortOldest": "Más antiguas",
     "sortCheapest": "Más baratas",
     "sortExpensive": "Más caras",
-    "sortLabel": "Ordenar por"
+    "sortLabel": "Ordenar por",
+    "cityFilter": "Ciudad",
+    "deliveryFilter": "Envío disponible",
+    "radiusLabel": "Radio"
   }
 }

@@ -25,6 +25,13 @@ export async function createListing(
   const description = formData.get("description") as string;
   const priceStr = formData.get("price") as string;
   const categoryId = formData.get("category_id") as string;
+  const city = (formData.get("city") as string) || null;
+  const postalCode = (formData.get("postal_code") as string) || null;
+  const latStr = formData.get("latitude") as string;
+  const lngStr = formData.get("longitude") as string;
+  const latitude = latStr ? parseFloat(latStr) : null;
+  const longitude = lngStr ? parseFloat(lngStr) : null;
+  const deliveryAvailable = formData.get("delivery_available") === "true";
   const images = formData.getAll("images") as File[];
 
   const fieldErrors: Record<string, string> = {};
@@ -73,6 +80,11 @@ export async function createListing(
       price,
       category_id: categoryId,
       user_id: user.id,
+      city,
+      postal_code: postalCode,
+      latitude,
+      longitude,
+      delivery_available: deliveryAvailable,
     })
     .select("id")
     .single();
@@ -195,6 +207,13 @@ export async function updateListing(
   const description = formData.get("description") as string;
   const priceStr = formData.get("price") as string;
   const categoryId = formData.get("category_id") as string;
+  const city = (formData.get("city") as string) || null;
+  const postalCode = (formData.get("postal_code") as string) || null;
+  const latStr = formData.get("latitude") as string;
+  const lngStr = formData.get("longitude") as string;
+  const latitude = latStr ? parseFloat(latStr) : null;
+  const longitude = lngStr ? parseFloat(lngStr) : null;
+  const deliveryAvailable = formData.get("delivery_available") === "true";
   const imagesToDelete = formData.getAll("images_to_delete") as string[];
   const newImages = (formData.getAll("new_images") as File[]).filter(
     (f) => f.size > 0
@@ -237,6 +256,11 @@ export async function updateListing(
       description: description?.trim() || null,
       price,
       category_id: categoryId,
+      city,
+      postal_code: postalCode,
+      latitude,
+      longitude,
+      delivery_available: deliveryAvailable,
     })
     .eq("id", listingId);
 

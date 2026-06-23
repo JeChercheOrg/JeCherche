@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { AddressAutocomplete } from "@/components/address-autocomplete";
 import { Camera, X } from "lucide-react";
 
 interface ExistingImage {
@@ -27,6 +28,11 @@ interface Listing {
   description: string | null;
   price: number;
   category_id: string;
+  city?: string | null;
+  postal_code?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  delivery_available?: boolean;
   listing_images?: ExistingImage[];
 }
 
@@ -47,6 +53,11 @@ export default function EditListingForm({
   const [description, setDescription] = useState(listing.description || "");
   const [price, setPrice] = useState((listing.price / 100).toString());
   const [categoryId, setCategoryId] = useState(listing.category_id);
+  const [city, setCity] = useState(listing.city || "");
+  const [postalCode, setPostalCode] = useState(listing.postal_code || "");
+  const [latitude, setLatitude] = useState<number | null>(listing.latitude ?? null);
+  const [longitude, setLongitude] = useState<number | null>(listing.longitude ?? null);
+  const [deliveryAvailable, setDeliveryAvailable] = useState(listing.delivery_available || false);
 
   const [existingImages, setExistingImages] = useState<ExistingImage[]>(
     (listing.listing_images || []).sort((a, b) => a.position - b.position)
@@ -111,6 +122,11 @@ export default function EditListingForm({
     formData.set("description", description);
     formData.set("price", price);
     formData.set("category_id", categoryId);
+    if (city) formData.set("city", city);
+    if (postalCode) formData.set("postal_code", postalCode);
+    if (latitude !== null) formData.set("latitude", latitude.toString());
+    if (longitude !== null) formData.set("longitude", longitude.toString());
+    formData.set("delivery_available", deliveryAvailable.toString());
     imagesToDelete.forEach((path) =>
       formData.append("images_to_delete", path)
     );
@@ -176,6 +192,29 @@ export default function EditListingForm({
             </option>
           ))}
         </Select>
+      </section>
+
+      <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
+        <AddressAutocomplete
+          label={t("city")}
+          placeholder={t("cityPlaceholder")}
+          defaultCity={listing.city || undefined}
+          defaultPostalCode={listing.postal_code || undefined}
+          geolocateLabel={t("geolocate")}
+          onSelect={(c, p, lat, lng) => { setCity(c); setPostalCode(p); setLatitude(lat); setLongitude(lng); }}
+        />
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={deliveryAvailable}
+            onChange={(e) => setDeliveryAvailable(e.target.checked)}
+            className="h-4 w-4 rounded border-border text-primary focus:ring-primary/40"
+          />
+          <span className="text-sm font-medium text-text-primary">
+            {t("deliveryLabel")}
+          </span>
+        </label>
       </section>
 
       <section className="rounded-xl border border-border bg-surface p-6 space-y-5">

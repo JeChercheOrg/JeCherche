@@ -35,7 +35,9 @@
   "CreateListing": {
     "pageTitle": "Publish a listing",
     "title": "Title",
+    "titlePlaceholder": "I'm looking for…",
     "description": "Description",
+    "descriptionPlaceholder": "I describe what I'm looking for…",
     "price": "Price",
     "category": "Category",
     "images": "Photos",
@@ -51,7 +53,12 @@
     "pricePositive": "Price must be greater than 0.",
     "imageFormatError": "Unsupported format. Use JPG, PNG or WebP.",
     "imageSizeError": "Image exceeds the 5 MB size limit.",
-    "imageLimitError": "You can add up to 5 photos."
+    "imageLimitError": "You can add up to 5 photos.",
+    "city": "City",
+    "cityPlaceholder": "Search for a city…",
+    "delivery": "Delivery",
+    "deliveryLabel": "Delivery available",
+    "geolocate": "Use my location"
   },
   "ListingDetail": {
     "budget": "Budget",
@@ -61,7 +68,9 @@
     "description": "Description",
     "noDescription": "No description provided.",
     "postedBy": "Posted by",
-    "viewProfile": "View profile"
+    "viewProfile": "View profile",
+    "location": "Location",
+    "deliveryAvailable": "Delivery available"
   },
   "MyListings": {
     "pageTitle": "My listings",
@@ -188,6 +197,9 @@
     "sortOldest": "Oldest",
     "sortCheapest": "Cheapest",
     "sortExpensive": "Most expensive",
-    "sortLabel": "Sort by"
+    "sortLabel": "Sort by",
+    "cityFilter": "City",
+    "deliveryFilter": "Delivery available",
+    "radiusLabel": "Radius"
   }
 }

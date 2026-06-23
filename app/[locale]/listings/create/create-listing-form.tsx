@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { AddressAutocomplete } from "@/components/address-autocomplete";
 import { Camera, X } from "lucide-react";
 
 interface Category {
@@ -30,6 +31,11 @@ export default function CreateListingForm({
   const [categoryId, setCategoryId] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [deliveryAvailable, setDeliveryAvailable] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -78,6 +84,11 @@ export default function CreateListingForm({
     formData.set("description", description);
     formData.set("price", price);
     formData.set("category_id", categoryId);
+    if (city) formData.set("city", city);
+    if (postalCode) formData.set("postal_code", postalCode);
+    if (latitude !== null) formData.set("latitude", latitude.toString());
+    if (longitude !== null) formData.set("longitude", longitude.toString());
+    formData.set("delivery_available", deliveryAvailable.toString());
     images.forEach((img) => formData.append("images", img));
 
     const result = await createListing(locale, formData);
@@ -113,6 +124,7 @@ export default function CreateListingForm({
           id="title"
           type="text"
           required
+          placeholder={t("titlePlaceholder")}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           error={fieldErrors.title}
@@ -122,6 +134,7 @@ export default function CreateListingForm({
           label={t("description")}
           id="description"
           rows={4}
+          placeholder={t("descriptionPlaceholder")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -141,6 +154,28 @@ export default function CreateListingForm({
             </option>
           ))}
         </Select>
+      </section>
+
+      {/* Location & delivery section */}
+      <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
+        <AddressAutocomplete
+          label={t("city")}
+          placeholder={t("cityPlaceholder")}
+          geolocateLabel={t("geolocate")}
+          onSelect={(c, p, lat, lng) => { setCity(c); setPostalCode(p); setLatitude(lat); setLongitude(lng); }}
+        />
+
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={deliveryAvailable}
+            onChange={(e) => setDeliveryAvailable(e.target.checked)}
+            className="h-4 w-4 rounded border-border text-primary focus:ring-primary/40"
+          />
+          <span className="text-sm font-medium text-text-primary">
+            {t("deliveryLabel")}
+          </span>
+        </label>
       </section>
 
       {/* Budget & Photos section */}

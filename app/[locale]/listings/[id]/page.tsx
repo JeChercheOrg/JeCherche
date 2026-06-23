@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MapPin, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/image-gallery";
 import { UserAvatar } from "@/components/user-avatar";
@@ -201,6 +201,23 @@ export default async function ListingDetailPage({
                 year: "numeric",
               })}
             </p>
+
+            {(listing.city || listing.delivery_available) && (
+              <div className="flex flex-wrap items-center gap-2">
+                {listing.city && (
+                  <span className="inline-flex items-center gap-1 text-sm text-text-secondary">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {listing.city} {listing.postal_code}
+                  </span>
+                )}
+                {listing.delivery_available && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary-light px-2.5 py-0.5 text-xs font-medium text-primary-text">
+                    <Truck className="h-3 w-3" />
+                    {t("deliveryAvailable")}
+                  </span>
+                )}
+              </div>
+            )}
 
             <hr className="border-border" />
 

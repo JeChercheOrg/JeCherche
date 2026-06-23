@@ -19,10 +19,15 @@ export default async function ListingsPage({
     price_min?: string;
     price_max?: string;
     sort?: string;
+    city?: string;
+    delivery?: string;
+    lat?: string;
+    lng?: string;
+    radius?: string;
   }>;
 }) {
   const { locale } = await params;
-  const { q, category, price_min, price_max, sort } = await searchParams;
+  const { q, category, price_min, price_max, sort, city, delivery, lat, lng, radius } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations("Listings");
@@ -59,6 +64,31 @@ export default async function ListingsPage({
     query = query.lte("price", priceMax);
   }
 
+  if (city) {
+    const centerLat = lat ? parseFloat(lat) : null;
+    const centerLng = lng ? parseFloat(lng) : null;
+    const radiusKm = radius ? parseInt(radius) : null;
+
+    if (centerLat && centerLng && radiusKm) {
+      const { data: nearbyIds } = await supabase.rpc("listings_within_radius", {
+        center_lat: centerLat,
+        center_lng: centerLng,
+        radius_km: radiusKm,
+      });
+      if (nearbyIds && nearbyIds.length > 0) {
+        query = query.in("id", nearbyIds.map((r: { id: string }) => r.id));
+      } else {
+        query = query.in("id", []);
+      }
+    } else {
+      query = query.ilike("city", `%${city}%`);
+    }
+  }
+
+  if (delivery === "true") {
+    query = query.eq("delivery_available", true);
+  }
+
   const { data: listings } = await query;
 
   const { data: categories } = await supabase
@@ -72,7 +102,7 @@ export default async function ListingsPage({
   const formatDate = (date: Date) =>
     format.dateTime(date, { day: "numeric", month: "short" });
 
-  const hasFilters = searchQuery.length > 0 || !!category || priceMin !== null || priceMax !== null;
+  const hasFilters = searchQuery.length > 0 || !!category || priceMin !== null || priceMax !== null || !!city || delivery === "true" || !!radius;
   const count = listings?.length ?? 0;
 
   return (
@@ -122,6 +152,9 @@ export default async function ListingsPage({
               sortOldest: t("sortOldest"),
               sortCheapest: t("sortCheapest"),
               sortExpensive: t("sortExpensive"),
+              cityFilter: t("cityFilter"),
+              deliveryFilter: t("deliveryFilter"),
+              radiusLabel: t("radiusLabel"),
             }}
           />
         </Suspense>

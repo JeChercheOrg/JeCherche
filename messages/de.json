@@ -35,7 +35,9 @@
   "CreateListing": {
     "pageTitle": "Anzeige veröffentlichen",
     "title": "Titel",
+    "titlePlaceholder": "Ich suche…",
     "description": "Beschreibung",
+    "descriptionPlaceholder": "Ich beschreibe, was ich suche…",
     "price": "Preis",
     "category": "Kategorie",
     "images": "Fotos",
@@ -51,7 +53,12 @@
     "pricePositive": "Der Preis muss größer als 0 sein.",
     "imageFormatError": "Format nicht unterstützt. Verwenden Sie JPG, PNG oder WebP.",
     "imageSizeError": "Das Bild überschreitet die maximale Größe von 5 MB.",
-    "imageLimitError": "Sie können maximal 5 Fotos hinzufügen."
+    "imageLimitError": "Sie können maximal 5 Fotos hinzufügen.",
+    "city": "Stadt",
+    "cityPlaceholder": "Stadt suchen…",
+    "delivery": "Lieferung",
+    "deliveryLabel": "Lieferung möglich",
+    "geolocate": "Meinen Standort verwenden"
   },
   "ListingDetail": {
     "budget": "Budget",
@@ -61,7 +68,9 @@
     "description": "Beschreibung",
     "noDescription": "Keine Beschreibung angegeben.",
     "postedBy": "Veröffentlicht von",
-    "viewProfile": "Profil ansehen"
+    "viewProfile": "Profil ansehen",
+    "location": "Standort",
+    "deliveryAvailable": "Lieferung möglich"
   },
   "MyListings": {
     "pageTitle": "Meine Anzeigen",
@@ -188,6 +197,9 @@
     "sortOldest": "Älteste",
     "sortCheapest": "Günstigste",
     "sortExpensive": "Teuerste",
-    "sortLabel": "Sortieren nach"
+    "sortLabel": "Sortieren nach",
+    "cityFilter": "Stadt",
+    "deliveryFilter": "Lieferung möglich",
+    "radiusLabel": "Umkreis"
   }
 }

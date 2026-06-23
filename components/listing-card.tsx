@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { MapPin } from "lucide-react";
 
 interface ListingCardProps {
   listing: {
@@ -8,6 +9,8 @@ interface ListingCardProps {
     title: string;
     price: number;
     created_at: string;
+    city?: string | null;
+    postal_code?: string | null;
     listing_images?: { storage_path: string; position: number }[];
     categories?: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null } | null;
   };
@@ -63,6 +66,12 @@ export function ListingCard({ listing, locale, formatPrice, formatDate }: Listin
           <h2 className="text-sm font-medium text-text-primary truncate">
             {listing.title}
           </h2>
+          {listing.city && (
+            <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
+              <MapPin className="h-3 w-3" />
+              {listing.city} {listing.postal_code}
+            </span>
+          )}
           <span className="text-xs text-text-tertiary mt-1 block">
             {formatDate(new Date(listing.created_at))}
           </span>
