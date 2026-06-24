@@ -15,8 +15,8 @@ export function Logo({ href = "/", className }: LogoProps) {
         className
       )}
     >
-      Je
-      <span className="text-primary-text">Cherche</span>
+      Vends
+      <span className="text-primary-text">Moi</span>
     </Link>
   );
 }

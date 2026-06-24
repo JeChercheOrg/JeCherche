@@ -3,6 +3,22 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+export async function checkDisplayName(name: string) {
+  const trimmed = name.trim();
+  if (!trimmed || trimmed.length < 2) {
+    return { available: false, reason: "tooShort" };
+  }
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("id")
+    .ilike("display_name", trimmed)
+    .limit(1);
+
+  return { available: !data || data.length === 0 };
+}
+
 export async function logout(locale: string) {
   const supabase = await createClient();
   await supabase.auth.signOut();
@@ -21,6 +37,16 @@ export async function signup(
   const trimmedName = displayName.trim();
   if (!trimmedName) {
     return { error: "displayNameRequired" };
+  }
+
+  const { data: existing } = await supabase
+    .from("profiles")
+    .select("id")
+    .ilike("display_name", trimmedName)
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    return { error: "displayNameTaken" };
   }
 
   const { data, error } = await supabase.auth.signUp({

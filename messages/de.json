@@ -33,7 +33,10 @@
     "generatePassword": "Generieren",
     "displayName": "Anzeigename",
     "displayNamePlaceholder": "Dein Name…",
-    "displayNameRequired": "Der Anzeigename ist erforderlich."
+    "displayNameRequired": "Der Anzeigename ist erforderlich.",
+    "displayNameChecking": "Überprüfung…",
+    "displayNameAvailable": "Dieser Name ist verfügbar",
+    "displayNameTaken": "Dieser Name ist bereits vergeben"
   },
   "CreateListing": {
     "pageTitle": "Anzeige veröffentlichen",

@@ -33,7 +33,10 @@
     "generatePassword": "Générer",
     "displayName": "Nom visible",
     "displayNamePlaceholder": "Votre pseudo…",
-    "displayNameRequired": "Le nom visible est obligatoire."
+    "displayNameRequired": "Le nom visible est obligatoire.",
+    "displayNameChecking": "Vérification…",
+    "displayNameAvailable": "Ce pseudo est disponible",
+    "displayNameTaken": "Ce pseudo est déjà pris"
   },
   "CreateListing": {
     "pageTitle": "Publier une annonce",

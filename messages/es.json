@@ -33,7 +33,10 @@
     "generatePassword": "Generar",
     "displayName": "Nombre visible",
     "displayNamePlaceholder": "Tu nombre…",
-    "displayNameRequired": "El nombre visible es obligatorio."
+    "displayNameRequired": "El nombre visible es obligatorio.",
+    "displayNameChecking": "Verificando…",
+    "displayNameAvailable": "Este nombre está disponible",
+    "displayNameTaken": "Este nombre ya está en uso"
   },
   "CreateListing": {
     "pageTitle": "Publicar un anuncio",

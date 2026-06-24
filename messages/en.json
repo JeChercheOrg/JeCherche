@@ -33,7 +33,10 @@
     "generatePassword": "Generate",
     "displayName": "Display name",
     "displayNamePlaceholder": "Your username…",
-    "displayNameRequired": "Display name is required."
+    "displayNameRequired": "Display name is required.",
+    "displayNameChecking": "Checking…",
+    "displayNameAvailable": "This name is available",
+    "displayNameTaken": "This name is already taken"
   },
   "CreateListing": {
     "pageTitle": "Publish a listing",

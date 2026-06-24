@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { signup } from "@/app/actions/auth";
+import { signup, checkDisplayName } from "@/app/actions/auth";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
 export default function SignupForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
@@ -18,6 +18,29 @@ export default function SignupForm({ locale }: { locale: string }) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [nameStatus, setNameStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const trimmed = displayName.trim();
+    if (trimmed.length < 2) {
+      setNameStatus("idle");
+      return;
+    }
+
+    setNameStatus("checking");
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      const result = await checkDisplayName(trimmed);
+      setNameStatus(result.available ? "available" : "taken");
+    }, 500);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [displayName]);
 
   function generatePassword() {
     const chars =
@@ -37,7 +60,11 @@ export default function SignupForm({ locale }: { locale: string }) {
     const result = await signup(locale, email, password, displayName, window.location.origin);
 
     if (result.error) {
-      setError(t("errorGeneric"));
+      if (result.error === "displayNameTaken") {
+        setError(t("displayNameTaken"));
+      } else {
+        setError(t("errorGeneric"));
+      }
       setLoading(false);
       return;
     }
@@ -79,16 +106,36 @@ export default function SignupForm({ locale }: { locale: string }) {
         </div>
       )}
 
-      <Input
-        label={t("displayName")}
-        id="display_name"
-        type="text"
-        required
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
-        placeholder={t("displayNamePlaceholder")}
-        autoComplete="name"
-      />
+      <div className="space-y-1.5">
+        <Input
+          label={t("displayName")}
+          id="display_name"
+          type="text"
+          required
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          placeholder={t("displayNamePlaceholder")}
+          autoComplete="name"
+        />
+        {nameStatus === "checking" && (
+          <p className="text-xs text-text-tertiary flex items-center gap-1">
+            <Loader2 className="h-3 w-3 animate-spin" />
+            {t("displayNameChecking")}
+          </p>
+        )}
+        {nameStatus === "available" && (
+          <p className="text-xs text-success flex items-center gap-1">
+            <CheckCircle className="h-3 w-3" />
+            {t("displayNameAvailable")}
+          </p>
+        )}
+        {nameStatus === "taken" && (
+          <p className="text-xs text-error flex items-center gap-1">
+            <XCircle className="h-3 w-3" />
+            {t("displayNameTaken")}
+          </p>
+        )}
+      </div>
 
       <Input
         label={t("email")}
@@ -130,7 +177,7 @@ export default function SignupForm({ locale }: { locale: string }) {
         </div>
       </div>
 
-      <Button type="submit" disabled={loading} fullWidth size="lg">
+      <Button type="submit" disabled={loading || nameStatus === "taken"} fullWidth size="lg">
         {t("signupSubmit")}
       </Button>
 
