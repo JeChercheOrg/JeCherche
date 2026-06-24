@@ -61,10 +61,11 @@ export default async function ListingsPage({
     lat?: string;
     lng?: string;
     radius?: string;
+    show_found?: string;
   }>;
 }) {
   const { locale } = await params;
-  const { q, category, price_min, price_max, sort, city, delivery, lat, lng, radius } = await searchParams;
+  const { q, category, price_min, price_max, sort, city, delivery, lat, lng, radius, show_found } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations("Listings");
@@ -83,6 +84,10 @@ export default async function ListingsPage({
     .from("listings")
     .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)")
     .order(orderColumn, { ascending: orderAscending });
+
+  if (show_found !== "true") {
+    query = query.eq("status", "active");
+  }
 
   if (searchQuery) {
     const escaped = searchQuery.replace(/%/g, "\\%").replace(/_/g, "\\_");
@@ -139,7 +144,7 @@ export default async function ListingsPage({
   const formatDate = (date: Date) =>
     format.dateTime(date, { day: "numeric", month: "short" });
 
-  const hasFilters = searchQuery.length > 0 || !!category || priceMin !== null || priceMax !== null || !!city || delivery === "true" || !!radius;
+  const hasFilters = searchQuery.length > 0 || !!category || priceMin !== null || priceMax !== null || !!city || delivery === "true" || !!radius || show_found === "true";
   const count = listings?.length ?? 0;
 
   return (
@@ -208,6 +213,7 @@ export default async function ListingsPage({
               cityFilter: t("cityFilter"),
               deliveryFilter: t("deliveryFilter"),
               radiusLabel: t("radiusLabel"),
+              showFound: t("showFound"),
             }}
           />
         </Suspense>
@@ -230,6 +236,7 @@ export default async function ListingsPage({
               locale={locale}
               formatPrice={formatPrice}
               formatDate={formatDate}
+              foundLabel={t("found")}
             />
           ))}
         </div>

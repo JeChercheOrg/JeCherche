@@ -51,6 +51,7 @@ export default async function Home({
   const { data: listings } = await supabase
     .from("listings")
     .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)")
+    .eq("status", "active")
     .order("created_at", { ascending: false })
     .limit(6);
 

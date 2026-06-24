@@ -150,6 +150,7 @@ export default async function PublicProfilePage({
               locale={locale}
               formatPrice={formatPrice}
               formatDate={formatDate}
+              foundLabel={t("found")}
             />
           ))}
         </div>

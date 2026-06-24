@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useRef } from "react";
-import { MapPin, Truck } from "lucide-react";
+import { MapPin, Truck, CheckCircle } from "lucide-react";
 
 interface ListingsFiltersProps {
   locale: string;
@@ -17,6 +17,7 @@ interface ListingsFiltersProps {
     cityFilter: string;
     deliveryFilter: string;
     radiusLabel: string;
+    showFound: string;
   };
 }
 
@@ -38,6 +39,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
   const [cityLng, setCityLng] = useState(searchParams.get("lng") || "");
   const [radius, setRadius] = useState(searchParams.get("radius") || "");
   const [delivery, setDelivery] = useState(searchParams.get("delivery") === "true");
+  const [showFound, setShowFound] = useState(searchParams.get("show_found") === "true");
 
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -46,7 +48,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
 
   const currentSort = searchParams.get("sort") || "newest";
 
-  function buildParams(overrides?: { sort?: string; delivery?: boolean; radius?: string; cityLat?: string; cityLng?: string; cityQuery?: string }) {
+  function buildParams(overrides?: { sort?: string; delivery?: boolean; showFound?: boolean; radius?: string; cityLat?: string; cityLng?: string; cityQuery?: string }) {
     const params = new URLSearchParams();
     const q = searchParams.get("q");
     const category = searchParams.get("category");
@@ -72,13 +74,16 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
     const deliveryVal = overrides?.delivery ?? delivery;
     if (deliveryVal) params.set("delivery", "true");
 
+    const showFoundVal = overrides?.showFound ?? showFound;
+    if (showFoundVal) params.set("show_found", "true");
+
     const sort = overrides?.sort ?? currentSort;
     if (sort && sort !== "newest") params.set("sort", sort);
 
     return params;
   }
 
-  function navigate(overrides?: { sort?: string; delivery?: boolean; radius?: string; cityLat?: string; cityLng?: string; cityQuery?: string }) {
+  function navigate(overrides?: { sort?: string; delivery?: boolean; showFound?: boolean; radius?: string; cityLat?: string; cityLng?: string; cityQuery?: string }) {
     const params = buildParams(overrides);
     const qs = params.toString();
     router.push(`/${locale}/listings${qs ? `?${qs}` : ""}`);
@@ -165,6 +170,12 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
     navigate({ delivery: newVal });
   }
 
+  function handleShowFoundToggle() {
+    const newVal = !showFound;
+    setShowFound(newVal);
+    navigate({ showFound: newVal });
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-3">
       {/* City + radius */}
@@ -239,14 +250,26 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       <button
         type="button"
         onClick={handleDeliveryToggle}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${
-          delivery
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${delivery
             ? "border-primary bg-primary-light text-primary-text"
             : "border-border bg-surface text-text-secondary hover:border-border-hover"
-        }`}
+          }`}
       >
         <Truck className="h-3.5 w-3.5" />
         {translations.deliveryFilter}
+      </button>
+
+      {/* Show found chip */}
+      <button
+        type="button"
+        onClick={handleShowFoundToggle}
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${showFound
+            ? "border-green-600 bg-green-50 text-green-700"
+            : "border-border bg-surface text-text-secondary hover:border-border-hover"
+          }`}
+      >
+        <CheckCircle className="h-3.5 w-3.5" />
+        {translations.showFound}
       </button>
 
       {/* Sort */}

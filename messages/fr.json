@@ -73,7 +73,8 @@
     "postedBy": "Publié par",
     "viewProfile": "Voir le profil",
     "location": "Localisation",
-    "deliveryAvailable": "Livraison possible"
+    "deliveryAvailable": "Livraison possible",
+    "listingFound": "Cette demande a été pourvue"
   },
   "MyListings": {
     "pageTitle": "Mes annonces",
@@ -83,6 +84,9 @@
     "confirmDelete": "Voulez-vous vraiment supprimer cette annonce ?",
     "cancelDelete": "Annuler",
     "deleting": "Suppression…",
+    "markFound": "Marquer trouvé",
+    "reopen": "Rouvrir",
+    "found": "Trouvé",
     "editPageTitle": "Modifier l'annonce",
     "save": "Enregistrer",
     "saving": "Enregistrement…",
@@ -129,7 +133,8 @@
     "memberSince": "Membre depuis {date}",
     "listings": "Annonces",
     "noListings": "Cet utilisateur n'a publié aucune annonce.",
-    "anonymousUser": "Utilisateur"
+    "anonymousUser": "Utilisateur",
+    "found": "Trouvé"
   },
   "Responses": {
     "sectionTitle": "Offres",
@@ -173,7 +178,8 @@
     "reject": "Refuser",
     "offerAccepted": "Offre acceptée.",
     "offerRejected": "Offre refusée.",
-    "errorNotOwner": "Seul l'auteur de l'annonce peut effectuer cette action."
+    "errorNotOwner": "Seul l'auteur de l'annonce peut effectuer cette action.",
+    "errorListingClosed": "Cette annonce a déjà été pourvue."
   },
   "Messages": {
     "inbox": "Messages",
@@ -226,7 +232,9 @@
     "sortLabel": "Trier par",
     "cityFilter": "Ville",
     "deliveryFilter": "Livraison possible",
-    "radiusLabel": "Rayon"
+    "radiusLabel": "Rayon",
+    "showFound": "Inclure pourvues",
+    "found": "Trouvé"
   },
   "SEO": {
     "homeTitle": "Publiez ce que vous cherchez, les vendeurs viennent à vous",

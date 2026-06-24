@@ -4,10 +4,10 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormatter } from "next-intl";
-import { Pencil, Trash2, MessageSquare, Flame } from "lucide-react";
+import { Pencil, Trash2, MessageSquare, Flame, CheckCircle, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { deleteListing } from "@/app/actions/listings";
+import { deleteListing, toggleListingStatus } from "@/app/actions/listings";
 
 interface MyListingCardProps {
   listing: {
@@ -15,6 +15,7 @@ interface MyListingCardProps {
     title: string;
     price: number;
     created_at: string;
+    status?: string;
     listing_images?: { storage_path: string; position: number }[];
     categories?: {
       name: string;
@@ -31,6 +32,9 @@ interface MyListingCardProps {
     confirmDelete: string;
     cancelDelete: string;
     deleting: string;
+    markFound: string;
+    reopen: string;
+    found: string;
   };
 }
 
@@ -57,6 +61,7 @@ export function MyListingCard({
   const format = useFormatter();
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [toggling, setToggling] = useState(false);
 
   const formatPrice = (price: number) =>
     format.number(price / 100, { style: "currency", currency: "EUR" });
@@ -68,6 +73,7 @@ export function MyListingCard({
     (img) => img.position === 0
   );
   const responseCount = listing.responses?.[0]?.count ?? 0;
+  const isFound = listing.status === "found";
 
   async function handleDelete() {
     setDeleting(true);
@@ -75,10 +81,16 @@ export function MyListingCard({
     setDeleting(false);
   }
 
+  async function handleToggleStatus() {
+    setToggling(true);
+    await toggleListingStatus(locale, listing.id);
+    setToggling(false);
+  }
+
   return (
     <article className="rounded-lg border border-border bg-surface overflow-hidden">
       <Link href={`/${locale}/listings/${listing.id}`}>
-        <div className="relative aspect-[4/3] bg-background">
+        <div className={`relative aspect-[4/3] bg-background ${isFound ? "grayscale-[40%]" : ""}`}>
           {coverImage ? (
             <Image
               src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${coverImage.storage_path}`}
@@ -100,6 +112,14 @@ export function MyListingCard({
               >
                 {getCategoryName(listing.categories, locale)}
               </Badge>
+            </div>
+          )}
+          {isFound && (
+            <div className="absolute top-2 right-2">
+              <span className="inline-flex items-center gap-1 rounded-full bg-green-600/90 backdrop-blur-sm px-2 py-0.5 text-xs font-semibold text-white">
+                <CheckCircle className="h-3 w-3" />
+                {translations.found}
+              </span>
             </div>
           )}
           {responseCount > 0 && (
@@ -163,6 +183,20 @@ export function MyListingCard({
                 {translations.edit}
               </Button>
             </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleToggleStatus}
+              disabled={toggling}
+              className={isFound ? "text-blue-600 hover:text-blue-700 hover:bg-blue-50" : "text-green-600 hover:text-green-700 hover:bg-green-50"}
+            >
+              {isFound ? (
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+              ) : (
+                <CheckCircle className="h-3.5 w-3.5 mr-1" />
+              )}
+              {isFound ? translations.reopen : translations.markFound}
+            </Button>
             <Button
               variant="ghost"
               size="sm"

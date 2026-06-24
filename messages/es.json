@@ -73,7 +73,8 @@
     "postedBy": "Publicado por",
     "viewProfile": "Ver perfil",
     "location": "Ubicación",
-    "deliveryAvailable": "Envío disponible"
+    "deliveryAvailable": "Envío disponible",
+    "listingFound": "Esta solicitud ha sido cubierta"
   },
   "MyListings": {
     "pageTitle": "Mis anuncios",
@@ -83,6 +84,9 @@
     "confirmDelete": "¿Seguro que quieres eliminar este anuncio?",
     "cancelDelete": "Cancelar",
     "deleting": "Eliminando…",
+    "markFound": "Marcar encontrado",
+    "reopen": "Reabrir",
+    "found": "Encontrado",
     "editPageTitle": "Editar anuncio",
     "save": "Guardar",
     "saving": "Guardando…",
@@ -129,7 +133,8 @@
     "memberSince": "Miembro desde {date}",
     "listings": "Anuncios",
     "noListings": "Este usuario no ha publicado ningún anuncio.",
-    "anonymousUser": "Usuario"
+    "anonymousUser": "Usuario",
+    "found": "Encontrado"
   },
   "Responses": {
     "sectionTitle": "Ofertas",
@@ -173,7 +178,8 @@
     "reject": "Rechazar",
     "offerAccepted": "Oferta aceptada.",
     "offerRejected": "Oferta rechazada.",
-    "errorNotOwner": "Solo el autor del anuncio puede realizar esta acción."
+    "errorNotOwner": "Solo el autor del anuncio puede realizar esta acción.",
+    "errorListingClosed": "Este anuncio ya ha sido cubierto."
   },
   "Messages": {
     "inbox": "Mensajes",
@@ -226,7 +232,9 @@
     "sortLabel": "Ordenar por",
     "cityFilter": "Ciudad",
     "deliveryFilter": "Envío disponible",
-    "radiusLabel": "Radio"
+    "radiusLabel": "Radio",
+    "showFound": "Incluir encontradas",
+    "found": "Encontrado"
   },
   "SEO": {
     "homeTitle": "Publica lo que buscas, los vendedores vienen a ti",

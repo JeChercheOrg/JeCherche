@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Truck } from "lucide-react";
+import { ArrowLeft, MapPin, Truck, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/image-gallery";
 import { UserAvatar } from "@/components/user-avatar";
@@ -134,7 +134,7 @@ export default async function ListingDetailPage({
     hasResponded = !!existingResponse;
   }
 
-  const canRespond = !!user && !isOwner && !hasResponded;
+  const canRespond = !!user && !isOwner && !hasResponded && listing.status !== "found";
 
   const responseTranslations = {
     yourOffer: tR("yourOffer"),
@@ -253,6 +253,15 @@ export default async function ListingDetailPage({
               </Badge>
             )}
 
+            {listing.status === "found" && (
+              <div className="flex items-center gap-2 rounded-lg bg-green-50 border border-green-200 px-4 py-3">
+                <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
+                <p className="text-sm font-medium text-green-800">
+                  {t("listingFound")}
+                </p>
+              </div>
+            )}
+
             <h1 className="text-xl sm:text-2xl font-bold text-text-primary">
               {listing.title}
             </h1>
@@ -342,7 +351,7 @@ export default async function ListingDetailPage({
               </>
             )}
 
-            {!user && (
+            {!user && listing.status !== "found" && (
               <>
                 <hr className="border-border" />
                 <Link

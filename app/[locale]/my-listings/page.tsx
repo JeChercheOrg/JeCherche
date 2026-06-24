@@ -53,6 +53,9 @@ export default async function MyListingsPage({
                 confirmDelete: t("confirmDelete"),
                 cancelDelete: t("cancelDelete"),
                 deleting: t("deleting"),
+                markFound: t("markFound"),
+                reopen: t("reopen"),
+                found: t("found"),
               }}
             />
           ))}

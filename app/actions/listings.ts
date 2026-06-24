@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -307,4 +308,44 @@ export async function updateListing(
   }
 
   redirect(`/${locale}/my-listings`);
+}
+
+export async function toggleListingStatus(
+  locale: string,
+  listingId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("user_id, status")
+    .eq("id", listingId)
+    .single();
+
+  if (!listing || listing.user_id !== user.id) {
+    return { error: "errorGeneric" };
+  }
+
+  const newStatus = listing.status === "active" ? "found" : "active";
+
+  const { error: updateError } = await supabase
+    .from("listings")
+    .update({ status: newStatus })
+    .eq("id", listingId);
+
+  if (updateError) {
+    return { error: "errorGeneric" };
+  }
+
+  revalidatePath(`/${locale}/my-listings`);
+  revalidatePath(`/${locale}/listings/${listingId}`);
+  return {};
 }

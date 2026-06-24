@@ -31,12 +31,16 @@ export async function createResponse(
 
   const { data: listing } = await supabase
     .from("listings")
-    .select("user_id")
+    .select("user_id, status")
     .eq("id", listingId)
     .single();
 
   if (!listing) {
     return { error: "errorGeneric" };
+  }
+
+  if (listing.status === "found") {
+    return { error: "errorListingClosed" };
   }
 
   if (listing.user_id === user.id) {
@@ -203,6 +207,11 @@ export async function acceptResponse(
     .eq("listing_id", listingId)
     .neq("id", responseId)
     .eq("status", "pending");
+
+  await supabase
+    .from("listings")
+    .update({ status: "found" })
+    .eq("id", listingId);
 
   const { data: acceptedResponse } = await supabase
     .from("responses")
@@ -391,12 +400,16 @@ export async function acceptListing(
 
   const { data: listing } = await supabase
     .from("listings")
-    .select("user_id, price")
+    .select("user_id, price, status")
     .eq("id", listingId)
     .single();
 
   if (!listing) {
     return { error: "errorGeneric" };
+  }
+
+  if (listing.status === "found") {
+    return { error: "errorListingClosed" };
   }
 
   if (listing.user_id === user.id) {

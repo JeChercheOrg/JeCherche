@@ -73,7 +73,8 @@
     "postedBy": "Veröffentlicht von",
     "viewProfile": "Profil ansehen",
     "location": "Standort",
-    "deliveryAvailable": "Lieferung möglich"
+    "deliveryAvailable": "Lieferung möglich",
+    "listingFound": "Diese Anfrage wurde erfüllt"
   },
   "MyListings": {
     "pageTitle": "Meine Anzeigen",
@@ -83,6 +84,9 @@
     "confirmDelete": "Möchten Sie diese Anzeige wirklich löschen?",
     "cancelDelete": "Abbrechen",
     "deleting": "Wird gelöscht…",
+    "markFound": "Als gefunden markieren",
+    "reopen": "Wieder öffnen",
+    "found": "Gefunden",
     "editPageTitle": "Anzeige bearbeiten",
     "save": "Speichern",
     "saving": "Wird gespeichert…",
@@ -129,7 +133,8 @@
     "memberSince": "Mitglied seit {date}",
     "listings": "Anzeigen",
     "noListings": "Dieser Benutzer hat noch keine Anzeige veröffentlicht.",
-    "anonymousUser": "Benutzer"
+    "anonymousUser": "Benutzer",
+    "found": "Gefunden"
   },
   "Responses": {
     "sectionTitle": "Angebote",
@@ -173,7 +178,8 @@
     "reject": "Ablehnen",
     "offerAccepted": "Angebot akzeptiert.",
     "offerRejected": "Angebot abgelehnt.",
-    "errorNotOwner": "Nur der Inseratsersteller kann diese Aktion ausführen."
+    "errorNotOwner": "Nur der Inseratsersteller kann diese Aktion ausführen.",
+    "errorListingClosed": "Diese Anzeige wurde bereits erfüllt."
   },
   "Messages": {
     "inbox": "Nachrichten",
@@ -226,7 +232,9 @@
     "sortLabel": "Sortieren nach",
     "cityFilter": "Stadt",
     "deliveryFilter": "Lieferung möglich",
-    "radiusLabel": "Umkreis"
+    "radiusLabel": "Umkreis",
+    "showFound": "Gefundene anzeigen",
+    "found": "Gefunden"
   },
   "SEO": {
     "homeTitle": "Veröffentlichen Sie, was Sie suchen — Verkäufer kommen zu Ihnen",

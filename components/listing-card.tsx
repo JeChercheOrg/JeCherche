@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, MessageSquare, Flame } from "lucide-react";
+import { MapPin, MessageSquare, Flame, CheckCircle } from "lucide-react";
 
 interface ListingCardProps {
   listing: {
@@ -11,6 +11,7 @@ interface ListingCardProps {
     created_at: string;
     city?: string | null;
     postal_code?: string | null;
+    status?: string;
     listing_images?: { storage_path: string; position: number }[];
     categories?: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null } | null;
     responses?: { count: number }[];
@@ -18,6 +19,7 @@ interface ListingCardProps {
   locale: string;
   formatPrice: (price: number) => string;
   formatDate: (date: Date) => string;
+  foundLabel?: string;
 }
 
 function getCategoryName(
@@ -30,16 +32,17 @@ function getCategoryName(
   return category.name;
 }
 
-export function ListingCard({ listing, locale, formatPrice, formatDate }: ListingCardProps) {
+export function ListingCard({ listing, locale, formatPrice, formatDate, foundLabel }: ListingCardProps) {
   const coverImage = listing.listing_images?.find(
     (img) => img.position === 0
   );
   const responseCount = listing.responses?.[0]?.count ?? 0;
+  const isFound = listing.status === "found";
 
   return (
     <Link href={`/${locale}/listings/${listing.id}`}>
       <article className="group rounded-lg border border-border bg-surface overflow-hidden transition-shadow duration-200 hover:shadow-md">
-        <div className="relative aspect-[4/3] bg-background">
+        <div className={`relative aspect-[4/3] bg-background ${isFound ? "grayscale-[40%]" : ""}`}>
           {coverImage ? (
             <Image
               src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/listing-images/${coverImage.storage_path}`}
@@ -58,6 +61,14 @@ export function ListingCard({ listing, locale, formatPrice, formatDate }: Listin
               <Badge variant="default" className="bg-surface/90 backdrop-blur-sm">
                 {getCategoryName(listing.categories, locale)}
               </Badge>
+            </div>
+          )}
+          {isFound && foundLabel && (
+            <div className="absolute top-2 right-2">
+              <span className="inline-flex items-center gap-1 rounded-full bg-green-600/90 backdrop-blur-sm px-2 py-0.5 text-xs font-semibold text-white">
+                <CheckCircle className="h-3 w-3" />
+                {foundLabel}
+              </span>
             </div>
           )}
           {responseCount > 0 && (

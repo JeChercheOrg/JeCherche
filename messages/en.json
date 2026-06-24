@@ -73,7 +73,8 @@
     "postedBy": "Posted by",
     "viewProfile": "View profile",
     "location": "Location",
-    "deliveryAvailable": "Delivery available"
+    "deliveryAvailable": "Delivery available",
+    "listingFound": "This request has been fulfilled"
   },
   "MyListings": {
     "pageTitle": "My listings",
@@ -83,6 +84,9 @@
     "confirmDelete": "Are you sure you want to delete this listing?",
     "cancelDelete": "Cancel",
     "deleting": "Deleting…",
+    "markFound": "Mark as found",
+    "reopen": "Reopen",
+    "found": "Found",
     "editPageTitle": "Edit listing",
     "save": "Save",
     "saving": "Saving…",
@@ -129,7 +133,8 @@
     "memberSince": "Member since {date}",
     "listings": "Listings",
     "noListings": "This user hasn't published any listing yet.",
-    "anonymousUser": "User"
+    "anonymousUser": "User",
+    "found": "Found"
   },
   "Responses": {
     "sectionTitle": "Offers",
@@ -173,7 +178,8 @@
     "reject": "Reject",
     "offerAccepted": "Offer accepted.",
     "offerRejected": "Offer rejected.",
-    "errorNotOwner": "Only the listing owner can perform this action."
+    "errorNotOwner": "Only the listing owner can perform this action.",
+    "errorListingClosed": "This listing has already been fulfilled."
   },
   "Messages": {
     "inbox": "Messages",
@@ -226,7 +232,9 @@
     "sortLabel": "Sort by",
     "cityFilter": "City",
     "deliveryFilter": "Delivery available",
-    "radiusLabel": "Radius"
+    "radiusLabel": "Radius",
+    "showFound": "Include found",
+    "found": "Found"
   },
   "SEO": {
     "homeTitle": "Post what you're looking for, let sellers come to you",
