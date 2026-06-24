@@ -25,7 +25,7 @@ export default async function MyListingsPage({
   const { data: listings } = await supabase
     .from("listings")
     .select(
-      "*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position)"
+      "*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });

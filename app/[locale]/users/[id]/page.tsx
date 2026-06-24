@@ -76,7 +76,7 @@ export default async function PublicProfilePage({
 
   const { data: listings } = await supabase
     .from("listings")
-    .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position)")
+    .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)")
     .eq("user_id", id)
     .order("created_at", { ascending: false });
 

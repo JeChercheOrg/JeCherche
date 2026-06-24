@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useFormatter } from "next-intl";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, MessageSquare, Flame } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { deleteListing } from "@/app/actions/listings";
@@ -22,6 +22,7 @@ interface MyListingCardProps {
       name_es: string | null;
       name_de: string | null;
     } | null;
+    responses?: { count: number }[];
   };
   locale: string;
   translations: {
@@ -66,6 +67,7 @@ export function MyListingCard({
   const coverImage = listing.listing_images?.find(
     (img) => img.position === 0
   );
+  const responseCount = listing.responses?.[0]?.count ?? 0;
 
   async function handleDelete() {
     setDeleting(true);
@@ -98,6 +100,21 @@ export function MyListingCard({
               >
                 {getCategoryName(listing.categories, locale)}
               </Badge>
+            </div>
+          )}
+          {responseCount > 0 && (
+            <div className="absolute bottom-2 right-2">
+              {responseCount >= 10 ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/90 backdrop-blur-sm px-2 py-0.5 text-xs font-bold text-white">
+                  <Flame className="h-3 w-3" />
+                  {responseCount}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-full bg-surface/90 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-text-primary">
+                  <MessageSquare className="h-3 w-3" />
+                  {responseCount}
+                </span>
+              )}
             </div>
           )}
         </div>

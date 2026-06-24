@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { MapPin } from "lucide-react";
+import { MapPin, MessageSquare, Flame } from "lucide-react";
 
 interface ListingCardProps {
   listing: {
@@ -13,6 +13,7 @@ interface ListingCardProps {
     postal_code?: string | null;
     listing_images?: { storage_path: string; position: number }[];
     categories?: { name: string; name_fr: string | null; name_es: string | null; name_de: string | null } | null;
+    responses?: { count: number }[];
   };
   locale: string;
   formatPrice: (price: number) => string;
@@ -33,6 +34,7 @@ export function ListingCard({ listing, locale, formatPrice, formatDate }: Listin
   const coverImage = listing.listing_images?.find(
     (img) => img.position === 0
   );
+  const responseCount = listing.responses?.[0]?.count ?? 0;
 
   return (
     <Link href={`/${locale}/listings/${listing.id}`}>
@@ -56,6 +58,21 @@ export function ListingCard({ listing, locale, formatPrice, formatDate }: Listin
               <Badge variant="default" className="bg-surface/90 backdrop-blur-sm">
                 {getCategoryName(listing.categories, locale)}
               </Badge>
+            </div>
+          )}
+          {responseCount > 0 && (
+            <div className="absolute bottom-2 right-2">
+              {responseCount >= 10 ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/90 backdrop-blur-sm px-2 py-0.5 text-xs font-bold text-white">
+                  <Flame className="h-3 w-3" />
+                  {responseCount}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 rounded-full bg-surface/90 backdrop-blur-sm px-2 py-0.5 text-xs font-medium text-text-primary">
+                  <MessageSquare className="h-3 w-3" />
+                  {responseCount}
+                </span>
+              )}
             </div>
           )}
         </div>
