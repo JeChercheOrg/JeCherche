@@ -22,7 +22,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-md",
+  sm: "px-3 py-2 text-sm rounded-md min-h-[44px] sm:min-h-0 sm:py-1.5",
   md: "px-5 py-2.5 text-sm rounded-full",
   lg: "px-6 py-3 text-base rounded-full",
 };

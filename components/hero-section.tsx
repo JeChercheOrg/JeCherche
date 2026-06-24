@@ -15,7 +15,7 @@ interface HeroSectionProps {
 export function HeroSection({ locale, translations }: HeroSectionProps) {
   return (
     <section className="bg-surface border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 py-12 text-center">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 text-center">
         <div className="flex justify-center mb-4">
           <div className="h-12 w-12 rounded-full bg-primary-light flex items-center justify-center">
             <Megaphone className="h-6 w-6 text-primary-text" />

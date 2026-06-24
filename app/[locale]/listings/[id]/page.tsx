@@ -155,7 +155,7 @@ export default async function ListingDetailPage({
     format.number(price / 100, { style: "currency", currency: "EUR" });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6">
+    <div className="mx-auto max-w-7xl px-3 sm:px-4 py-4 sm:py-6">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -186,9 +186,9 @@ export default async function ListingDetailPage({
         ]}
       />
 
-      <div className="mt-4 lg:grid lg:grid-cols-5 lg:gap-8">
+      <div className="mt-4 md:grid md:grid-cols-5 md:gap-6 lg:gap-8">
         {/* Left column — gallery + responses */}
-        <div className="lg:col-span-3 mb-6 lg:mb-0 space-y-10">
+        <div className="md:col-span-3 mb-6 md:mb-0 space-y-10">
           <ImageGallery
             images={images}
             alt={listing.title}
@@ -245,8 +245,8 @@ export default async function ListingDetailPage({
         </div>
 
         {/* Right column — sticky info card */}
-        <div className="lg:col-span-2">
-          <div className="rounded-xl border border-border bg-surface p-6 space-y-4 lg:sticky lg:top-20">
+        <div className="md:col-span-2">
+          <div className="rounded-xl border border-border bg-surface p-4 sm:p-6 space-y-4 md:sticky md:top-20">
             {listing.categories && (
               <Badge variant="secondary">
                 {getCategoryName(listing.categories, locale)}

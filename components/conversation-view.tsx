@@ -128,7 +128,7 @@ export function ConversationView({
   }
 
   return (
-    <div className="mx-auto max-w-3xl h-[calc(100vh-4rem)] flex flex-col">
+    <div className="mx-auto max-w-3xl h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
         <Link
@@ -194,7 +194,7 @@ export function ConversationView({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={t("sendPlaceholder")}
-            rows={1}
+            rows={2}
             className="flex-1 resize-none rounded-xl border border-border bg-surface px-4 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
             style={{ maxHeight: "120px" }}
           />

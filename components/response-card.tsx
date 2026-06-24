@@ -71,10 +71,10 @@ export function ResponseCard({
 
   return (
     <div
-      className={`rounded-xl border bg-surface p-5 space-y-3 ${isOwn ? "border-primary ring-2 ring-primary/30 bg-primary-light/20" : "border-border"}`}
+      className={`rounded-xl border bg-surface p-4 sm:p-5 space-y-3 ${isOwn ? "border-primary ring-2 ring-primary/30 bg-primary-light/20" : "border-border"}`}
     >
       {/* Main row: user / price / date */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <Link
           href={`/${locale}/users/${response.user_id}`}
           className="flex items-center gap-2.5 group shrink-0"
@@ -96,9 +96,9 @@ export function ResponseCard({
           </div>
         </Link>
 
-        <div className="ml-auto flex items-center gap-4">
+        <div className="ml-auto flex flex-wrap items-center gap-2 sm:gap-4">
           <span className="flex items-center gap-1.5">
-            <span className={`text-lg font-bold ${priceColor}`}>
+            <span className={`text-base sm:text-lg font-bold ${priceColor}`}>
               {formatPrice(response.price)}
             </span>
             {priceDiffPercent !== 0 && (

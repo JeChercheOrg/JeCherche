@@ -177,7 +177,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
       {/* City + radius */}
       <div ref={containerRef} className="relative flex items-center gap-1.5">
         <div className="relative">
@@ -189,7 +189,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
             onChange={(e) => handleCityChange(e.target.value)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-            className="w-36 rounded-lg border border-border bg-surface pl-8 pr-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-28 sm:w-36 rounded-lg border border-border bg-surface pl-8 pr-3 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
           {showSuggestions && (
             <ul className="absolute z-50 top-full mt-1 w-56 rounded-md border border-border bg-surface shadow-lg overflow-hidden">
@@ -198,7 +198,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
                   <button
                     type="button"
                     onMouseDown={() => handleCitySelect(s)}
-                    className="w-full px-3 py-2 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors"
+                    className="w-full px-3 py-2.5 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors"
                   >
                     {s.label}
                   </button>
@@ -211,7 +211,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
           <select
             value={radius || "25"}
             onChange={handleRadiusChange}
-            className="rounded-lg border border-border bg-surface px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="rounded-lg border border-border bg-surface px-2 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
           >
             <option value="10">10 km</option>
             <option value="25">25 km</option>
@@ -222,7 +222,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       </div>
 
       {/* Price range */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         <input
           type="number"
           min="0"
@@ -231,7 +231,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
           onChange={(e) => setPriceMin(e.target.value)}
           onBlur={handlePriceBlur}
           onKeyDown={handlePriceKeyDown}
-          className="w-24 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-20 sm:w-24 rounded-lg border border-border bg-surface px-2.5 sm:px-3 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
         <span className="text-text-tertiary text-sm">–</span>
         <input
@@ -242,7 +242,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
           onChange={(e) => setPriceMax(e.target.value)}
           onBlur={handlePriceBlur}
           onKeyDown={handlePriceKeyDown}
-          className="w-24 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-20 sm:w-24 rounded-lg border border-border bg-surface px-2.5 sm:px-3 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
       </div>
 
@@ -250,7 +250,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       <button
         type="button"
         onClick={handleDeliveryToggle}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${delivery
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2.5 text-sm font-medium border transition-colors ${delivery
             ? "border-primary bg-primary-light text-primary-text"
             : "border-border bg-surface text-text-secondary hover:border-border-hover"
           }`}
@@ -263,7 +263,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       <button
         type="button"
         onClick={handleShowFoundToggle}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium border transition-colors ${showFound
+        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2.5 text-sm font-medium border transition-colors ${showFound
             ? "border-green-600 bg-green-50 text-green-700"
             : "border-border bg-surface text-text-secondary hover:border-border-hover"
           }`}
@@ -276,7 +276,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       <select
         value={currentSort}
         onChange={handleSortChange}
-        className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+        className="rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
       >
         <option value="newest">{translations.sortNewest}</option>
         <option value="oldest">{translations.sortOldest}</option>

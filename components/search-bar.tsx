@@ -30,7 +30,7 @@ export function SearchBar({ placeholder, action, className }: SearchBarProps) {
         name="q"
         defaultValue={currentQuery}
         placeholder={placeholder}
-        className="h-10 w-full rounded-full border border-border bg-surface pl-10 pr-9 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
+        className="h-11 w-full rounded-full border border-border bg-surface pl-10 pr-9 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
       />
       {currentCategory && (
         <input type="hidden" name="category" value={currentCategory} />

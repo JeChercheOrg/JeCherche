@@ -118,7 +118,7 @@ export default function CreateListingForm({
       )}
 
       {/* Details section */}
-      <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
+      <section className="rounded-xl border border-border bg-surface p-4 sm:p-6 space-y-5">
         <Input
           label={t("title")}
           id="title"
@@ -157,7 +157,7 @@ export default function CreateListingForm({
       </section>
 
       {/* Location & delivery section */}
-      <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
+      <section className="rounded-xl border border-border bg-surface p-4 sm:p-6 space-y-5">
         <AddressAutocomplete
           label={t("city")}
           placeholder={t("cityPlaceholder")}
@@ -179,7 +179,7 @@ export default function CreateListingForm({
       </section>
 
       {/* Budget & Photos section */}
-      <section className="rounded-xl border border-border bg-surface p-6 space-y-5">
+      <section className="rounded-xl border border-border bg-surface p-4 sm:p-6 space-y-5">
         <div className="space-y-1.5">
           <label htmlFor="price" className="text-sm font-medium text-text-primary">
             {t("price")}

@@ -176,7 +176,7 @@ export function MyListingCard({
             </div>
           </div>
         ) : (
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex flex-wrap gap-2">
             <Link href={`/${locale}/my-listings/${listing.id}/edit`}>
               <Button variant="ghost" size="sm">
                 <Pencil className="h-3.5 w-3.5 mr-1" />

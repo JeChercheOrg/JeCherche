@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { UnreadBadge } from "@/components/unread-badge";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Plus, List } from "lucide-react";
 
 interface UserMenuProps {
   user: { id?: string; email?: string } | null;
@@ -24,12 +24,12 @@ export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, tr
     return (
       <div className="flex items-center gap-2">
         <Link href={`/${locale}/login`}>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2.5 sm:px-3 py-2">
             {translations.login}
           </Button>
         </Link>
         <Link href={`/${locale}/signup`}>
-          <Button variant="secondary" size="sm">
+          <Button variant="secondary" size="sm" className="text-xs sm:text-sm px-2.5 sm:px-3 py-2">
             {translations.signup}
           </Button>
         </Link>
@@ -38,21 +38,23 @@ export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, tr
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-1.5 sm:gap-3">
       <Link href={`/${locale}/listings/create`}>
-        <Button variant="primary" size="sm">
-          {translations.publish}
+        <Button variant="primary" size="sm" className="px-2.5 sm:px-3 py-2">
+          <Plus className="h-4 w-4 sm:hidden" />
+          <span className="hidden sm:inline">{translations.publish}</span>
         </Button>
       </Link>
       <Link href={`/${locale}/my-listings`}>
-        <Button variant="ghost" size="sm">
-          {translations.myListings}
+        <Button variant="ghost" size="sm" className="px-2.5 sm:px-3 py-2">
+          <List className="h-4 w-4 sm:hidden" />
+          <span className="hidden sm:inline">{translations.myListings}</span>
         </Button>
       </Link>
       <Link href={`/${locale}/messages`} className="relative">
-        <Button variant="ghost" size="sm" className="gap-1.5">
+        <Button variant="ghost" size="sm" className="gap-1.5 px-2.5 sm:px-3 py-2">
           <MessageCircle className="h-4 w-4" />
-          {translations.messages}
+          <span className="hidden sm:inline">{translations.messages}</span>
         </Button>
         {user.id && (
           <UnreadBadge initialCount={unreadCount ?? 0} currentUserId={user.id} />
