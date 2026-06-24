@@ -8,7 +8,7 @@
     "viewAll": "Browse all listings"
   },
   "Layout": {
-    "title": "JeCherche",
+    "title": "VendsMoi",
     "description": "Find what you are looking for. Post what you want to buy, let sellers come to you.",
     "publish": "Publish",
     "searchPlaceholder": "What are you looking for?",
@@ -238,12 +238,12 @@
   },
   "SEO": {
     "homeTitle": "Post what you're looking for, let sellers come to you",
-    "homeDescription": "JeCherche is the reverse marketplace: post your buying request and receive offers from sellers. Find everything you need effortlessly.",
+    "homeDescription": "VendsMoi is the reverse marketplace: post your buying request and receive offers from sellers. Find everything you need effortlessly.",
     "listingsTitle": "All listings",
-    "listingsDescription": "Browse buying requests posted on JeCherche. Sellers, submit your offers to buyers looking for your products.",
+    "listingsDescription": "Browse buying requests posted on VendsMoi. Sellers, submit your offers to buyers looking for your products.",
     "listingDetailDescription": "{title} — Budget: {price}. {description}",
     "profileTitle": "{name}'s profile",
-    "profileDescription": "Discover listings posted by {name} on JeCherche."
+    "profileDescription": "Discover listings posted by {name} on VendsMoi."
   },
   "HowItWorks": {
     "title": "How it works",

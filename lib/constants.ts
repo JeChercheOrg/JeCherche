@@ -1,4 +1,4 @@
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://jecherche.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://vendsmoi.fr";
 
-export const SITE_NAME = "JeCherche";
+export const SITE_NAME = "VendsMoi";

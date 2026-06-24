@@ -17,7 +17,7 @@ export async function sendNotificationEmail(params: {
   if (!client) return;
   try {
     await client.emails.send({
-      from: "JeCherche <notifications@jecherche.fr>",
+      from: "VendsMoi <notifications@vendsmoi.fr>",
       ...params,
     });
   } catch (e) {

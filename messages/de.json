@@ -8,7 +8,7 @@
     "viewAll": "Alle Anzeigen ansehen"
   },
   "Layout": {
-    "title": "JeCherche",
+    "title": "VendsMoi",
     "description": "Finden Sie, was Sie suchen. Veröffentlichen Sie, was Sie kaufen möchten, und lassen Sie die Verkäufer zu Ihnen kommen.",
     "publish": "Veröffentlichen",
     "searchPlaceholder": "Was suchen Sie?",
@@ -238,12 +238,12 @@
   },
   "SEO": {
     "homeTitle": "Veröffentlichen Sie, was Sie suchen — Verkäufer kommen zu Ihnen",
-    "homeDescription": "JeCherche ist der umgekehrte Marktplatz: Veröffentlichen Sie Ihre Kaufanfrage und erhalten Sie Angebote von Verkäufern. Finden Sie mühelos alles, was Sie brauchen.",
+    "homeDescription": "VendsMoi ist der umgekehrte Marktplatz: Veröffentlichen Sie Ihre Kaufanfrage und erhalten Sie Angebote von Verkäufern. Finden Sie mühelos alles, was Sie brauchen.",
     "listingsTitle": "Alle Anzeigen",
-    "listingsDescription": "Durchsuchen Sie Kaufanfragen auf JeCherche. Verkäufer, senden Sie Ihre Angebote an Käufer, die Ihre Produkte suchen.",
+    "listingsDescription": "Durchsuchen Sie Kaufanfragen auf VendsMoi. Verkäufer, senden Sie Ihre Angebote an Käufer, die Ihre Produkte suchen.",
     "listingDetailDescription": "{title} — Budget: {price}. {description}",
     "profileTitle": "Profil von {name}",
-    "profileDescription": "Entdecken Sie die Anzeigen von {name} auf JeCherche."
+    "profileDescription": "Entdecken Sie die Anzeigen von {name} auf VendsMoi."
   },
   "HowItWorks": {
     "title": "So funktioniert's",

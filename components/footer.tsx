@@ -13,7 +13,7 @@ export function Footer({ locale, translations }: FooterProps) {
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:py-6 flex items-center justify-between">
         <p className="text-xs sm:text-sm text-text-tertiary">
-          © {new Date().getFullYear()} JeCherche
+          © {new Date().getFullYear()} VendsMoi
         </p>
         <nav className="flex items-center gap-4 sm:gap-5">
           <Link

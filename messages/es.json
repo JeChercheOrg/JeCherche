@@ -8,7 +8,7 @@
     "viewAll": "Ver todos los anuncios"
   },
   "Layout": {
-    "title": "JeCherche",
+    "title": "VendsMoi",
     "description": "Encuentra lo que buscas. Publica lo que quieres comprar, deja que los vendedores vengan a ti.",
     "publish": "Publicar",
     "searchPlaceholder": "¿Qué buscas?",
@@ -238,12 +238,12 @@
   },
   "SEO": {
     "homeTitle": "Publica lo que buscas, los vendedores vienen a ti",
-    "homeDescription": "JeCherche es el marketplace inverso: publica tu solicitud de compra y recibe ofertas de vendedores. Encuentra todo lo que necesitas sin esfuerzo.",
+    "homeDescription": "VendsMoi es el marketplace inverso: publica tu solicitud de compra y recibe ofertas de vendedores. Encuentra todo lo que necesitas sin esfuerzo.",
     "listingsTitle": "Todos los anuncios",
-    "listingsDescription": "Explora las solicitudes de compra publicadas en JeCherche. Vendedores, envíen sus ofertas a los compradores que buscan sus productos.",
+    "listingsDescription": "Explora las solicitudes de compra publicadas en VendsMoi. Vendedores, envíen sus ofertas a los compradores que buscan sus productos.",
     "listingDetailDescription": "{title} — Presupuesto: {price}. {description}",
     "profileTitle": "Perfil de {name}",
-    "profileDescription": "Descubre los anuncios publicados por {name} en JeCherche."
+    "profileDescription": "Descubre los anuncios publicados por {name} en VendsMoi."
   },
   "HowItWorks": {
     "title": "Cómo funciona",

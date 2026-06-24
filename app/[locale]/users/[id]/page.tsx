@@ -109,7 +109,7 @@ export default async function PublicProfilePage({
       <Breadcrumbs
         locale={locale}
         items={[
-          { label: "JeCherche", href: "" },
+          { label: "VendsMoi", href: "" },
           { label: displayName },
         ]}
       />
