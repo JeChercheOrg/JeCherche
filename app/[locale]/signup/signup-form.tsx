@@ -13,6 +13,7 @@ export default function SignupForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -33,7 +34,7 @@ export default function SignupForm({ locale }: { locale: string }) {
     setLoading(true);
     setError(null);
 
-    const result = await signup(locale, email, password, window.location.origin);
+    const result = await signup(locale, email, password, displayName, window.location.origin);
 
     if (result.error) {
       setError(t("errorGeneric"));
@@ -77,6 +78,17 @@ export default function SignupForm({ locale }: { locale: string }) {
           <p className="text-sm text-error">{error}</p>
         </div>
       )}
+
+      <Input
+        label={t("displayName")}
+        id="display_name"
+        type="text"
+        required
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+        placeholder={t("displayNamePlaceholder")}
+        autoComplete="name"
+      />
 
       <Input
         label={t("email")}

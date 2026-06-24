@@ -17,7 +17,6 @@ export async function updateProfile(
     return { error: "errorAuth" };
   }
 
-  const displayName = (formData.get("display_name") as string)?.trim() || null;
   const avatarFile = formData.get("avatar") as File;
 
   let avatarPath: string | undefined;
@@ -55,8 +54,7 @@ export async function updateProfile(
     avatarPath = newPath;
   }
 
-  const updateData: { display_name: string | null; avatar_path?: string; updated_at: string } = {
-    display_name: displayName,
+  const updateData: { avatar_path?: string; updated_at: string } = {
     updated_at: new Date().toISOString(),
   };
 

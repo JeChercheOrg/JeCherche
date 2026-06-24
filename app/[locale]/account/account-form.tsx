@@ -17,19 +17,16 @@ import { logout } from "@/app/actions/auth";
 interface AccountFormProps {
   locale: string;
   email: string;
-  displayName: string;
   avatarPath: string | null;
 }
 
 export default function AccountForm({
   locale,
   email,
-  displayName,
   avatarPath,
 }: AccountFormProps) {
   const t = useTranslations("Account");
 
-  const [name, setName] = useState(displayName);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
@@ -72,7 +69,6 @@ export default function AccountForm({
     setProfileSuccess(false);
 
     const formData = new FormData();
-    formData.set("display_name", name);
     if (avatarFile) formData.set("avatar", avatarFile);
 
     const result = await updateProfile(locale, formData);
@@ -181,15 +177,6 @@ export default function AccountForm({
             />
           </div>
         </div>
-
-        <Input
-          label={t("displayName")}
-          id="display_name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          hint={t("displayNameHint")}
-        />
 
         {profileError && (
           <p className="text-sm text-error">{profileError}</p>

@@ -13,19 +13,33 @@ export async function signup(
   locale: string,
   email: string,
   password: string,
+  displayName: string,
   origin: string
 ) {
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+
+  const trimmedName = displayName.trim();
+  if (!trimmedName) {
+    return { error: "displayNameRequired" };
+  }
+
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${origin}/${locale}/auth/confirm`,
+      data: { display_name: trimmedName },
     },
   });
 
   if (error) {
     return { error: error.message };
+  }
+
+  if (data.user) {
+    await supabase
+      .from("profiles")
+      .upsert({ id: data.user.id, display_name: trimmedName });
   }
 
   return { error: null };

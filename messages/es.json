@@ -30,7 +30,10 @@
     "checkEmail": "Revisa tu correo electrónico para confirmar tu registro.",
     "errorInvalidCredentials": "Correo o contraseña incorrectos.",
     "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
-    "generatePassword": "Generar"
+    "generatePassword": "Generar",
+    "displayName": "Nombre visible",
+    "displayNamePlaceholder": "Tu nombre…",
+    "displayNameRequired": "El nombre visible es obligatorio."
   },
   "CreateListing": {
     "pageTitle": "Publicar un anuncio",

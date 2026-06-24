@@ -30,7 +30,10 @@
     "checkEmail": "Check your email to confirm your registration.",
     "errorInvalidCredentials": "Invalid email or password.",
     "errorGeneric": "Something went wrong. Please try again.",
-    "generatePassword": "Generate"
+    "generatePassword": "Generate",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your username…",
+    "displayNameRequired": "Display name is required."
   },
   "CreateListing": {
     "pageTitle": "Publish a listing",

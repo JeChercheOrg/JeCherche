@@ -30,7 +30,10 @@
     "checkEmail": "Vérifiez votre boîte e-mail pour confirmer votre inscription.",
     "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
     "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
-    "generatePassword": "Générer"
+    "generatePassword": "Générer",
+    "displayName": "Nom visible",
+    "displayNamePlaceholder": "Votre pseudo…",
+    "displayNameRequired": "Le nom visible est obligatoire."
   },
   "CreateListing": {
     "pageTitle": "Publier une annonce",

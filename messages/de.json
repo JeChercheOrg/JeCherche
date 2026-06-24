@@ -30,7 +30,10 @@
     "checkEmail": "Überprüfen Sie Ihre E-Mail, um Ihre Registrierung zu bestätigen.",
     "errorInvalidCredentials": "Ungültige E-Mail oder Passwort.",
     "errorGeneric": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-    "generatePassword": "Generieren"
+    "generatePassword": "Generieren",
+    "displayName": "Anzeigename",
+    "displayNamePlaceholder": "Dein Name…",
+    "displayNameRequired": "Der Anzeigename ist erforderlich."
   },
   "CreateListing": {
     "pageTitle": "Anzeige veröffentlichen",
