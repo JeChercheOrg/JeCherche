@@ -1,21 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { login } from "@/app/actions/auth";
+import { requestPasswordReset } from "@/app/actions/auth";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { CheckCircle } from "lucide-react";
 
-export default function LoginForm({ locale }: { locale: string }) {
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? undefined;
+export default function ForgotPasswordForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -23,12 +21,32 @@ export default function LoginForm({ locale }: { locale: string }) {
     setLoading(true);
     setError(null);
 
-    const result = await login(locale, email, password, redirectTo);
+    const result = await requestPasswordReset(email, window.location.origin, locale);
 
-    if (result?.error) {
-      setError(t("errorInvalidCredentials"));
+    if (result.error) {
+      setError(t("errorGeneric"));
       setLoading(false);
+      return;
     }
+
+    setSuccess(true);
+    setLoading(false);
+  }
+
+  if (success) {
+    return (
+      <div className="text-center py-4">
+        <div className="flex justify-center mb-4">
+          <div className="h-12 w-12 rounded-full bg-tertiary-light flex items-center justify-center">
+            <CheckCircle className="h-6 w-6 text-success" />
+          </div>
+        </div>
+        <h1 className="text-xl font-bold text-text-primary mb-2">
+          {t("forgotPasswordTitle")}
+        </h1>
+        <p className="text-text-secondary">{t("forgotPasswordSent")}</p>
+      </div>
+    );
   }
 
   return (
@@ -38,8 +56,11 @@ export default function LoginForm({ locale }: { locale: string }) {
           <Logo href={`/${locale}`} />
         </div>
         <h1 className="text-xl font-bold text-text-primary">
-          {t("loginTitle")}
+          {t("forgotPasswordTitle")}
         </h1>
+        <p className="text-sm text-text-secondary mt-1">
+          {t("forgotPasswordSubtitle")}
+        </p>
       </div>
 
       {error && (
@@ -51,6 +72,7 @@ export default function LoginForm({ locale }: { locale: string }) {
       <Input
         label={t("email")}
         id="email"
+        name="email"
         type="email"
         required
         value={email}
@@ -58,36 +80,16 @@ export default function LoginForm({ locale }: { locale: string }) {
         autoComplete="email"
       />
 
-      <Input
-        label={t("password")}
-        id="password"
-        type="password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        autoComplete="current-password"
-      />
-
-      <div className="text-right -mt-2">
-        <Link
-          href={`/${locale}/forgot-password`}
-          className="text-xs text-primary-text hover:underline"
-        >
-          {t("forgotPassword")}
-        </Link>
-      </div>
-
       <Button type="submit" disabled={loading} fullWidth size="lg">
-        {t("loginSubmit")}
+        {t("forgotPasswordSubmit")}
       </Button>
 
       <p className="text-sm text-center text-text-secondary">
-        {t("noAccount")}{" "}
         <Link
-          href={`/${locale}/signup`}
+          href={`/${locale}/login`}
           className="text-primary-text font-medium hover:underline"
         >
-          {t("signup")}
+          {t("backToLogin")}
         </Link>
       </p>
     </form>

@@ -36,7 +36,20 @@
     "displayNameRequired": "El nombre visible es obligatorio.",
     "displayNameChecking": "Verificando…",
     "displayNameAvailable": "Este nombre está disponible",
-    "displayNameTaken": "Este nombre ya está en uso"
+    "displayNameTaken": "Este nombre ya está en uso",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "forgotPasswordTitle": "Restablecer contraseña",
+    "forgotPasswordSubtitle": "Ingresa tu correo para recibir un enlace de restablecimiento.",
+    "forgotPasswordSubmit": "Enviar enlace",
+    "forgotPasswordSent": "Se envió un correo de restablecimiento. Revisa tu bandeja de entrada.",
+    "backToLogin": "Volver al inicio de sesión",
+    "resetPasswordTitle": "Nueva contraseña",
+    "resetPasswordSubtitle": "Elige tu nueva contraseña.",
+    "resetPasswordSubmit": "Cambiar contraseña",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres."
   },
   "CreateListing": {
     "pageTitle": "Publicar un anuncio",

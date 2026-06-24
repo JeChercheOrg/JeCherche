@@ -36,7 +36,20 @@
     "displayNameRequired": "Der Anzeigename ist erforderlich.",
     "displayNameChecking": "Überprüfung…",
     "displayNameAvailable": "Dieser Name ist verfügbar",
-    "displayNameTaken": "Dieser Name ist bereits vergeben"
+    "displayNameTaken": "Dieser Name ist bereits vergeben",
+    "forgotPassword": "Passwort vergessen?",
+    "forgotPasswordTitle": "Passwort zurücksetzen",
+    "forgotPasswordSubtitle": "Geben Sie Ihre E-Mail-Adresse ein, um einen Link zum Zurücksetzen zu erhalten.",
+    "forgotPasswordSubmit": "Link senden",
+    "forgotPasswordSent": "Eine E-Mail zum Zurücksetzen wurde gesendet. Überprüfen Sie Ihren Posteingang.",
+    "backToLogin": "Zurück zur Anmeldung",
+    "resetPasswordTitle": "Neues Passwort",
+    "resetPasswordSubtitle": "Wählen Sie Ihr neues Passwort.",
+    "resetPasswordSubmit": "Passwort ändern",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+    "passwordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein."
   },
   "CreateListing": {
     "pageTitle": "Anzeige veröffentlichen",

@@ -36,7 +36,20 @@
     "displayNameRequired": "Display name is required.",
     "displayNameChecking": "Checking…",
     "displayNameAvailable": "This name is available",
-    "displayNameTaken": "This name is already taken"
+    "displayNameTaken": "This name is already taken",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordSubtitle": "Enter your email to receive a reset link.",
+    "forgotPasswordSubmit": "Send reset link",
+    "forgotPasswordSent": "A reset email has been sent. Check your inbox.",
+    "backToLogin": "Back to login",
+    "resetPasswordTitle": "New password",
+    "resetPasswordSubtitle": "Choose your new password.",
+    "resetPasswordSubmit": "Change password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordTooShort": "Password must be at least 6 characters."
   },
   "CreateListing": {
     "pageTitle": "Publish a listing",

@@ -36,7 +36,20 @@
     "displayNameRequired": "Le nom visible est obligatoire.",
     "displayNameChecking": "Vérification…",
     "displayNameAvailable": "Ce pseudo est disponible",
-    "displayNameTaken": "Ce pseudo est déjà pris"
+    "displayNameTaken": "Ce pseudo est déjà pris",
+    "forgotPassword": "Mot de passe oublié ?",
+    "forgotPasswordTitle": "Réinitialiser le mot de passe",
+    "forgotPasswordSubtitle": "Entrez votre e-mail pour recevoir un lien de réinitialisation.",
+    "forgotPasswordSubmit": "Envoyer le lien",
+    "forgotPasswordSent": "Un e-mail de réinitialisation a été envoyé. Vérifiez votre boîte de réception.",
+    "backToLogin": "Retour à la connexion",
+    "resetPasswordTitle": "Nouveau mot de passe",
+    "resetPasswordSubtitle": "Choisissez votre nouveau mot de passe.",
+    "resetPasswordSubmit": "Changer le mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères."
   },
   "CreateListing": {
     "pageTitle": "Publier une annonce",

@@ -62,12 +62,6 @@ export async function signup(
     return { error: error.message };
   }
 
-  if (data.user) {
-    await supabase
-      .from("profiles")
-      .upsert({ id: data.user.id, display_name: trimmedName });
-  }
-
   return { error: null };
 }
 
@@ -88,4 +82,28 @@ export async function login(
   }
 
   redirect(redirectTo && redirectTo.startsWith("/") ? redirectTo : `/${locale}`);
+}
+
+export async function requestPasswordReset(email: string, origin: string, locale: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/${locale}/auth/confirm`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { error: null };
+}
+
+export async function updatePasswordWithToken(locale: string, newPassword: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect(`/${locale}`);
 }

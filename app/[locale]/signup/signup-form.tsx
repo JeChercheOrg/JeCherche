@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { CheckCircle, XCircle, Loader2, Eye, EyeOff } from "lucide-react";
 
 export default function SignupForm({ locale }: { locale: string }) {
   const t = useTranslations("Auth");
@@ -49,7 +49,6 @@ export default function SignupForm({ locale }: { locale: string }) {
     crypto.getRandomValues(array);
     const generated = Array.from(array, (byte) => chars[byte % chars.length]).join("");
     setPassword(generated);
-    setShowPassword(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -140,6 +139,7 @@ export default function SignupForm({ locale }: { locale: string }) {
       <Input
         label={t("email")}
         id="email"
+        name="email"
         type="email"
         required
         value={email}
@@ -154,27 +154,36 @@ export default function SignupForm({ locale }: { locale: string }) {
         >
           {t("password")}
         </label>
-        <div className="flex gap-2">
+        <div className="relative">
           <input
             id="password"
+            name="password"
             type={showPassword ? "text" : "password"}
             required
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
-            className="h-11 w-full rounded-md border border-border bg-surface px-3 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
+            className="h-11 w-full rounded-md border border-border bg-surface px-3 pr-20 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
           />
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={generatePassword}
-            className="shrink-0 h-11 rounded-md"
-          >
-            {t("generatePassword")}
-          </Button>
+          <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="p-2 text-text-tertiary hover:text-text-primary transition-colors"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
+        <button
+          type="button"
+          onClick={generatePassword}
+          className="text-xs text-primary-text hover:underline"
+        >
+          {t("generatePassword")}
+        </button>
       </div>
 
       <Button type="submit" disabled={loading || nameStatus === "taken"} fullWidth size="lg">
