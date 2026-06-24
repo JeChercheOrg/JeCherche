@@ -24,7 +24,7 @@ export default async function AccountPage({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name, avatar_path")
+    .select("display_name, avatar_path, email_notifications")
     .eq("id", user.id)
     .single();
 
@@ -41,6 +41,7 @@ export default async function AccountPage({
         locale={locale}
         email={user.email || ""}
         avatarPath={profile?.avatar_path || null}
+        emailNotifications={profile?.email_notifications ?? true}
       />
     </div>
   );

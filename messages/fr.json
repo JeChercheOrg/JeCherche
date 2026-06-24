@@ -120,6 +120,9 @@
     "invalidEmail": "Adresse e-mail invalide.",
     "avatarTooLarge": "L'image dépasse la taille maximale de 2 Mo.",
     "avatarFormatError": "Format non supporté. Utilisez JPG, PNG ou WebP.",
+    "notificationsSection": "Notifications",
+    "emailNotifications": "Notifications par email",
+    "emailNotificationsHint": "Recevoir un email lors d'une nouvelle offre, message ou changement de statut.",
     "logout": "Se déconnecter"
   },
   "PublicProfile": {

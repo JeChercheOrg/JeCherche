@@ -3,13 +3,14 @@
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Camera, Check, Trash2, LogOut, ChevronDown } from "lucide-react";
+import { Camera, Check, Trash2, LogOut, ChevronDown, Bell } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   updateProfile,
   updateEmail,
   updatePassword,
+  updateNotificationPreference,
   deleteAccount,
 } from "@/app/actions/account";
 import { logout } from "@/app/actions/auth";
@@ -18,12 +19,14 @@ interface AccountFormProps {
   locale: string;
   email: string;
   avatarPath: string | null;
+  emailNotifications: boolean;
 }
 
 export default function AccountForm({
   locale,
   email,
   avatarPath,
+  emailNotifications,
 }: AccountFormProps) {
   const t = useTranslations("Account");
 
@@ -49,6 +52,9 @@ export default function AccountForm({
   const [deleteConfirming, setDeleteConfirming] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [dangerOpen, setDangerOpen] = useState(false);
+
+  const [notifEnabled, setNotifEnabled] = useState(emailNotifications);
+  const [notifLoading, setNotifLoading] = useState(false);
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -124,6 +130,16 @@ export default function AccountForm({
     setPwdLoading(false);
   }
 
+  async function handleNotifToggle() {
+    setNotifLoading(true);
+    const newValue = !notifEnabled;
+    const result = await updateNotificationPreference(locale, newValue);
+    if (!result.error) {
+      setNotifEnabled(newValue);
+    }
+    setNotifLoading(false);
+  }
+
   async function handleDelete() {
     setDeleteLoading(true);
     await deleteAccount(locale);
@@ -194,6 +210,42 @@ export default function AccountForm({
           )}
         </div>
       </form>
+
+      {/* Notifications section */}
+      <div className="rounded-xl border border-border bg-surface p-6 space-y-4">
+        <h2 className="text-lg font-semibold text-text-primary">
+          {t("notificationsSection")}
+        </h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Bell className="h-5 w-5 text-text-tertiary" />
+            <div>
+              <p className="text-sm font-medium text-text-primary">
+                {t("emailNotifications")}
+              </p>
+              <p className="text-xs text-text-tertiary">
+                {t("emailNotificationsHint")}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={notifEnabled}
+            onClick={handleNotifToggle}
+            disabled={notifLoading}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-text disabled:opacity-50 ${
+              notifEnabled ? "bg-primary-text" : "bg-border"
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ${
+                notifEnabled ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
+          </button>
+        </div>
+      </div>
 
       {/* Email section */}
       <form

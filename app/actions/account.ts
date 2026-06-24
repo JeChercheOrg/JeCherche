@@ -137,6 +137,32 @@ export async function updatePassword(
   return { success: true };
 }
 
+export async function updateNotificationPreference(
+  locale: string,
+  enabled: boolean
+): Promise<{ error?: string; success?: boolean }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ email_notifications: enabled })
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: "errorGeneric" };
+  }
+
+  return { success: true };
+}
+
 export async function deleteAccount(
   locale: string
 ): Promise<{ error?: string }> {

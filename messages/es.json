@@ -120,6 +120,9 @@
     "invalidEmail": "Correo electrónico no válido.",
     "avatarTooLarge": "La imagen supera el límite de 2 MB.",
     "avatarFormatError": "Formato no soportado. Usa JPG, PNG o WebP.",
+    "notificationsSection": "Notificaciones",
+    "emailNotifications": "Notificaciones por email",
+    "emailNotificationsHint": "Recibir un email cuando recibas una nueva oferta, mensaje o cambio de estado.",
     "logout": "Cerrar sesión"
   },
   "PublicProfile": {

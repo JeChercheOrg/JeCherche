@@ -2,6 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { sendNotificationEmail } from "@/lib/email";
+import { newMessageEmail } from "@/lib/email-templates";
+import { SITE_URL } from "@/lib/constants";
 
 export async function getOrCreateConversation(
   locale: string,
@@ -101,6 +104,40 @@ export async function sendMessage(
 
   if (insertError || !data) {
     return { error: "errorGeneric" };
+  }
+
+  const { data: conv } = await supabase
+    .from("conversations")
+    .select("buyer_id, seller_id, listing_id, listings(title)")
+    .eq("id", conversationId)
+    .single();
+
+  if (conv) {
+    const recipientId =
+      conv.buyer_id === user.id ? conv.seller_id : conv.buyer_id;
+
+    const { data: recipientEmail } = await supabase.rpc(
+      "get_user_email_for_notification",
+      { user_uuid: recipientId }
+    );
+
+    if (recipientEmail) {
+      const { data: senderProfile } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("id", user.id)
+        .single();
+
+      const listingTitle =
+        (conv.listings as unknown as { title: string })?.title || "";
+      const conversationUrl = `${SITE_URL}/fr/messages/${conversationId}`;
+      const email = newMessageEmail(
+        senderProfile?.display_name || "?",
+        listingTitle,
+        conversationUrl
+      );
+      sendNotificationEmail({ to: recipientEmail, ...email });
+    }
   }
 
   return { message: data };

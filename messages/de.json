@@ -120,6 +120,9 @@
     "invalidEmail": "Ungültige E-Mail-Adresse.",
     "avatarTooLarge": "Das Bild überschreitet die maximale Größe von 2 MB.",
     "avatarFormatError": "Format nicht unterstützt. Verwenden Sie JPG, PNG oder WebP.",
+    "notificationsSection": "Benachrichtigungen",
+    "emailNotifications": "E-Mail-Benachrichtigungen",
+    "emailNotificationsHint": "Eine E-Mail erhalten, wenn Sie ein neues Angebot, eine Nachricht oder eine Statusänderung bekommen.",
     "logout": "Abmelden"
   },
   "PublicProfile": {

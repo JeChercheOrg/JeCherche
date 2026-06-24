@@ -120,6 +120,9 @@
     "invalidEmail": "Invalid email address.",
     "avatarTooLarge": "Image exceeds the 2 MB size limit.",
     "avatarFormatError": "Unsupported format. Use JPG, PNG or WebP.",
+    "notificationsSection": "Notifications",
+    "emailNotifications": "Email notifications",
+    "emailNotificationsHint": "Receive an email when you get a new offer, message, or status change.",
     "logout": "Log out"
   },
   "PublicProfile": {

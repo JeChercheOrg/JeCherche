@@ -2,6 +2,13 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { sendNotificationEmail } from "@/lib/email";
+import {
+  newOfferEmail,
+  offerAcceptedEmail,
+  offerRejectedEmail,
+} from "@/lib/email-templates";
+import { SITE_URL } from "@/lib/constants";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -121,6 +128,36 @@ export async function createResponse(
     }
   }
 
+  const { data: listingForNotif } = await supabase
+    .from("listings")
+    .select("title")
+    .eq("id", listingId)
+    .single();
+
+  if (listingForNotif) {
+    const { data: sellerProfile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .single();
+
+    const { data: ownerEmail } = await supabase.rpc(
+      "get_user_email_for_notification",
+      { user_uuid: listing.user_id }
+    );
+
+    if (ownerEmail) {
+      const listingUrl = `${SITE_URL}/${locale}/listings/${listingId}`;
+      const email = newOfferEmail(
+        listingForNotif.title,
+        price,
+        sellerProfile?.display_name || "?",
+        listingUrl
+      );
+      sendNotificationEmail({ to: ownerEmail, ...email });
+    }
+  }
+
   revalidatePath(`/${locale}/listings/${listingId}`);
   return {};
 }
@@ -167,6 +204,37 @@ export async function acceptResponse(
     .neq("id", responseId)
     .eq("status", "pending");
 
+  const { data: acceptedResponse } = await supabase
+    .from("responses")
+    .select("user_id, price")
+    .eq("id", responseId)
+    .single();
+
+  if (acceptedResponse) {
+    const { data: listingForNotif } = await supabase
+      .from("listings")
+      .select("title")
+      .eq("id", listingId)
+      .single();
+
+    if (listingForNotif) {
+      const { data: sellerEmail } = await supabase.rpc(
+        "get_user_email_for_notification",
+        { user_uuid: acceptedResponse.user_id }
+      );
+
+      if (sellerEmail) {
+        const listingUrl = `${SITE_URL}/${locale}/listings/${listingId}`;
+        const email = offerAcceptedEmail(
+          listingForNotif.title,
+          acceptedResponse.price,
+          listingUrl
+        );
+        sendNotificationEmail({ to: sellerEmail, ...email });
+      }
+    }
+  }
+
   revalidatePath(`/${locale}/listings/${listingId}`);
   return {};
 }
@@ -204,6 +272,33 @@ export async function rejectResponse(
 
   if (updateError) {
     return { error: "errorGeneric" };
+  }
+
+  const { data: rejectedResponse } = await supabase
+    .from("responses")
+    .select("user_id")
+    .eq("id", responseId)
+    .single();
+
+  if (rejectedResponse) {
+    const { data: listingForNotif } = await supabase
+      .from("listings")
+      .select("title")
+      .eq("id", listingId)
+      .single();
+
+    if (listingForNotif) {
+      const { data: sellerEmail } = await supabase.rpc(
+        "get_user_email_for_notification",
+        { user_uuid: rejectedResponse.user_id }
+      );
+
+      if (sellerEmail) {
+        const listingUrl = `${SITE_URL}/${locale}/listings/${listingId}`;
+        const email = offerRejectedEmail(listingForNotif.title, listingUrl);
+        sendNotificationEmail({ to: sellerEmail, ...email });
+      }
+    }
   }
 
   revalidatePath(`/${locale}/listings/${listingId}`);
