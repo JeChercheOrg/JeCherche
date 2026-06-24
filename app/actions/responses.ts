@@ -210,6 +210,69 @@ export async function rejectResponse(
   return {};
 }
 
+export async function updateResponse(
+  locale: string,
+  responseId: string,
+  formData: FormData
+): Promise<{ error?: string; fieldErrors?: Record<string, string> }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  const { data: response } = await supabase
+    .from("responses")
+    .select("id, user_id, status, listing_id")
+    .eq("id", responseId)
+    .single();
+
+  if (!response || response.user_id !== user.id) {
+    return { error: "errorGeneric" };
+  }
+
+  if (response.status !== "pending") {
+    return { error: "errorNotPending" };
+  }
+
+  const message = formData.get("message") as string;
+  const priceStr = formData.get("price") as string;
+
+  const fieldErrors: Record<string, string> = {};
+
+  if (!message || message.trim().length === 0) {
+    fieldErrors.message = "fieldRequired";
+  }
+
+  const price = Math.round(parseFloat(priceStr) * 100);
+  if (isNaN(price) || price <= 0) {
+    fieldErrors.price = "pricePositive";
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors };
+  }
+
+  const { error: updateError } = await supabase
+    .from("responses")
+    .update({
+      price,
+      message: message.trim(),
+    })
+    .eq("id", responseId);
+
+  if (updateError) {
+    return { error: "errorGeneric" };
+  }
+
+  revalidatePath(`/${locale}/listings/${response.listing_id}`);
+  return {};
+}
+
 const ACCEPT_MESSAGES: Record<string, string> = {
   fr: "J'accepte votre prix.",
   en: "I accept your price.",

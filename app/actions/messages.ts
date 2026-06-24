@@ -208,10 +208,20 @@ export async function getConversationDetail(conversationId: string): Promise<{
     id: string;
     listing_id: string;
     listing_title: string;
+    listing_price: number;
     other_user_name: string;
     other_user_avatar: string | null;
     other_user_id: string;
     current_user_id: string;
+    is_buyer: boolean;
+    response?: {
+      id: string;
+      price: number;
+      message: string;
+      status: string;
+      user_id: string;
+      images: { storage_path: string; position: number }[];
+    };
   };
   messages?: {
     id: string;
@@ -234,7 +244,7 @@ export async function getConversationDetail(conversationId: string): Promise<{
   const { data: conv } = await supabase
     .from("conversations")
     .select(
-      "id, listing_id, buyer_id, seller_id, listings(title), buyer:profiles!conversations_buyer_id_fkey(display_name, avatar_path), seller:profiles!conversations_seller_id_fkey(display_name, avatar_path)"
+      "id, listing_id, buyer_id, seller_id, response_id, listings(title, price), buyer:profiles!conversations_buyer_id_fkey(display_name, avatar_path), seller:profiles!conversations_seller_id_fkey(display_name, avatar_path)"
     )
     .eq("id", conversationId)
     .single();
@@ -252,6 +262,36 @@ export async function getConversationDetail(conversationId: string): Promise<{
     ? (conv.seller as unknown as { display_name: string | null; avatar_path: string | null })
     : (conv.buyer as unknown as { display_name: string | null; avatar_path: string | null });
 
+  const listingData = conv.listings as unknown as { title: string; price: number };
+
+  let responseData: {
+    id: string;
+    price: number;
+    message: string;
+    status: string;
+    user_id: string;
+    images: { storage_path: string; position: number }[];
+  } | undefined;
+
+  if (conv.response_id) {
+    const { data: resp } = await supabase
+      .from("responses")
+      .select("id, price, message, status, user_id, response_images(storage_path, position)")
+      .eq("id", conv.response_id)
+      .single();
+
+    if (resp) {
+      responseData = {
+        id: resp.id,
+        price: resp.price,
+        message: resp.message,
+        status: resp.status,
+        user_id: resp.user_id,
+        images: (resp.response_images as { storage_path: string; position: number }[]) || [],
+      };
+    }
+  }
+
   const { data: messages } = await supabase
     .from("messages")
     .select("id, sender_id, content, created_at")
@@ -262,11 +302,14 @@ export async function getConversationDetail(conversationId: string): Promise<{
     conversation: {
       id: conv.id,
       listing_id: conv.listing_id,
-      listing_title: (conv.listings as unknown as { title: string })?.title || "",
+      listing_title: listingData?.title || "",
+      listing_price: listingData?.price || 0,
       other_user_name: otherProfile?.display_name || "?",
       other_user_avatar: otherProfile?.avatar_path || null,
       other_user_id: isBuyer ? conv.seller_id : conv.buyer_id,
       current_user_id: user.id,
+      is_buyer: isBuyer,
+      response: responseData,
     },
     messages: messages || [],
   };

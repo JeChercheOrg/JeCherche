@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { sendMessage, markConversationRead, getConversationDetail } from "@/app/actions/messages";
 import { MessageBubble } from "@/components/message-bubble";
+import { ConversationOfferCard } from "@/components/conversation-offer-card";
 import { UserAvatar } from "@/components/user-avatar";
 import { ArrowLeft, Send } from "lucide-react";
 
@@ -16,16 +17,28 @@ interface Message {
   created_at: string;
 }
 
+interface OfferResponse {
+  id: string;
+  price: number;
+  message: string;
+  status: string;
+  user_id: string;
+  images: { storage_path: string; position: number }[];
+}
+
 interface ConversationViewProps {
   locale: string;
   conversation: {
     id: string;
     listing_id: string;
     listing_title: string;
+    listing_price: number;
     other_user_name: string;
     other_user_avatar: string | null;
     other_user_id: string;
     current_user_id: string;
+    is_buyer: boolean;
+    response?: OfferResponse;
   };
   initialMessages: Message[];
 }
@@ -37,12 +50,26 @@ export function ConversationView({
 }: ConversationViewProps) {
   const t = useTranslations("Messages");
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [offerResponse, setOfferResponse] = useState<OfferResponse | undefined>(
+    conversation.response
+  );
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+
+  const refreshConversation = useCallback(async () => {
+    const result = await getConversationDetail(conversation.id);
+    if (result.conversation?.response) {
+      setOfferResponse(result.conversation.response);
+    }
+    if (result.messages) {
+      setMessages(result.messages);
+    }
+  }, [conversation.id]);
+
   const avatarUrl = conversation.other_user_avatar
     ? `${supabaseUrl}/storage/v1/object/public/avatars/${conversation.other_user_avatar}`
     : null;
@@ -66,6 +93,9 @@ export function ConversationView({
           return result.messages!;
         });
         markConversationRead(conversation.id);
+      }
+      if (result.conversation?.response) {
+        setOfferResponse(result.conversation.response);
       }
     }, 5000);
 
@@ -124,6 +154,18 @@ export function ConversationView({
           </Link>
         </div>
       </div>
+
+      {/* Offer */}
+      {offerResponse && (
+        <ConversationOfferCard
+          response={offerResponse}
+          listingId={conversation.listing_id}
+          listingPrice={conversation.listing_price}
+          isBuyer={conversation.is_buyer}
+          locale={locale}
+          onResponseChanged={refreshConversation}
+        />
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
