@@ -233,7 +233,7 @@ export default function EditListingForm({
               id="price"
               type="number"
               step="0.01"
-              min="0.01"
+              min="0"
               required
               value={price}
               onChange={(e) => setPrice(e.target.value)}

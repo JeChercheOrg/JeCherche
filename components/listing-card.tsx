@@ -21,6 +21,7 @@ interface ListingCardProps {
   formatPrice: (price: number) => string;
   formatDate: (date: Date) => string;
   foundLabel?: string;
+  priceTbdLabel?: string;
   isFavorited?: boolean;
   isAuthenticated?: boolean;
 }
@@ -35,7 +36,7 @@ function getCategoryName(
   return category.name;
 }
 
-export function ListingCard({ listing, locale, formatPrice, formatDate, foundLabel, isFavorited, isAuthenticated }: ListingCardProps) {
+export function ListingCard({ listing, locale, formatPrice, formatDate, foundLabel, priceTbdLabel, isFavorited, isAuthenticated }: ListingCardProps) {
   const coverImage = listing.listing_images?.find(
     (img) => img.position === 0
   );
@@ -102,7 +103,11 @@ export function ListingCard({ listing, locale, formatPrice, formatDate, foundLab
         </div>
         <div className="p-4">
           <p className="text-lg font-bold text-primary-text mb-1">
-            {formatPrice(listing.price)}
+            {listing.price === 0 ? (
+              <span className="text-sm font-semibold text-text-secondary">{priceTbdLabel || "Prix à déterminer"}</span>
+            ) : (
+              formatPrice(listing.price)
+            )}
           </p>
           <h2 className="text-sm font-medium text-text-primary truncate">
             {listing.title}

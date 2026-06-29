@@ -3,19 +3,19 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useFormatter } from "next-intl";
-import { Pencil, Trash2, MessageSquare, Flame, CheckCircle, RotateCcw } from "lucide-react";
+import { Pencil, Trash2, CheckCircle, RotateCcw, MessageSquare, Flame, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { deleteListing, toggleListingStatus } from "@/app/actions/listings";
 
-interface MyListingCardProps {
+interface AdminListingCardProps {
   listing: {
     id: string;
     title: string;
     price: number;
     created_at: string;
     status?: string;
+    city?: string | null;
     listing_images?: { storage_path: string; position: number }[];
     categories?: {
       name: string;
@@ -26,6 +26,9 @@ interface MyListingCardProps {
     responses?: { count: number }[];
   };
   locale: string;
+  authorName: string;
+  formatPrice: (price: number) => string;
+  formatDate: (date: Date) => string;
   translations: {
     edit: string;
     delete: string;
@@ -35,6 +38,7 @@ interface MyListingCardProps {
     markFound: string;
     reopen: string;
     found: string;
+    author: string;
     priceTbd: string;
   };
 }
@@ -54,25 +58,19 @@ function getCategoryName(
   return category.name;
 }
 
-export function MyListingCard({
+export function AdminListingCard({
   listing,
   locale,
+  authorName,
+  formatPrice,
+  formatDate,
   translations,
-}: MyListingCardProps) {
-  const format = useFormatter();
+}: AdminListingCardProps) {
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [toggling, setToggling] = useState(false);
 
-  const formatPrice = (price: number) =>
-    format.number(price / 100, { style: "currency", currency: "EUR" });
-
-  const formatDate = (date: Date) =>
-    format.dateTime(date, { day: "numeric", month: "short" });
-
-  const coverImage = listing.listing_images?.find(
-    (img) => img.position === 0
-  );
+  const coverImage = listing.listing_images?.find((img) => img.position === 0);
   const responseCount = listing.responses?.[0]?.count ?? 0;
   const isFound = listing.status === "found";
 
@@ -107,10 +105,7 @@ export function MyListingCard({
           )}
           {listing.categories && (
             <div className="absolute top-2 left-2">
-              <Badge
-                variant="default"
-                className="bg-surface/90 backdrop-blur-sm"
-              >
+              <Badge variant="default" className="bg-surface/90 backdrop-blur-sm">
                 {getCategoryName(listing.categories, locale)}
               </Badge>
             </div>
@@ -152,9 +147,13 @@ export function MyListingCard({
         <h2 className="text-sm font-medium text-text-primary truncate">
           {listing.title}
         </h2>
-        <span className="text-xs text-text-tertiary mt-1 block">
-          {formatDate(new Date(listing.created_at))}
+        <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
+          <User className="h-3 w-3" />
+          {authorName}
         </span>
+        <time dateTime={listing.created_at} className="text-xs text-text-tertiary mt-0.5 block">
+          {formatDate(new Date(listing.created_at))}
+        </time>
 
         {confirming ? (
           <div className="mt-3 space-y-2">
@@ -193,7 +192,11 @@ export function MyListingCard({
               size="sm"
               onClick={handleToggleStatus}
               disabled={toggling}
-              className={isFound ? "text-blue-600 hover:text-blue-700 hover:bg-blue-50" : "text-green-600 hover:text-green-700 hover:bg-green-50"}
+              className={
+                isFound
+                  ? "text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                  : "text-green-600 hover:text-green-700 hover:bg-green-50"
+              }
             >
               {isFound ? (
                 <RotateCcw className="h-3.5 w-3.5 mr-1" />

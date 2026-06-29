@@ -111,8 +111,10 @@ export default async function LocaleLayout({
   const tMyListings = await getTranslations("MyListings");
   const tMessages = await getTranslations("Messages");
   const tFavorites = await getTranslations("Favorites");
+  const tAdmin = await getTranslations("Admin");
 
   const unreadCount = user ? await getUnreadCount() : 0;
+  const userIsAdmin = user?.app_metadata?.role === "admin";
 
   return (
     <html
@@ -126,6 +128,7 @@ export default async function LocaleLayout({
           avatarUrl={avatarUrl}
           displayName={displayName}
           unreadCount={unreadCount}
+          isAdmin={userIsAdmin}
           translations={{
             login: tAuth("login"),
             signup: tAuth("signup"),
@@ -135,6 +138,7 @@ export default async function LocaleLayout({
             messages: tMessages("messages"),
             listings: tLayout("listings"),
             searchPlaceholder: tLayout("searchPlaceholder"),
+            ...(userIsAdmin && { admin: tAdmin("admin") }),
           }}
         />
         <main className="flex-1">

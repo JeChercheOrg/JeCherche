@@ -3,13 +3,14 @@ import { createClient } from "@/utils/supabase/server";
 import { getTranslations, getFormatter, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Truck, CheckCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Truck, CheckCircle, Pencil, Trash2, Shield } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ImageGallery } from "@/components/image-gallery";
 import { UserAvatar } from "@/components/user-avatar";
 import { ResponseForm } from "@/components/response-form";
 import { ResponseCard } from "@/components/response-card";
 import { ListingActions } from "@/components/listing-actions";
+import { ListingModerateActions } from "@/components/listing-moderate-actions";
 import { FavoriteButton } from "@/components/favorite-button";
 import { JsonLd } from "@/components/json-ld";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -85,6 +86,7 @@ export default async function ListingDetailPage({
 
   const t = await getTranslations("ListingDetail");
   const tR = await getTranslations("Responses");
+  const tMy = await getTranslations("MyListings");
   const format = await getFormatter();
   const supabase = await createClient();
 
@@ -123,6 +125,8 @@ export default async function ListingDetailPage({
     .order("price", { ascending: true });
 
   const isOwner = user?.id === listing.user_id;
+  const isAdmin = user?.app_metadata?.role === "admin";
+  const canModerate = isOwner || isAdmin;
 
   let isFavorited = false;
   if (user) {
@@ -146,7 +150,7 @@ export default async function ListingDetailPage({
     hasResponded = !!existingResponse;
   }
 
-  const canRespond = !!user && !isOwner && !hasResponded && listing.status !== "found";
+  const canRespond = !!user && !isOwner && !isAdmin && !hasResponded && listing.status !== "found";
 
   const responseTranslations = {
     yourOffer: tR("yourOffer"),
@@ -279,15 +283,23 @@ export default async function ListingDetailPage({
             </h1>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary-text">
-                {format.number(listing.price / 100, {
-                  style: "currency",
-                  currency: "EUR",
-                })}
-              </span>
-              <span className="text-xs text-text-tertiary uppercase tracking-wide">
-                {t("budget")}
-              </span>
+              {listing.price === 0 ? (
+                <span className="text-lg font-semibold text-text-secondary">
+                  {t("priceTbd")}
+                </span>
+              ) : (
+                <>
+                  <span className="text-2xl font-bold text-primary-text">
+                    {format.number(listing.price / 100, {
+                      style: "currency",
+                      currency: "EUR",
+                    })}
+                  </span>
+                  <span className="text-xs text-text-tertiary uppercase tracking-wide">
+                    {t("budget")}
+                  </span>
+                </>
+              )}
               <div className="ml-auto">
                 <FavoriteButton
                   listingId={id}
@@ -364,6 +376,28 @@ export default async function ListingDetailPage({
                 </p>
               </div>
             </Link>
+
+            {canModerate && (
+              <>
+                <hr className="border-border" />
+                <ListingModerateActions
+                  locale={locale}
+                  listingId={id}
+                  isFound={listing.status === "found"}
+                  isAdmin={!isOwner && !!isAdmin}
+                  translations={{
+                    edit: tMy("edit"),
+                    delete: tMy("delete"),
+                    confirmDelete: tMy("confirmDelete"),
+                    cancelDelete: tMy("cancelDelete"),
+                    deleting: tMy("deleting"),
+                    markFound: tMy("markFound"),
+                    reopen: tMy("reopen"),
+                    adminBadge: t("adminAction"),
+                  }}
+                />
+              </>
+            )}
 
             {canRespond && (
               <>

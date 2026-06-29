@@ -43,7 +43,7 @@ export default async function EditListingPage({
     .eq("id", id)
     .single();
 
-  if (!listing || listing.user_id !== user.id) {
+  if (!listing || (listing.user_id !== user.id && user.app_metadata?.role !== "admin")) {
     notFound();
   }
 

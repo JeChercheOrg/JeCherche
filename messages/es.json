@@ -90,7 +90,9 @@
     "viewProfile": "Ver perfil",
     "location": "Ubicación",
     "deliveryAvailable": "Envío disponible",
-    "listingFound": "Esta solicitud ha sido cubierta"
+    "listingFound": "Esta solicitud ha sido cubierta",
+    "adminAction": "Acción admin",
+    "priceTbd": "Precio a determinar"
   },
   "MyListings": {
     "pageTitle": "Mis anuncios",
@@ -250,7 +252,8 @@
     "deliveryFilter": "Envío disponible",
     "radiusLabel": "Radio",
     "showFound": "Incluir encontradas",
-    "found": "Encontrado"
+    "found": "Encontrado",
+    "priceTbd": "Precio a determinar"
   },
   "SEO": {
     "homeTitle": "Publica lo que buscas, los vendedores vienen a ti",
@@ -276,5 +279,19 @@
     "noFavorites": "Aún no tienes favoritos.",
     "emptyState": "Explora los anuncios y añádelos a tus favoritos para encontrarlos fácilmente.",
     "browseCta": "Explorar anuncios"
+  },
+  "Admin": {
+    "admin": "Admin",
+    "pageTitle": "Administración",
+    "allListings": "Todos los anuncios",
+    "author": "Autor",
+    "noListings": "No se encontraron anuncios.",
+    "unknownAuthor": "Usuario desconocido",
+    "searchPlaceholder": "Buscar por título…",
+    "status_all": "Todos",
+    "status_active": "Activos",
+    "status_found": "Encontrados",
+    "totalListings": "{count, plural, =0 {Ningún anuncio} one {1 anuncio} other {# anuncios}}",
+    "priceTbd": "Precio a determinar"
   }
 }

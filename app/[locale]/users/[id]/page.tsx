@@ -57,6 +57,7 @@ export default async function PublicProfilePage({
   setRequestLocale(locale);
 
   const t = await getTranslations("PublicProfile");
+  const tListings = await getTranslations("Listings");
   const format = await getFormatter();
   const supabase = await createClient();
 
@@ -159,6 +160,7 @@ export default async function PublicProfilePage({
               formatPrice={formatPrice}
               formatDate={formatDate}
               foundLabel={t("found")}
+              priceTbdLabel={tListings("priceTbd")}
               isFavorited={favoritedIds.includes(listing.id)}
               isAuthenticated={!!user}
             />

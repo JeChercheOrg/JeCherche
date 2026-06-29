@@ -245,6 +245,7 @@ export default async function ListingsPage({
               formatPrice={formatPrice}
               formatDate={formatDate}
               foundLabel={t("found")}
+              priceTbdLabel={t("priceTbd")}
               isFavorited={favoritedIds.includes(listing.id)}
               isAuthenticated={!!user}
             />

@@ -9,6 +9,7 @@ interface HeaderProps {
   avatarUrl?: string | null;
   displayName?: string | null;
   unreadCount?: number;
+  isAdmin?: boolean;
   translations: {
     login: string;
     signup: string;
@@ -18,10 +19,11 @@ interface HeaderProps {
     messages: string;
     listings: string;
     searchPlaceholder: string;
+    admin?: string;
   };
 }
 
-export function Header({ user, locale, avatarUrl, displayName, unreadCount, translations }: HeaderProps) {
+export function Header({ user, locale, avatarUrl, displayName, unreadCount, isAdmin, translations }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface">
       <div className="mx-auto max-w-7xl px-4 h-14 sm:h-16 flex items-center gap-3 sm:gap-4">
@@ -32,7 +34,7 @@ export function Header({ user, locale, avatarUrl, displayName, unreadCount, tran
           </Suspense>
         </div>
         <div className="ml-auto">
-          <UserMenu user={user} locale={locale} avatarUrl={avatarUrl} displayName={displayName} unreadCount={unreadCount} translations={translations} />
+          <UserMenu user={user} locale={locale} avatarUrl={avatarUrl} displayName={displayName} unreadCount={unreadCount} isAdmin={isAdmin} translations={translations} />
         </div>
       </div>
     </header>

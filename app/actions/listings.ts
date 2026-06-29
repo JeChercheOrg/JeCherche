@@ -42,7 +42,7 @@ export async function createListing(
   }
 
   const price = Math.round(parseFloat(priceStr) * 100);
-  if (isNaN(price) || price <= 0) {
+  if (isNaN(price) || price < 0) {
     fieldErrors.price = "pricePositive";
   }
 
@@ -155,7 +155,7 @@ export async function deleteListing(
     .eq("id", listingId)
     .single();
 
-  if (!listing || listing.user_id !== user.id) {
+  if (!listing || (listing.user_id !== user.id && user.app_metadata?.role !== "admin")) {
     return { error: "errorGeneric" };
   }
 
@@ -176,7 +176,7 @@ export async function deleteListing(
     return { error: "errorGeneric" };
   }
 
-  redirect(`/${locale}/my-listings`);
+  redirect(`/${locale}/listings`);
 }
 
 export async function updateListing(
@@ -200,7 +200,7 @@ export async function updateListing(
     .eq("id", listingId)
     .single();
 
-  if (!existing || existing.user_id !== user.id) {
+  if (!existing || (existing.user_id !== user.id && user.app_metadata?.role !== "admin")) {
     return { error: "errorGeneric" };
   }
 
@@ -227,7 +227,7 @@ export async function updateListing(
   }
 
   const price = Math.round(parseFloat(priceStr) * 100);
-  if (isNaN(price) || price <= 0) {
+  if (isNaN(price) || price < 0) {
     fieldErrors.price = "pricePositive";
   }
 
@@ -289,7 +289,7 @@ export async function updateListing(
 
     for (const file of newImages) {
       const ext = file.name.split(".").pop() || "jpg";
-      const storagePath = `${user.id}/${listingId}/${nextPosition}_${Date.now()}.${ext}`;
+      const storagePath = `${existing.user_id}/${listingId}/${nextPosition}_${Date.now()}.${ext}`;
 
       const { error: uploadError } = await supabase.storage
         .from("listing-images")
@@ -307,7 +307,7 @@ export async function updateListing(
     }
   }
 
-  redirect(`/${locale}/my-listings`);
+  redirect(`/${locale}/listings/${listingId}`);
 }
 
 export async function toggleListingStatus(
@@ -330,7 +330,7 @@ export async function toggleListingStatus(
     .eq("id", listingId)
     .single();
 
-  if (!listing || listing.user_id !== user.id) {
+  if (!listing || (listing.user_id !== user.id && user.app_metadata?.role !== "admin")) {
     return { error: "errorGeneric" };
   }
 

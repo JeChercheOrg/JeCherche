@@ -90,7 +90,9 @@
     "viewProfile": "View profile",
     "location": "Location",
     "deliveryAvailable": "Delivery available",
-    "listingFound": "This request has been fulfilled"
+    "listingFound": "This request has been fulfilled",
+    "adminAction": "Admin action",
+    "priceTbd": "Price to be determined"
   },
   "MyListings": {
     "pageTitle": "My listings",
@@ -250,7 +252,8 @@
     "deliveryFilter": "Delivery available",
     "radiusLabel": "Radius",
     "showFound": "Include found",
-    "found": "Found"
+    "found": "Found",
+    "priceTbd": "Price to be determined"
   },
   "SEO": {
     "homeTitle": "Post what you're looking for, let sellers come to you",
@@ -276,5 +279,19 @@
     "noFavorites": "You have no favorites yet.",
     "emptyState": "Browse listings and add them to your favorites to find them easily.",
     "browseCta": "Browse listings"
+  },
+  "Admin": {
+    "admin": "Admin",
+    "pageTitle": "Administration",
+    "allListings": "All listings",
+    "author": "Author",
+    "noListings": "No listings found.",
+    "unknownAuthor": "Unknown user",
+    "searchPlaceholder": "Search by title…",
+    "status_all": "All",
+    "status_active": "Active",
+    "status_found": "Found",
+    "totalListings": "{count, plural, =0 {No listings} one {1 listing} other {# listings}}",
+    "priceTbd": "Price to be determined"
   }
 }

@@ -21,6 +21,7 @@ export default async function MyListingsPage({
   }
 
   const t = await getTranslations("MyListings");
+  const tListings = await getTranslations("Listings");
 
   const { data: listings } = await supabase
     .from("listings")
@@ -56,6 +57,7 @@ export default async function MyListingsPage({
                 markFound: t("markFound"),
                 reopen: t("reopen"),
                 found: t("found"),
+                priceTbd: tListings("priceTbd"),
               }}
             />
           ))}

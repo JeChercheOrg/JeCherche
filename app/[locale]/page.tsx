@@ -46,6 +46,7 @@ export default async function Home({
   const t = await getTranslations("HomePage");
   const tH = await getTranslations("HowItWorks");
   const tSeo = await getTranslations("SEO");
+  const tListings = await getTranslations("Listings");
   const format = await getFormatter();
   const supabase = await createClient();
 
@@ -147,6 +148,7 @@ export default async function Home({
                   locale={locale}
                   formatPrice={formatPrice}
                   formatDate={formatDate}
+                  priceTbdLabel={tListings("priceTbd")}
                   isFavorited={favoritedIds.includes(listing.id)}
                   isAuthenticated={!!user}
                 />

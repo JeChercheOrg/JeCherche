@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { UnreadBadge } from "@/components/unread-badge";
-import { MessageCircle, Plus, List, Heart } from "lucide-react";
+import { MessageCircle, Plus, List, Heart, Shield } from "lucide-react";
 
 interface UserMenuProps {
   user: { id?: string; email?: string } | null;
@@ -17,10 +17,12 @@ interface UserMenuProps {
     myListings: string;
     favorites: string;
     messages: string;
+    admin?: string;
   };
+  isAdmin?: boolean;
 }
 
-export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, translations }: UserMenuProps) {
+export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, translations, isAdmin }: UserMenuProps) {
   if (!user) {
     return (
       <div className="flex items-center gap-2">
@@ -58,6 +60,14 @@ export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, tr
           <span className="hidden sm:inline">{translations.favorites}</span>
         </Button>
       </Link>
+      {isAdmin && translations.admin && (
+        <Link href={`/${locale}/admin`}>
+          <Button variant="ghost" size="sm" className="px-2.5 sm:px-3 py-2 text-amber-600 hover:text-amber-700">
+            <Shield className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">{translations.admin}</span>
+          </Button>
+        </Link>
+      )}
       <Link href={`/${locale}/messages`} className="relative">
         <Button variant="ghost" size="sm" className="gap-1.5 px-2.5 sm:px-3 py-2">
           <MessageCircle className="h-4 w-4" />

@@ -106,6 +106,7 @@ export default async function FavoritesPage({
               formatPrice={formatPrice}
               formatDate={formatDate}
               foundLabel={tListings("found")}
+              priceTbdLabel={tListings("priceTbd")}
               isFavorited
               isAuthenticated
             />

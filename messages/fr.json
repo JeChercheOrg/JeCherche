@@ -90,7 +90,9 @@
     "viewProfile": "Voir le profil",
     "location": "Localisation",
     "deliveryAvailable": "Livraison possible",
-    "listingFound": "Cette demande a été pourvue"
+    "listingFound": "Cette demande a été pourvue",
+    "adminAction": "Action admin",
+    "priceTbd": "Prix à déterminer"
   },
   "MyListings": {
     "pageTitle": "Mes annonces",
@@ -250,7 +252,8 @@
     "deliveryFilter": "Livraison possible",
     "radiusLabel": "Rayon",
     "showFound": "Inclure pourvues",
-    "found": "Trouvé"
+    "found": "Trouvé",
+    "priceTbd": "Prix à déterminer"
   },
   "SEO": {
     "homeTitle": "Publiez ce que vous cherchez, les vendeurs viennent à vous",
@@ -276,5 +279,19 @@
     "noFavorites": "Vous n'avez pas encore de favoris.",
     "emptyState": "Explorez les annonces et ajoutez-les à vos favoris pour les retrouver facilement.",
     "browseCta": "Parcourir les annonces"
+  },
+  "Admin": {
+    "admin": "Admin",
+    "pageTitle": "Administration",
+    "allListings": "Toutes les annonces",
+    "author": "Auteur",
+    "noListings": "Aucune annonce trouvée.",
+    "unknownAuthor": "Utilisateur inconnu",
+    "searchPlaceholder": "Rechercher par titre…",
+    "status_all": "Toutes",
+    "status_active": "Actives",
+    "status_found": "Trouvées",
+    "totalListings": "{count, plural, =0 {Aucune annonce} one {1 annonce} other {# annonces}}",
+    "priceTbd": "Prix à déterminer"
   }
 }
