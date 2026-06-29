@@ -269,5 +269,12 @@
     "step2Description": "Sellers see your request and propose their products with a price.",
     "step3Title": "Choose the best offer",
     "step3Description": "Compare offers, chat with sellers, and finalize your purchase."
+  },
+  "Favorites": {
+    "favorites": "Favorites",
+    "pageTitle": "My favorites",
+    "noFavorites": "You have no favorites yet.",
+    "emptyState": "Browse listings and add them to your favorites to find them easily.",
+    "browseCta": "Browse listings"
   }
 }

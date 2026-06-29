@@ -110,6 +110,7 @@ export default async function LocaleLayout({
   const tLayout = await getTranslations("Layout");
   const tMyListings = await getTranslations("MyListings");
   const tMessages = await getTranslations("Messages");
+  const tFavorites = await getTranslations("Favorites");
 
   const unreadCount = user ? await getUnreadCount() : 0;
 
@@ -130,6 +131,7 @@ export default async function LocaleLayout({
             signup: tAuth("signup"),
             publish: tLayout("publish"),
             myListings: tMyListings("myListings"),
+            favorites: tFavorites("favorites"),
             messages: tMessages("messages"),
             listings: tLayout("listings"),
             searchPlaceholder: tLayout("searchPlaceholder"),

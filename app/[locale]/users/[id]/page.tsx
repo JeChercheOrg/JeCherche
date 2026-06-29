@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/json-ld";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { SITE_URL } from "@/lib/constants";
 import { routing } from "@/i18n/routing";
+import { getFavoriteIds } from "@/app/actions/favorites";
 
 export async function generateMetadata({
   params,
@@ -80,6 +81,13 @@ export default async function PublicProfilePage({
     .eq("user_id", id)
     .order("created_at", { ascending: false });
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const listingIds = listings?.map((l) => l.id) ?? [];
+  const favoritedIds = user ? await getFavoriteIds(listingIds) : [];
+
   const formatPrice = (price: number) =>
     format.number(price / 100, { style: "currency", currency: "EUR" });
 
@@ -151,6 +159,8 @@ export default async function PublicProfilePage({
               formatPrice={formatPrice}
               formatDate={formatDate}
               foundLabel={t("found")}
+              isFavorited={favoritedIds.includes(listing.id)}
+              isAuthenticated={!!user}
             />
           ))}
         </div>

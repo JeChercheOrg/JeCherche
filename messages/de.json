@@ -269,5 +269,12 @@
     "step2Description": "Verkäufer sehen Ihre Anfrage und bieten Ihnen ihre Produkte mit einem Preis an.",
     "step3Title": "Wählen Sie das beste Angebot",
     "step3Description": "Vergleichen Sie Angebote, chatten Sie mit Verkäufern und schließen Sie Ihren Kauf ab."
+  },
+  "Favorites": {
+    "favorites": "Favoriten",
+    "pageTitle": "Meine Favoriten",
+    "noFavorites": "Sie haben noch keine Favoriten.",
+    "emptyState": "Durchsuchen Sie Anzeigen und fügen Sie sie zu Ihren Favoriten hinzu, um sie leicht wiederzufinden.",
+    "browseCta": "Anzeigen durchsuchen"
   }
 }

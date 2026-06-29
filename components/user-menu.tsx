@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { UnreadBadge } from "@/components/unread-badge";
-import { MessageCircle, Plus, List } from "lucide-react";
+import { MessageCircle, Plus, List, Heart } from "lucide-react";
 
 interface UserMenuProps {
   user: { id?: string; email?: string } | null;
@@ -15,6 +15,7 @@ interface UserMenuProps {
     signup: string;
     publish: string;
     myListings: string;
+    favorites: string;
     messages: string;
   };
 }
@@ -49,6 +50,12 @@ export function UserMenu({ user, locale, avatarUrl, displayName, unreadCount, tr
         <Button variant="ghost" size="sm" className="px-2.5 sm:px-3 py-2">
           <List className="h-4 w-4 sm:hidden" />
           <span className="hidden sm:inline">{translations.myListings}</span>
+        </Button>
+      </Link>
+      <Link href={`/${locale}/favorites`}>
+        <Button variant="ghost" size="sm" className="px-2.5 sm:px-3 py-2">
+          <Heart className="h-4 w-4 sm:hidden" />
+          <span className="hidden sm:inline">{translations.favorites}</span>
         </Button>
       </Link>
       <Link href={`/${locale}/messages`} className="relative">

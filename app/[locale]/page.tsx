@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/json-ld";
 import { ArrowRight, Search, MessageSquare, CheckCircle } from "lucide-react";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { routing } from "@/i18n/routing";
+import { getFavoriteIds } from "@/app/actions/favorites";
 
 export async function generateMetadata({
   params,
@@ -54,6 +55,13 @@ export default async function Home({
     .eq("status", "active")
     .order("created_at", { ascending: false })
     .limit(6);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const listingIds = listings?.map((l) => l.id) ?? [];
+  const favoritedIds = user ? await getFavoriteIds(listingIds) : [];
 
   const formatPrice = (price: number) =>
     format.number(price / 100, { style: "currency", currency: "EUR" });
@@ -139,6 +147,8 @@ export default async function Home({
                   locale={locale}
                   formatPrice={formatPrice}
                   formatDate={formatDate}
+                  isFavorited={favoritedIds.includes(listing.id)}
+                  isAuthenticated={!!user}
                 />
               ))}
             </div>

@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { ResponseForm } from "@/components/response-form";
 import { ResponseCard } from "@/components/response-card";
 import { ListingActions } from "@/components/listing-actions";
+import { FavoriteButton } from "@/components/favorite-button";
 import { JsonLd } from "@/components/json-ld";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { SITE_URL } from "@/lib/constants";
@@ -122,6 +123,17 @@ export default async function ListingDetailPage({
     .order("price", { ascending: true });
 
   const isOwner = user?.id === listing.user_id;
+
+  let isFavorited = false;
+  if (user) {
+    const { data: fav } = await supabase
+      .from("favorites")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("listing_id", id)
+      .maybeSingle();
+    isFavorited = !!fav;
+  }
 
   let hasResponded = false;
   if (user && !isOwner) {
@@ -276,6 +288,15 @@ export default async function ListingDetailPage({
               <span className="text-xs text-text-tertiary uppercase tracking-wide">
                 {t("budget")}
               </span>
+              <div className="ml-auto">
+                <FavoriteButton
+                  listingId={id}
+                  initialFavorited={isFavorited}
+                  isAuthenticated={!!user}
+                  locale={locale}
+                  variant="detail"
+                />
+              </div>
             </div>
 
             <p className="text-sm text-text-tertiary">

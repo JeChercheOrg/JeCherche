@@ -14,6 +14,7 @@ interface HeaderProps {
     signup: string;
     publish: string;
     myListings: string;
+    favorites: string;
     messages: string;
     listings: string;
     searchPlaceholder: string;

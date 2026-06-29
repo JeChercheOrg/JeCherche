@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { FavoriteButton } from "@/components/favorite-button";
 import { MapPin, MessageSquare, Flame, CheckCircle } from "lucide-react";
 
 interface ListingCardProps {
@@ -20,6 +21,8 @@ interface ListingCardProps {
   formatPrice: (price: number) => string;
   formatDate: (date: Date) => string;
   foundLabel?: string;
+  isFavorited?: boolean;
+  isAuthenticated?: boolean;
 }
 
 function getCategoryName(
@@ -32,7 +35,7 @@ function getCategoryName(
   return category.name;
 }
 
-export function ListingCard({ listing, locale, formatPrice, formatDate, foundLabel }: ListingCardProps) {
+export function ListingCard({ listing, locale, formatPrice, formatDate, foundLabel, isFavorited, isAuthenticated }: ListingCardProps) {
   const coverImage = listing.listing_images?.find(
     (img) => img.position === 0
   );
@@ -63,8 +66,18 @@ export function ListingCard({ listing, locale, formatPrice, formatDate, foundLab
               </Badge>
             </div>
           )}
+          {isAuthenticated && (
+            <div className="absolute top-2 right-2 z-10">
+              <FavoriteButton
+                listingId={listing.id}
+                initialFavorited={isFavorited ?? false}
+                isAuthenticated
+                locale={locale}
+              />
+            </div>
+          )}
           {isFound && foundLabel && (
-            <div className="absolute top-2 right-2">
+            <div className={`absolute ${isAuthenticated ? "top-12" : "top-2"} right-2`}>
               <span className="inline-flex items-center gap-1 rounded-full bg-green-600/90 backdrop-blur-sm px-2 py-0.5 text-xs font-semibold text-white">
                 <CheckCircle className="h-3 w-3" />
                 {foundLabel}
