@@ -108,7 +108,7 @@ export function AddressAutocomplete({
         try {
           const { latitude, longitude } = position.coords;
           const res = await fetch(
-            `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}&type=municipality`
+            `https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`
           );
           const data = await res.json();
           const feature = data.features?.[0];
