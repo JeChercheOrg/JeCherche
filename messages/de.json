@@ -77,7 +77,11 @@
     "cityPlaceholder": "Stadt suchen…",
     "delivery": "Lieferung",
     "deliveryLabel": "Lieferung möglich",
-    "geolocate": "Meinen Standort verwenden"
+    "geolocate": "Meinen Standort verwenden",
+    "clearForm": "Formular leeren",
+    "clearConfirm": "Alles löschen?",
+    "clearYes": "Leeren",
+    "clearCancel": "Abbrechen"
   },
   "ListingDetail": {
     "budget": "Budget",

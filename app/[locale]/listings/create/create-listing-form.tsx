@@ -8,7 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { AddressAutocomplete } from "@/components/address-autocomplete";
-import { Camera, X } from "lucide-react";
+import { Camera, X, Trash2 } from "lucide-react";
+import { useListingDraft } from "@/lib/use-listing-draft";
+
+const DRAFT_KEY = "vendsmoi:draft:create-listing";
 
 interface Category {
   id: string;
@@ -39,6 +42,30 @@ export default function CreateListingForm({
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [confirmingClear, setConfirmingClear] = useState(false);
+
+  const { clearDraft, saveDraft } = useListingDraft(
+    DRAFT_KEY,
+    { title, description, price, categoryId, city, postalCode, latitude, longitude, deliveryAvailable },
+    images,
+    (savedText, savedImages) => {
+      if (savedText) {
+        setTitle(savedText.title);
+        setDescription(savedText.description);
+        setPrice(savedText.price);
+        setCategoryId(savedText.categoryId);
+        setCity(savedText.city);
+        setPostalCode(savedText.postalCode);
+        setLatitude(savedText.latitude);
+        setLongitude(savedText.longitude);
+        setDeliveryAvailable(savedText.deliveryAvailable);
+      }
+      if (savedImages.length > 0) {
+        setImages(savedImages);
+        setPreviews(savedImages.map((f) => URL.createObjectURL(f)));
+      }
+    }
+  );
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || []);
@@ -91,9 +118,14 @@ export default function CreateListingForm({
     formData.set("delivery_available", deliveryAvailable.toString());
     images.forEach((img) => formData.append("images", img));
 
+    // A successful submit redirects away, so clear the draft optimistically.
+    // If the action returns an error below, we re-save it.
+    clearDraft();
+
     const result = await createListing(locale, formData);
 
     if (result?.fieldErrors) {
+      saveDraft();
       const translated: Record<string, string> = {};
       for (const [key, val] of Object.entries(result.fieldErrors)) {
         translated[key] = t(val);
@@ -104,9 +136,41 @@ export default function CreateListingForm({
     }
 
     if (result?.error) {
+      saveDraft();
       setError(t(result.error));
       setLoading(false);
     }
+  }
+
+  const hasContent =
+    title !== "" ||
+    description !== "" ||
+    price !== "" ||
+    categoryId !== "" ||
+    city !== "" ||
+    postalCode !== "" ||
+    latitude !== null ||
+    longitude !== null ||
+    deliveryAvailable ||
+    images.length > 0;
+
+  function resetForm() {
+    previews.forEach((src) => URL.revokeObjectURL(src));
+    setTitle("");
+    setDescription("");
+    setPrice("");
+    setCategoryId("");
+    setImages([]);
+    setPreviews([]);
+    setCity("");
+    setPostalCode("");
+    setLatitude(null);
+    setLongitude(null);
+    setDeliveryAvailable(false);
+    setError(null);
+    setFieldErrors({});
+    clearDraft();
+    setConfirmingClear(false);
   }
 
   return (
@@ -260,10 +324,46 @@ export default function CreateListingForm({
       </section>
 
       {/* Submit */}
-      <div className="sticky bottom-4 sm:static">
+      <div className="sticky bottom-4 sm:static space-y-3">
         <Button type="submit" disabled={loading} fullWidth size="lg">
           {loading ? t("submitting") : t("submit")}
         </Button>
+
+        {hasContent &&
+          (confirmingClear ? (
+            <div className="rounded-lg border border-border bg-surface px-4 py-3 space-y-3">
+              <p className="text-sm text-text-secondary">{t("clearConfirm")}</p>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={resetForm}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  {t("clearYes")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setConfirmingClear(false)}
+                >
+                  {t("clearCancel")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setConfirmingClear(true)}
+              className="flex items-center justify-center gap-1.5 w-full text-sm text-text-tertiary hover:text-error transition-colors"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              {t("clearForm")}
+            </button>
+          ))}
       </div>
     </form>
   );
