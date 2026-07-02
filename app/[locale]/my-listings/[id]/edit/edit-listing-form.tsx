@@ -201,6 +201,13 @@ export default function EditListingForm({
           defaultCity={listing.city || undefined}
           defaultPostalCode={listing.postal_code || undefined}
           geolocateLabel={t("geolocate")}
+          geolocateMessages={{
+            denied: t("geoDenied"),
+            unavailable: t("geoUnavailable"),
+            noResult: t("geoNoResult"),
+            error: t("geoError"),
+            locating: t("geoLocating"),
+          }}
           onSelect={(c, p, lat, lng) => { setCity(c); setPostalCode(p); setLatitude(lat); setLongitude(lng); }}
         />
 

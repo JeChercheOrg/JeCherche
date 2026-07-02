@@ -226,6 +226,13 @@ export default function CreateListingForm({
           label={t("city")}
           placeholder={t("cityPlaceholder")}
           geolocateLabel={t("geolocate")}
+          geolocateMessages={{
+            denied: t("geoDenied"),
+            unavailable: t("geoUnavailable"),
+            noResult: t("geoNoResult"),
+            error: t("geoError"),
+            locating: t("geoLocating"),
+          }}
           onSelect={(c, p, lat, lng) => { setCity(c); setPostalCode(p); setLatitude(lat); setLongitude(lng); }}
         />
 

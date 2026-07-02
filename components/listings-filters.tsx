@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useRef } from "react";
 import { MapPin, Truck, CheckCircle } from "lucide-react";
+import { searchAddress } from "@/app/actions/geocode";
 
 interface ListingsFiltersProps {
   locale: string;
@@ -108,18 +109,13 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(value)}&type=municipality&limit=5`
-        );
-        const data = await res.json();
-        const items: CitySuggestion[] = (data.features || []).map(
-          (f: { properties: { label: string; city: string }; geometry: { coordinates: number[] } }) => ({
-            label: f.properties.label,
-            city: f.properties.city,
-            lat: f.geometry.coordinates[1],
-            lng: f.geometry.coordinates[0],
-          })
-        );
+        const { results } = await searchAddress(value);
+        const items: CitySuggestion[] = results.map((r) => ({
+          label: r.label,
+          city: r.city,
+          lat: r.lat,
+          lng: r.lng,
+        }));
         setSuggestions(items);
         setShowSuggestions(items.length > 0);
       } catch {
