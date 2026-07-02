@@ -234,6 +234,7 @@ export default async function ListingsPage({
               deliveryFilter: t("deliveryFilter"),
               radiusLabel: t("radiusLabel"),
               showFound: t("showFound"),
+              cityNoResult: t("cityNoResult"),
             }}
           />
         </Suspense>

@@ -26,6 +26,7 @@ interface AddressAutocompleteProps {
     error: string;
     locating: string;
   };
+  noResultLabel?: string;
 }
 
 const DEFAULT_GEO_MESSAGES = {
@@ -44,6 +45,7 @@ export function AddressAutocomplete({
   placeholder,
   geolocateLabel,
   geolocateMessages,
+  noResultLabel,
 }: AddressAutocompleteProps) {
   const [query, setQuery] = useState(
     defaultCity ? `${defaultCity} ${defaultPostalCode || ""}`.trim() : ""
@@ -58,6 +60,7 @@ export function AddressAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const geoMessages = geolocateMessages || DEFAULT_GEO_MESSAGES;
+  const noResultText = noResultLabel || "No city found";
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -88,7 +91,7 @@ export function AddressAutocomplete({
       try {
         const { results } = await searchAddress(value);
         setSuggestions(results);
-        setOpen(results.length > 0);
+        setOpen(true);
       } catch {
         setSuggestions([]);
         setOpen(false);
@@ -168,6 +171,7 @@ export function AddressAutocomplete({
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => suggestions.length > 0 && setOpen(true)}
             placeholder={placeholder}
+            aria-busy={searching}
             className="h-11 w-full rounded-md border border-border bg-surface pl-10 pr-9 text-sm text-text-primary placeholder:text-text-tertiary transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary hover:border-border-hover"
           />
           {selected && query && (
@@ -213,20 +217,27 @@ export function AddressAutocomplete({
         </p>
       )}
 
-      {open && (
+      {open && !searching && query.trim().length >= 2 && (
         <ul className="absolute z-50 top-full mt-1 w-full rounded-md border border-border bg-surface shadow-lg overflow-hidden">
-          {suggestions.map((s, i) => (
-            <li key={i}>
-              <button
-                type="button"
-                onClick={() => handleSelect(s)}
-                className="w-full px-3 py-2.5 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors flex items-center gap-2"
-              >
-                <MapPin className="h-3.5 w-3.5 text-text-tertiary shrink-0" />
-                {s.label}
-              </button>
+          {suggestions.length > 0 ? (
+            suggestions.map((s, i) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  onClick={() => handleSelect(s)}
+                  className="w-full px-3 py-2.5 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors flex items-center gap-2"
+                >
+                  <MapPin className="h-3.5 w-3.5 text-text-tertiary shrink-0" />
+                  {s.label}
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className="px-3 py-2.5 text-sm text-text-tertiary flex items-center gap-2">
+              <MapPin className="h-3.5 w-3.5 text-text-tertiary shrink-0" />
+              {noResultText}
             </li>
-          ))}
+          )}
         </ul>
       )}
     </div>

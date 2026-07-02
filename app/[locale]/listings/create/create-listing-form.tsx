@@ -233,6 +233,7 @@ export default function CreateListingForm({
             error: t("geoError"),
             locating: t("geoLocating"),
           }}
+          noResultLabel={t("cityNoResult")}
           onSelect={(c, p, lat, lng) => { setCity(c); setPostalCode(p); setLatitude(lat); setLongitude(lng); }}
         />
 

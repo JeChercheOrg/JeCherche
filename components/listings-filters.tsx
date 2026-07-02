@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useRef } from "react";
-import { MapPin, Truck, CheckCircle } from "lucide-react";
+import { MapPin, Truck, CheckCircle, Loader2 } from "lucide-react";
 import { searchAddress } from "@/app/actions/geocode";
 
 interface ListingsFiltersProps {
@@ -19,6 +19,7 @@ interface ListingsFiltersProps {
     deliveryFilter: string;
     radiusLabel: string;
     showFound: string;
+    cityNoResult: string;
   };
 }
 
@@ -44,6 +45,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
 
   const [suggestions, setSuggestions] = useState<CitySuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searching, setSearching] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -98,6 +100,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
     if (value.trim().length < 2) {
       setSuggestions([]);
       setShowSuggestions(false);
+      setSearching(false);
       if (value.trim().length === 0 && cityQuery) {
         setCityLat("");
         setCityLng("");
@@ -107,6 +110,7 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
       return;
     }
 
+    setSearching(true);
     debounceRef.current = setTimeout(async () => {
       try {
         const { results } = await searchAddress(value);
@@ -117,10 +121,12 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
           lng: r.lng,
         }));
         setSuggestions(items);
-        setShowSuggestions(items.length > 0);
+        setShowSuggestions(true);
       } catch {
         setSuggestions([]);
         setShowSuggestions(false);
+      } finally {
+        setSearching(false);
       }
     }, 300);
   }
@@ -185,21 +191,31 @@ export function ListingsFilters({ locale, translations }: ListingsFiltersProps) 
             onChange={(e) => handleCityChange(e.target.value)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-            className="w-28 sm:w-36 rounded-lg border border-border bg-surface pl-8 pr-3 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
+            aria-busy={searching}
+            className="w-28 sm:w-36 rounded-lg border border-border bg-surface pl-8 pr-8 py-2.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
-          {showSuggestions && (
+          {searching && (
+            <Loader2 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 animate-spin text-text-tertiary" />
+          )}
+          {showSuggestions && !searching && cityQuery.trim().length >= 2 && (
             <ul className="absolute z-50 top-full mt-1 w-56 rounded-md border border-border bg-surface shadow-lg overflow-hidden">
-              {suggestions.map((s, i) => (
-                <li key={i}>
-                  <button
-                    type="button"
-                    onMouseDown={() => handleCitySelect(s)}
-                    className="w-full px-3 py-2.5 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors"
-                  >
-                    {s.label}
-                  </button>
+              {suggestions.length > 0 ? (
+                suggestions.map((s, i) => (
+                  <li key={i}>
+                    <button
+                      type="button"
+                      onMouseDown={() => handleCitySelect(s)}
+                      className="w-full px-3 py-2.5 text-left text-sm text-text-primary hover:bg-primary-light/50 transition-colors"
+                    >
+                      {s.label}
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <li className="px-3 py-2.5 text-sm text-text-tertiary">
+                  {translations.cityNoResult}
                 </li>
-              ))}
+              )}
             </ul>
           )}
         </div>
