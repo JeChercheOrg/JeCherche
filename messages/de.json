@@ -201,7 +201,13 @@
     "offerAccepted": "Angebot akzeptiert.",
     "offerRejected": "Angebot abgelehnt.",
     "errorNotOwner": "Nur der Inseratsersteller kann diese Aktion ausführen.",
-    "errorListingClosed": "Diese Anzeige wurde bereits erfüllt."
+    "errorListingClosed": "Diese Anzeige wurde bereits erfüllt.",
+    "deleteOffer": "Angebot löschen",
+    "confirmDeleteOffer": "Dieses Angebot löschen? Die zugehörige Unterhaltung und die Nachrichten werden ebenfalls gelöscht.",
+    "cancelDelete": "Abbrechen",
+    "deleting": "Wird gelöscht…",
+    "offerDeleted": "Angebot gelöscht.",
+    "adminAction": "Admin-Aktion"
   },
   "Messages": {
     "inbox": "Nachrichten",

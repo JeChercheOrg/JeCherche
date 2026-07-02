@@ -314,6 +314,56 @@ export async function rejectResponse(
   return {};
 }
 
+export async function deleteResponse(
+  locale: string,
+  listingId: string,
+  responseId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "errorAuth" };
+  }
+
+  if (user.app_metadata?.role !== "admin") {
+    return { error: "errorNotOwner" };
+  }
+
+  const { data: response } = await supabase
+    .from("responses")
+    .select("id, listing_id, response_images(storage_path)")
+    .eq("id", responseId)
+    .single();
+
+  if (!response) {
+    return { error: "errorGeneric" };
+  }
+
+  const imagePaths = (response.response_images || []).map(
+    (img: { storage_path: string }) => img.storage_path
+  );
+
+  if (imagePaths.length > 0) {
+    await supabase.storage.from("response-images").remove(imagePaths);
+  }
+
+  const { error: deleteError } = await supabase
+    .from("responses")
+    .delete()
+    .eq("id", responseId);
+
+  if (deleteError) {
+    return { error: "errorGeneric" };
+  }
+
+  revalidatePath(`/${locale}/listings/${response.listing_id || listingId}`);
+  return {};
+}
+
 export async function updateResponse(
   locale: string,
   responseId: string,

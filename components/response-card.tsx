@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { UserAvatar } from "@/components/user-avatar";
 import { ResponseActions } from "@/components/response-actions";
+import { ResponseAdminActions } from "@/components/response-admin-actions";
 import { ContactButton } from "@/components/contact-button";
 
 interface ResponseCardProps {
@@ -23,6 +24,7 @@ interface ResponseCardProps {
   supabaseUrl: string;
   isOwn?: boolean;
   isListingOwner?: boolean;
+  isAdmin?: boolean;
   translations: {
     yourOffer: string;
     offeredPrice: string;
@@ -48,6 +50,7 @@ export function ResponseCard({
   supabaseUrl,
   isOwn,
   isListingOwner,
+  isAdmin,
   translations,
 }: ResponseCardProps) {
   const displayName = response.profiles?.display_name || "?";
@@ -159,6 +162,15 @@ export function ResponseCard({
           )}
           <ContactButton locale={locale} responseId={response.id} />
         </div>
+      )}
+
+      {/* Moderation action for admins */}
+      {isAdmin && (
+        <ResponseAdminActions
+          locale={locale}
+          listingId={listingId}
+          responseId={response.id}
+        />
       )}
     </div>
   );

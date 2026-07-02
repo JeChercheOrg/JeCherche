@@ -201,7 +201,13 @@
     "offerAccepted": "Offre acceptée.",
     "offerRejected": "Offre refusée.",
     "errorNotOwner": "Seul l'auteur de l'annonce peut effectuer cette action.",
-    "errorListingClosed": "Cette annonce a déjà été pourvue."
+    "errorListingClosed": "Cette annonce a déjà été pourvue.",
+    "deleteOffer": "Supprimer l'offre",
+    "confirmDeleteOffer": "Supprimer cette offre ? La conversation et les messages liés seront aussi supprimés.",
+    "cancelDelete": "Annuler",
+    "deleting": "Suppression…",
+    "offerDeleted": "Offre supprimée.",
+    "adminAction": "Action admin"
   },
   "Messages": {
     "inbox": "Messages",

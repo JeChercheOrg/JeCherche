@@ -201,7 +201,13 @@
     "offerAccepted": "Offer accepted.",
     "offerRejected": "Offer rejected.",
     "errorNotOwner": "Only the listing owner can perform this action.",
-    "errorListingClosed": "This listing has already been fulfilled."
+    "errorListingClosed": "This listing has already been fulfilled.",
+    "deleteOffer": "Delete offer",
+    "confirmDeleteOffer": "Delete this offer? The linked conversation and messages will also be deleted.",
+    "cancelDelete": "Cancel",
+    "deleting": "Deleting…",
+    "offerDeleted": "Offer deleted.",
+    "adminAction": "Admin action"
   },
   "Messages": {
     "inbox": "Messages",

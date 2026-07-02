@@ -252,6 +252,7 @@ export default async function ListingDetailPage({
                     supabaseUrl={supabaseUrl}
                     isOwn={response.user_id === user?.id}
                     isListingOwner={isOwner}
+                    isAdmin={isAdmin}
                     translations={responseTranslations}
                   />
                 ))}

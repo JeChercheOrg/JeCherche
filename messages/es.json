@@ -201,7 +201,13 @@
     "offerAccepted": "Oferta aceptada.",
     "offerRejected": "Oferta rechazada.",
     "errorNotOwner": "Solo el autor del anuncio puede realizar esta acción.",
-    "errorListingClosed": "Este anuncio ya ha sido cubierto."
+    "errorListingClosed": "Este anuncio ya ha sido cubierto.",
+    "deleteOffer": "Eliminar oferta",
+    "confirmDeleteOffer": "¿Eliminar esta oferta? También se eliminarán la conversación y los mensajes vinculados.",
+    "cancelDelete": "Cancelar",
+    "deleting": "Eliminando…",
+    "offerDeleted": "Oferta eliminada.",
+    "adminAction": "Acción admin"
   },
   "Messages": {
     "inbox": "Mensajes",
