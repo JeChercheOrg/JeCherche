@@ -263,7 +263,12 @@
     "radiusLabel": "Radio",
     "showFound": "Incluir encontradas",
     "found": "Encontrado",
-    "priceTbd": "Precio a determinar"
+    "priceTbd": "Precio a determinar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pageInfo": "Página {page} de {total}",
+    "pageLabel": "Ir a la página",
+    "titlePaged": "{title} — Página {page}"
   },
   "SEO": {
     "homeTitle": "Publica lo que buscas, los vendedores vienen a ti",

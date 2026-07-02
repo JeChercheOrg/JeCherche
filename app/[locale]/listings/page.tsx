@@ -7,6 +7,7 @@ import { SearchBar } from "@/components/search-bar";
 import { CategoryBar } from "@/components/category-bar";
 import { ListingsFilters } from "@/components/listings-filters";
 import { ListingCard } from "@/components/listing-card";
+import { Pagination } from "@/components/pagination";
 import { JsonLd } from "@/components/json-ld";
 import { X } from "lucide-react";
 import { SITE_URL } from "@/lib/constants";
@@ -18,33 +19,38 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const { q } = await searchParams;
+  const { q, page } = await searchParams;
   const t = await getTranslations({ locale, namespace: "SEO" });
   const tL = await getTranslations({ locale, namespace: "Listings" });
 
-  const title = q ? tL("searchResults", { query: q }) : t("listingsTitle");
+  const pageNum = Math.max(1, parseInt(page || "1") || 1);
+  const baseTitle = q ? tL("searchResults", { query: q }) : t("listingsTitle");
+  const title = pageNum > 1 ? tL("titlePaged", { title: baseTitle, page: pageNum }) : baseTitle;
   const description = t("listingsDescription");
+  const pageSuffix = pageNum > 1 ? `?page=${pageNum}` : "";
 
   return {
     title,
     description,
     alternates: {
-      canonical: `${SITE_URL}/${locale}/listings`,
+      canonical: `${SITE_URL}/${locale}/listings${pageSuffix}`,
       languages: Object.fromEntries(
-        routing.locales.map((l) => [l, `${SITE_URL}/${l}/listings`])
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}/listings${pageSuffix}`])
       ),
     },
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/${locale}/listings`,
+      url: `${SITE_URL}/${locale}/listings${pageSuffix}`,
       type: "website",
     },
   };
 }
+
+const PAGE_SIZE = 24;
 
 export default async function ListingsPage({
   params,
@@ -63,10 +69,11 @@ export default async function ListingsPage({
     lng?: string;
     radius?: string;
     show_found?: string;
+    page?: string;
   }>;
 }) {
   const { locale } = await params;
-  const { q, category, price_min, price_max, sort, city, delivery, lat, lng, radius, show_found } = await searchParams;
+  const { q, category, price_min, price_max, sort, city, delivery, lat, lng, radius, show_found, page } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations("Listings");
@@ -77,14 +84,16 @@ export default async function ListingsPage({
   const priceMin = price_min ? parseInt(price_min) * 100 : null;
   const priceMax = price_max ? parseInt(price_max) * 100 : null;
   const sortBy = sort || "newest";
+  const currentPage = Math.max(1, parseInt(page || "1") || 1);
 
   const orderColumn = sortBy === "cheapest" || sortBy === "expensive" ? "price" : "created_at";
   const orderAscending = sortBy === "oldest" || sortBy === "cheapest";
 
   let query = supabase
     .from("listings")
-    .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)")
-    .order(orderColumn, { ascending: orderAscending });
+    .select("*, categories(name, name_fr, name_es, name_de), listing_images(storage_path, position), responses(count)", { count: "exact" })
+    .order(orderColumn, { ascending: orderAscending })
+    .order("id", { ascending: true });
 
   if (show_found !== "true") {
     query = query.eq("status", "active");
@@ -132,7 +141,9 @@ export default async function ListingsPage({
     query = query.eq("delivery_available", true);
   }
 
-  const { data: listings } = await query;
+  const from = (currentPage - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+  const { data: listings, count: totalCount } = await query.range(from, to);
 
   const {
     data: { user },
@@ -153,7 +164,8 @@ export default async function ListingsPage({
     format.dateTime(date, { day: "numeric", month: "short" });
 
   const hasFilters = searchQuery.length > 0 || !!category || priceMin !== null || priceMax !== null || !!city || delivery === "true" || !!radius || show_found === "true";
-  const count = listings?.length ?? 0;
+  const count = totalCount ?? 0;
+  const totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
@@ -162,10 +174,10 @@ export default async function ListingsPage({
           data={{
             "@context": "https://schema.org",
             "@type": "ItemList",
-            numberOfItems: listings.length,
+            numberOfItems: count,
             itemListElement: listings.slice(0, 10).map((listing, index) => ({
               "@type": "ListItem",
-              position: index + 1,
+              position: from + index + 1,
               url: `${SITE_URL}/${locale}/listings/${listing.id}`,
               name: listing.title,
             })),
@@ -236,21 +248,38 @@ export default async function ListingsPage({
           {t("noResults")}
         </p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {listings!.map((listing) => (
-            <ListingCard
-              key={listing.id}
-              listing={listing}
+        <>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {listings!.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                locale={locale}
+                formatPrice={formatPrice}
+                formatDate={formatDate}
+                foundLabel={t("found")}
+                priceTbdLabel={t("priceTbd")}
+                isFavorited={favoritedIds.includes(listing.id)}
+                isAuthenticated={!!user}
+              />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <Pagination
               locale={locale}
-              formatPrice={formatPrice}
-              formatDate={formatDate}
-              foundLabel={t("found")}
-              priceTbdLabel={t("priceTbd")}
-              isFavorited={favoritedIds.includes(listing.id)}
-              isAuthenticated={!!user}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              searchParams={{ q, category, price_min, price_max, sort, city, delivery, lat, lng, radius, show_found }}
+              translations={{
+                previous: t("previous"),
+                next: t("next"),
+                pageInfo: t("pageInfo", { page: currentPage, total: totalPages }),
+                pageLabel: t("pageLabel"),
+              }}
             />
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );

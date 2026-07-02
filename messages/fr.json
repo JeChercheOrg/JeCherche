@@ -263,7 +263,12 @@
     "radiusLabel": "Rayon",
     "showFound": "Inclure pourvues",
     "found": "Trouvé",
-    "priceTbd": "Prix à déterminer"
+    "priceTbd": "Prix à déterminer",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageInfo": "Page {page} sur {total}",
+    "pageLabel": "Aller à la page",
+    "titlePaged": "{title} — Page {page}"
   },
   "SEO": {
     "homeTitle": "Publiez ce que vous cherchez, les vendeurs viennent à vous",

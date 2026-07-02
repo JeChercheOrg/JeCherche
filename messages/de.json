@@ -263,7 +263,12 @@
     "radiusLabel": "Umkreis",
     "showFound": "Gefundene anzeigen",
     "found": "Gefunden",
-    "priceTbd": "Preis zu bestimmen"
+    "priceTbd": "Preis zu bestimmen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "pageInfo": "Seite {page} von {total}",
+    "pageLabel": "Zur Seite",
+    "titlePaged": "{title} — Seite {page}"
   },
   "SEO": {
     "homeTitle": "Veröffentlichen Sie, was Sie suchen — Verkäufer kommen zu Ihnen",

@@ -263,7 +263,12 @@
     "radiusLabel": "Radius",
     "showFound": "Include found",
     "found": "Found",
-    "priceTbd": "Price to be determined"
+    "priceTbd": "Price to be determined",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {page} of {total}",
+    "pageLabel": "Go to page",
+    "titlePaged": "{title} — Page {page}"
   },
   "SEO": {
     "homeTitle": "Post what you're looking for, let sellers come to you",
