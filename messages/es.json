@@ -219,6 +219,7 @@
     "inbox": "Mensajes",
     "noConversations": "No hay conversaciones por el momento.",
     "noMessages": "Sin mensajes aún. ¡Inicia la conversación!",
+    "loadOlderMessages": "Cargar mensajes anteriores",
     "contact": "Contactar",
     "contacting": "Abriendo…",
     "sendPlaceholder": "Escribe un mensaje…",

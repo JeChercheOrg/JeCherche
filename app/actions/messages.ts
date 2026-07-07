@@ -6,6 +6,8 @@ import { sendNotificationEmail } from "@/lib/email";
 import { newMessageEmail } from "@/lib/email-templates";
 import { SITE_URL } from "@/lib/constants";
 
+const MESSAGE_PAGE_SIZE = 30;
+
 export async function getOrCreateConversation(
   locale: string,
   responseId: string
@@ -240,7 +242,7 @@ export async function getConversations(): Promise<{
   return { conversations: result };
 }
 
-export async function getConversationDetail(conversationId: string): Promise<{
+export async function getConversationDetail(conversationId: string, messageLimit: number = MESSAGE_PAGE_SIZE): Promise<{
   conversation?: {
     id: string;
     listing_id: string;
@@ -266,6 +268,7 @@ export async function getConversationDetail(conversationId: string): Promise<{
     content: string;
     created_at: string;
   }[];
+  hasOlderMessages?: boolean;
   error?: string;
 }> {
   const supabase = await createClient();
@@ -329,11 +332,19 @@ export async function getConversationDetail(conversationId: string): Promise<{
     }
   }
 
+  const { count: totalMessages } = await supabase
+    .from("messages")
+    .select("id", { count: "exact", head: true })
+    .eq("conversation_id", conversationId);
+
   const { data: messages } = await supabase
     .from("messages")
     .select("id, sender_id, content, created_at")
     .eq("conversation_id", conversationId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false })
+    .limit(messageLimit);
+
+  const sortedMessages = (messages || []).reverse();
 
   return {
     conversation: {
@@ -348,8 +359,110 @@ export async function getConversationDetail(conversationId: string): Promise<{
       is_buyer: isBuyer,
       response: responseData,
     },
-    messages: messages || [],
+    messages: sortedMessages,
+    hasOlderMessages: (totalMessages ?? 0) > messageLimit,
   };
+}
+
+export async function getOlderMessages(
+  conversationId: string,
+  beforeTimestamp: string,
+  limit: number = MESSAGE_PAGE_SIZE
+): Promise<{
+  messages?: { id: string; sender_id: string; content: string; created_at: string }[];
+  hasMore: boolean;
+  error?: string;
+}> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "errorAuth", hasMore: false };
+
+  const { data: conv } = await supabase
+    .from("conversations")
+    .select("buyer_id, seller_id")
+    .eq("id", conversationId)
+    .single();
+
+  if (!conv || (conv.buyer_id !== user.id && conv.seller_id !== user.id)) {
+    return { error: "errorGeneric", hasMore: false };
+  }
+
+  const { data } = await supabase
+    .from("messages")
+    .select("id, sender_id, content, created_at")
+    .eq("conversation_id", conversationId)
+    .lt("created_at", beforeTimestamp)
+    .order("created_at", { ascending: false })
+    .limit(limit + 1);
+
+  if (!data) return { messages: [], hasMore: false };
+
+  const hasMore = data.length > limit;
+  const page = hasMore ? data.slice(0, limit) : data;
+  return { messages: page.reverse(), hasMore };
+}
+
+export async function pollNewMessages(
+  conversationId: string,
+  afterTimestamp: string
+): Promise<{
+  newMessages?: { id: string; sender_id: string; content: string; created_at: string }[];
+  response?: {
+    id: string;
+    price: number;
+    message: string;
+    status: string;
+    user_id: string;
+    images: { storage_path: string; position: number }[];
+  };
+  error?: string;
+}> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "errorAuth" };
+
+  const { data: conv } = await supabase
+    .from("conversations")
+    .select("buyer_id, seller_id, response_id")
+    .eq("id", conversationId)
+    .single();
+
+  if (!conv || (conv.buyer_id !== user.id && conv.seller_id !== user.id)) {
+    return { error: "errorGeneric" };
+  }
+
+  const { data: newMessages } = await supabase
+    .from("messages")
+    .select("id, sender_id, content, created_at")
+    .eq("conversation_id", conversationId)
+    .gt("created_at", afterTimestamp)
+    .order("created_at", { ascending: true });
+
+  let response: {
+    id: string; price: number; message: string; status: string;
+    user_id: string; images: { storage_path: string; position: number }[];
+  } | undefined;
+
+  if (conv.response_id) {
+    const { data: resp } = await supabase
+      .from("responses")
+      .select("id, price, message, status, user_id, response_images(storage_path, position)")
+      .eq("id", conv.response_id)
+      .single();
+
+    if (resp) {
+      response = {
+        id: resp.id,
+        price: resp.price,
+        message: resp.message,
+        status: resp.status,
+        user_id: resp.user_id,
+        images: (resp.response_images as { storage_path: string; position: number }[]) || [],
+      };
+    }
+  }
+
+  return { newMessages: newMessages || [], response };
 }
 
 export async function markConversationRead(

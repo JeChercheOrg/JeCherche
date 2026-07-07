@@ -26,6 +26,7 @@ export default async function ConversationPage({
       locale={locale}
       conversation={result.conversation}
       initialMessages={result.messages || []}
+      initialHasOlderMessages={result.hasOlderMessages ?? false}
     />
   );
 }

@@ -2,13 +2,17 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { sendMessage, markConversationRead, getConversationDetail } from "@/app/actions/messages";
+import {
+  sendMessage,
+  markConversationRead,
+  getOlderMessages,
+  pollNewMessages,
+} from "@/app/actions/messages";
 import { MessageBubble } from "@/components/message-bubble";
 import { ConversationOfferCard } from "@/components/conversation-offer-card";
 import { UserAvatar } from "@/components/user-avatar";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, Loader2 } from "lucide-react";
 
 interface Message {
   id: string;
@@ -41,12 +45,14 @@ interface ConversationViewProps {
     response?: OfferResponse;
   };
   initialMessages: Message[];
+  initialHasOlderMessages: boolean;
 }
 
 export function ConversationView({
   locale,
   conversation,
   initialMessages,
+  initialHasOlderMessages,
 }: ConversationViewProps) {
   const t = useTranslations("Messages");
   const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -55,28 +61,44 @@ export function ConversationView({
   );
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [hasOlderMessages, setHasOlderMessages] = useState(initialHasOlderMessages);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const initialScrollDone = useRef(false);
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 
   const refreshConversation = useCallback(async () => {
-    const result = await getConversationDetail(conversation.id);
-    if (result.conversation?.response) {
-      setOfferResponse(result.conversation.response);
+    const result = await pollNewMessages(
+      conversation.id,
+      messages.length > 0 ? messages[messages.length - 1].created_at : ""
+    );
+    if (result.response) {
+      setOfferResponse(result.response);
     }
-    if (result.messages) {
-      setMessages(result.messages);
+    if (result.newMessages && result.newMessages.length > 0) {
+      setMessages((prev) => {
+        const existingIds = new Set(prev.map((m) => m.id));
+        const fresh = result.newMessages!.filter((m) => !existingIds.has(m.id));
+        return fresh.length > 0 ? [...prev, ...fresh] : prev;
+      });
     }
-  }, [conversation.id]);
+  }, [conversation.id, messages]);
 
   const avatarUrl = conversation.other_user_avatar
     ? `${supabaseUrl}/storage/v1/object/public/avatars/${conversation.other_user_avatar}`
     : null;
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (!initialScrollDone.current) {
+      messagesEndRef.current?.scrollIntoView();
+      requestAnimationFrame(() => {
+        initialScrollDone.current = true;
+      });
+    }
+  }, []);
 
   useEffect(() => {
     markConversationRead(conversation.id).then(() => {
@@ -86,21 +108,73 @@ export function ConversationView({
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const result = await getConversationDetail(conversation.id);
-      if (result.messages) {
+      const lastTimestamp =
+        messages.length > 0 ? messages[messages.length - 1].created_at : "";
+      if (!lastTimestamp) return;
+
+      const result = await pollNewMessages(conversation.id, lastTimestamp);
+      if (result.newMessages && result.newMessages.length > 0) {
+        const container = scrollContainerRef.current;
+        const isAtBottom =
+          container &&
+          container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+
         setMessages((prev) => {
-          if (result.messages!.length === prev.length) return prev;
-          return result.messages!;
+          const existingIds = new Set(prev.map((m) => m.id));
+          const fresh = result.newMessages!.filter((m) => !existingIds.has(m.id));
+          return fresh.length > 0 ? [...prev, ...fresh] : prev;
         });
+
+        if (isAtBottom) {
+          setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        }
+
         markConversationRead(conversation.id);
       }
-      if (result.conversation?.response) {
-        setOfferResponse(result.conversation.response);
+      if (result.response) {
+        setOfferResponse(result.response);
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [conversation.id]);
+  }, [conversation.id, messages]);
+
+  async function handleLoadOlder() {
+    if (loadingOlder || !hasOlderMessages || messages.length === 0) return;
+    setLoadingOlder(true);
+
+    const container = scrollContainerRef.current;
+    const prevScrollHeight = container?.scrollHeight ?? 0;
+
+    const result = await getOlderMessages(
+      conversation.id,
+      messages[0].created_at
+    );
+
+    if (result.messages && result.messages.length > 0) {
+      setMessages((prev) => [...result.messages!, ...prev]);
+      setHasOlderMessages(result.hasMore);
+
+      requestAnimationFrame(() => {
+        if (container) {
+          container.scrollTop = container.scrollHeight - prevScrollHeight;
+        }
+      });
+    } else {
+      setHasOlderMessages(false);
+    }
+
+    setLoadingOlder(false);
+  }
+
+  function handleScroll() {
+    if (!initialScrollDone.current) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    if (container.scrollTop < 50 && hasOlderMessages && !loadingOlder) {
+      handleLoadOlder();
+    }
+  }
 
   async function handleSend() {
     const trimmed = input.trim();
@@ -116,6 +190,7 @@ export function ConversationView({
       });
       setInput("");
       inputRef.current?.focus();
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     }
     setSending(false);
   }
@@ -168,7 +243,25 @@ export function ConversationView({
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+      <div
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
+      >
+        {hasOlderMessages && (
+          <div className="text-center py-2">
+            {loadingOlder ? (
+              <Loader2 className="h-5 w-5 animate-spin text-text-tertiary mx-auto" />
+            ) : (
+              <button
+                onClick={handleLoadOlder}
+                className="text-sm text-primary hover:text-primary-hover transition-colors"
+              >
+                {t("loadOlderMessages")}
+              </button>
+            )}
+          </div>
+        )}
         {messages.length === 0 && (
           <p className="text-sm text-text-tertiary text-center py-8">
             {t("noMessages")}
