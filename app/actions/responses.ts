@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { sendNotificationEmail } from "@/lib/email";
+import { notifyFavoritersOfStatusChange } from "@/lib/favorite-notifications";
 import {
   newOfferEmail,
   listingAcceptedEmail,
@@ -301,6 +302,11 @@ export async function acceptResponse(
         );
         sendNotificationEmail({ to: sellerEmail, ...email });
       }
+
+      notifyFavoritersOfStatusChange(
+        supabase, locale, listingId, user.id,
+        listingForNotif.title, "found"
+      );
     }
   }
 

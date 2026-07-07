@@ -137,3 +137,65 @@ export function offerRejectedEmail(
     `),
   };
 }
+
+export function favoritePriceChangedEmail(
+  listingTitle: string,
+  oldPrice: number,
+  newPrice: number,
+  listingUrl: string
+) {
+  const oldLabel = oldPrice === 0 ? "Prix à déterminer" : formatPrice(oldPrice);
+  const newLabel = newPrice === 0 ? "Prix à déterminer" : formatPrice(newPrice);
+  return {
+    subject: `Prix modifié sur "${listingTitle}"`,
+    html: layout(`
+      <p style="margin:0 0 12px;font-size:15px;color:#18181b">
+        Le prix d'une annonce que vous suivez a été modifié.
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;border-radius:8px;margin:0 0 16px">
+        <tr><td style="padding:12px 16px">
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Annonce</p>
+          <p style="margin:0 0 8px;font-size:15px;color:#18181b;font-weight:500">${listingTitle}</p>
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Ancien prix</p>
+          <p style="margin:0 0 8px;font-size:16px;color:#a1a1aa;font-weight:500;text-decoration:line-through">${oldLabel}</p>
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Nouveau prix</p>
+          <p style="margin:0;font-size:18px;color:#2563eb;font-weight:700">${newLabel}</p>
+        </td></tr>
+      </table>
+      <p style="margin:0;text-align:center">${button(listingUrl, "Voir l'annonce")}</p>
+    `),
+  };
+}
+
+export function favoriteStatusChangedEmail(
+  listingTitle: string,
+  newStatus: "found" | "active",
+  listingUrl: string
+) {
+  const isFound = newStatus === "found";
+  const statusText = isFound
+    ? "a été <strong style=\"color:#71717a\">pourvue</strong>"
+    : "est de nouveau <strong style=\"color:#16a34a\">disponible</strong> !";
+  const bgColor = isFound ? "#f4f4f5" : "#f0fdf4";
+  const statusLabel = isFound ? "Pourvue" : "Disponible";
+  const statusColor = isFound ? "#71717a" : "#16a34a";
+  return {
+    subject: isFound
+      ? `"${listingTitle}" a été pourvue`
+      : `"${listingTitle}" est de nouveau disponible !`,
+    html: layout(`
+      <p style="margin:0 0 12px;font-size:15px;color:#18181b">
+        Une annonce que vous suivez ${statusText}
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:${bgColor};border-radius:8px;margin:0 0 16px">
+        <tr><td style="padding:12px 16px">
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Annonce</p>
+          <p style="margin:0 0 8px;font-size:15px;color:#18181b;font-weight:500">${listingTitle}</p>
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Statut</p>
+          <p style="margin:0;font-size:18px;color:${statusColor};font-weight:700">${statusLabel}</p>
+        </td></tr>
+      </table>
+      <p style="margin:0;text-align:center">${button(listingUrl, "Voir l'annonce")}</p>
+    `),
+  };
+}

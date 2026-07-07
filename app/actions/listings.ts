@@ -3,6 +3,10 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import {
+  notifyFavoritersOfPriceChange,
+  notifyFavoritersOfStatusChange,
+} from "@/lib/favorite-notifications";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -196,7 +200,7 @@ export async function updateListing(
 
   const { data: existing } = await supabase
     .from("listings")
-    .select("id, user_id")
+    .select("id, user_id, price, title")
     .eq("id", listingId)
     .single();
 
@@ -269,6 +273,13 @@ export async function updateListing(
     return { error: "errorGeneric" };
   }
 
+  if (existing.price !== null && price !== existing.price) {
+    notifyFavoritersOfPriceChange(
+      supabase, locale, listingId, user.id,
+      existing.title, existing.price, price
+    );
+  }
+
   if (imagesToDelete.length > 0) {
     await supabase.storage.from("listing-images").remove(imagesToDelete);
     await supabase
@@ -326,7 +337,7 @@ export async function toggleListingStatus(
 
   const { data: listing } = await supabase
     .from("listings")
-    .select("user_id, status")
+    .select("user_id, status, title")
     .eq("id", listingId)
     .single();
 
@@ -344,6 +355,11 @@ export async function toggleListingStatus(
   if (updateError) {
     return { error: "errorGeneric" };
   }
+
+  notifyFavoritersOfStatusChange(
+    supabase, locale, listingId, user.id,
+    listing.title, newStatus as "found" | "active"
+  );
 
   revalidatePath(`/${locale}/my-listings`);
   revalidatePath(`/${locale}/listings/${listingId}`);
