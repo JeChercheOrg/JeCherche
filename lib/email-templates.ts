@@ -98,6 +98,31 @@ export function offerAcceptedEmail(
   };
 }
 
+export function listingAcceptedEmail(
+  listingTitle: string,
+  price: number,
+  buyerName: string,
+  listingUrl: string
+) {
+  return {
+    subject: `${buyerName} a accepté votre prix sur "${listingTitle}" !`,
+    html: layout(`
+      <p style="margin:0 0 12px;font-size:15px;color:#18181b">
+        Bonne nouvelle ! <strong>${buyerName}</strong> a <strong style="color:#16a34a">accepté votre prix</strong> sur votre annonce.
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf4;border-radius:8px;margin:0 0 16px">
+        <tr><td style="padding:12px 16px">
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Annonce</p>
+          <p style="margin:0 0 8px;font-size:15px;color:#18181b;font-weight:500">${listingTitle}</p>
+          <p style="margin:0 0 4px;font-size:13px;color:#71717a">Prix accepté</p>
+          <p style="margin:0;font-size:18px;color:#16a34a;font-weight:700">${formatPrice(price)}</p>
+        </td></tr>
+      </table>
+      <p style="margin:0;text-align:center">${button(listingUrl, "Voir l'annonce")}</p>
+    `),
+  };
+}
+
 export function offerRejectedEmail(
   listingTitle: string,
   listingUrl: string
