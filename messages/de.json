@@ -19,6 +19,14 @@
     "terms": "AGB",
     "cookies": "Cookies"
   },
+  "Errors": {
+    "notFoundTitle": "Seite nicht gefunden",
+    "notFoundText": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "backHome": "Zurück zur Startseite",
+    "errorTitle": "Ein Fehler ist aufgetreten",
+    "errorText": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "retry": "Erneut versuchen"
+  },
   "Auth": {
     "login": "Anmelden",
     "signup": "Registrieren",

@@ -19,6 +19,14 @@
     "terms": "Términos",
     "cookies": "Cookies"
   },
+  "Errors": {
+    "notFoundTitle": "Página no encontrada",
+    "notFoundText": "La página que buscas no existe o ha sido movida.",
+    "backHome": "Volver al inicio",
+    "errorTitle": "Se produjo un error",
+    "errorText": "Ocurrió un error inesperado. Inténtalo de nuevo.",
+    "retry": "Reintentar"
+  },
   "Auth": {
     "login": "Iniciar sesión",
     "signup": "Registrarse",
