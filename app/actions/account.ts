@@ -176,21 +176,32 @@ export async function deleteAccount(
     return { error: "errorAuth" };
   }
 
+  // Remove Storage files first: deleting the account cascades the database
+  // rows but never the objects stored in the buckets.
   const { data: listings } = await supabase
     .from("listings")
-    .select("id, listing_images(storage_path)")
+    .select("listing_images(storage_path)")
     .eq("user_id", user.id);
+  const listingImagePaths = (listings ?? []).flatMap((l) =>
+    (l.listing_images ?? []).map(
+      (img: { storage_path: string }) => img.storage_path
+    )
+  );
+  if (listingImagePaths.length > 0) {
+    await supabase.storage.from("listing-images").remove(listingImagePaths);
+  }
 
-  if (listings && listings.length > 0) {
-    const allImagePaths = listings.flatMap(
-      (l) => (l.listing_images || []).map((img: { storage_path: string }) => img.storage_path)
-    );
-
-    if (allImagePaths.length > 0) {
-      await supabase.storage.from("listing-images").remove(allImagePaths);
-    }
-
-    await supabase.from("listings").delete().eq("user_id", user.id);
+  const { data: responses } = await supabase
+    .from("responses")
+    .select("response_images(storage_path)")
+    .eq("user_id", user.id);
+  const responseImagePaths = (responses ?? []).flatMap((r) =>
+    (r.response_images ?? []).map(
+      (img: { storage_path: string }) => img.storage_path
+    )
+  );
+  if (responseImagePaths.length > 0) {
+    await supabase.storage.from("response-images").remove(responseImagePaths);
   }
 
   const { data: profile } = await supabase
@@ -198,14 +209,17 @@ export async function deleteAccount(
     .select("avatar_path")
     .eq("id", user.id)
     .single();
-
   if (profile?.avatar_path) {
     await supabase.storage.from("avatars").remove([profile.avatar_path]);
   }
 
-  await supabase.from("profiles").delete().eq("id", user.id);
-  await supabase.auth.admin.deleteUser(user.id);
-  await supabase.auth.signOut();
+  // Delete the auth user; ON DELETE CASCADE removes the profile, listings,
+  // responses, conversations, messages, reads and favorites in one step.
+  const { error: deleteError } = await supabase.rpc("delete_own_account");
+  if (deleteError) {
+    return { error: "errorGeneric" };
+  }
 
+  await supabase.auth.signOut();
   redirect(`/${locale}`);
 }
