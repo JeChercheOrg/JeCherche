@@ -9,6 +9,8 @@ import { createClient } from "@/utils/supabase/server";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ToastProvider } from "@/components/toast";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getUnreadCount } from "@/app/actions/messages";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import "../globals.css";
@@ -58,6 +60,9 @@ export async function generateMetadata({
       locale,
       type: "website",
     },
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
@@ -157,6 +162,8 @@ export default async function LocaleLayout({
             cookies: tLayout("cookies"),
           }}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

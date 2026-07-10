@@ -12,6 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select("id, updated_at")
     .order("updated_at", { ascending: false });
 
+  const legalSlugs = ["mentions-legales", "confidentialite", "cgu", "cookies"];
+
   const staticPages = locales.flatMap((locale) => [
     {
       url: `${SITE_URL}/${locale}`,
@@ -25,6 +27,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "hourly" as const,
       priority: 0.9,
     },
+    ...legalSlugs.map((slug) => ({
+      url: `${SITE_URL}/${locale}/legal/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.2,
+    })),
   ]);
 
   const listingPages = (listings ?? []).flatMap((listing) =>
