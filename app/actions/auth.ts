@@ -3,6 +3,30 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+// Prevents open redirects: only allow same-origin absolute paths, never
+// protocol-relative ("//evil.com"), backslash ("/\\evil.com") or absolute URLs.
+function safeRedirectPath(
+  redirectTo: string | undefined,
+  locale: string
+): string {
+  const fallback = `/${locale}`;
+  if (
+    typeof redirectTo !== "string" ||
+    !redirectTo.startsWith("/") ||
+    redirectTo.startsWith("//")
+  ) {
+    return fallback;
+  }
+  try {
+    if (new URL(redirectTo, "http://localhost").origin !== "http://localhost") {
+      return fallback;
+    }
+  } catch {
+    return fallback;
+  }
+  return redirectTo;
+}
+
 export async function checkDisplayName(name: string) {
   const trimmed = name.trim();
   if (!trimmed || trimmed.length < 2) {
@@ -81,7 +105,7 @@ export async function login(
     return { error: error.message };
   }
 
-  redirect(redirectTo && redirectTo.startsWith("/") ? redirectTo : `/${locale}`);
+  redirect(safeRedirectPath(redirectTo, locale));
 }
 
 export async function requestPasswordReset(email: string, origin: string, locale: string) {
