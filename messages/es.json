@@ -13,7 +13,11 @@
     "publish": "Publicar",
     "searchPlaceholder": "¿Qué buscas?",
     "myAccount": "Mi cuenta",
-    "listings": "Anuncios"
+    "listings": "Anuncios",
+    "legalNotice": "Aviso legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "cookies": "Cookies"
   },
   "Auth": {
     "login": "Iniciar sesión",

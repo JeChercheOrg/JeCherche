@@ -151,6 +151,10 @@ export default async function LocaleLayout({
           translations={{
             listings: tLayout("listings"),
             publish: tLayout("publish"),
+            legalNotice: tLayout("legalNotice"),
+            privacy: tLayout("privacy"),
+            terms: tLayout("terms"),
+            cookies: tLayout("cookies"),
           }}
         />
       </body>
