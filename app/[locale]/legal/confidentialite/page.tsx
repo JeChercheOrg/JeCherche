@@ -30,7 +30,7 @@ export default async function ConfidentialitePage({
         {
           heading: "Responsable du traitement",
           paragraphs: [
-            "Le responsable du traitement est l'éditeur du site (voir les mentions légales). Pour toute question relative à vos données, vous pouvez écrire à [lefevreanto57@gmail.com].",
+            "Le responsable du traitement est l'éditeur du site (voir les mentions légales). Pour toute question relative à vos données, vous pouvez écrire à contact@vendsmoi.fr.",
           ],
         },
         {
@@ -78,7 +78,7 @@ export default async function ConfidentialitePage({
           heading: "Vos droits",
           paragraphs: [
             "Conformément au RGPD, vous disposez des droits d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition, ainsi que du droit de retirer votre consentement.",
-            "Vous pouvez supprimer votre compte et l'ensemble des données associées à tout moment depuis votre espace « Mon compte ». Pour exercer vos autres droits, contactez [lefevreanto57@gmail.com].",
+            "Vous pouvez supprimer votre compte et l'ensemble des données associées à tout moment depuis votre espace « Mon compte ». Pour exercer vos autres droits, contactez contact@vendsmoi.fr.",
             "Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).",
           ],
         },

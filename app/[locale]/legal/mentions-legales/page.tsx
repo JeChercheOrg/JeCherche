@@ -28,8 +28,8 @@ export default async function MentionsLegalesPage({
         {
           heading: "Éditeur du site",
           paragraphs: [
-            "Le site VendsMoi (accessible à l'adresse https://vendsmoi.fr) est édité par [LEFEVRE Antony], entrepreneur individuel.",
-            "Adresse e-mail de contact : [lefevreanto57@gmail.com].",
+            "Le site VendsMoi (accessible à l'adresse https://vendsmoi.fr) est édité par LEFEVRE Antony, entrepreneur individuel.",
+            "Adresse e-mail de contact : contact@vendsmoi.fr.",
           ],
         },
         {
@@ -62,7 +62,7 @@ export default async function MentionsLegalesPage({
         {
           heading: "Signalement de contenu illicite",
           paragraphs: [
-            "Tout contenu manifestement illicite peut être signalé à l'adresse [À COMPLÉTER : e-mail de contact]. L'éditeur se réserve le droit de retirer sans préavis tout contenu contraire à la loi ou aux présentes conditions.",
+            "Tout contenu manifestement illicite peut être signalé à l'adresse contact@vendsmoi.fr. L'éditeur se réserve le droit de retirer sans préavis tout contenu contraire à la loi ou aux présentes conditions.",
           ],
         },
       ]}
