@@ -6,6 +6,8 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   searchParams: Record<string, string | undefined>;
+  /** Path (without locale prefix) the page links point to. Defaults to "/listings". */
+  basePath?: string;
   translations: {
     previous: string;
     next: string;
@@ -35,6 +37,7 @@ export function Pagination({
   currentPage,
   totalPages,
   searchParams,
+  basePath = "/listings",
   translations,
 }: PaginationProps) {
   const hrefFor = (page: number) => {
@@ -44,7 +47,7 @@ export function Pagination({
     }
     if (page > 1) params.set("page", String(page));
     const qs = params.toString();
-    return `/${locale}/listings${qs ? `?${qs}` : ""}`;
+    return `/${locale}${basePath}${qs ? `?${qs}` : ""}`;
   };
 
   const pages = buildPageList(currentPage, totalPages);

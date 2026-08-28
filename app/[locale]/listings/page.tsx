@@ -13,6 +13,7 @@ import { X } from "lucide-react";
 import { SITE_URL } from "@/lib/constants";
 import { routing } from "@/i18n/routing";
 import { getFavoriteIds } from "@/app/actions/favorites";
+import { getCategorySlug, getLocalizedCategoryName } from "@/lib/hubs";
 
 export async function generateMetadata({
   params,
@@ -77,6 +78,7 @@ export default async function ListingsPage({
   setRequestLocale(locale);
 
   const t = await getTranslations("Listings");
+  const tHub = await getTranslations("Hub");
   const format = await getFormatter();
   const supabase = await createClient();
 
@@ -281,6 +283,37 @@ export default async function ListingsPage({
             />
           )}
         </>
+      )}
+
+      {categories && categories.length > 0 && (
+        <section
+          aria-labelledby="browse-hubs"
+          className="mt-12 border-t border-border pt-8"
+        >
+          <h2
+            id="browse-hubs"
+            className="mb-3 text-sm font-semibold text-text-primary"
+          >
+            {tHub("indexHeading")}
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((c) => (
+              <Link
+                key={c.id}
+                href={`/${locale}/recherche/${getCategorySlug(c, locale)}`}
+                className="rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-text-secondary transition-colors hover:border-border-hover hover:text-primary-text"
+              >
+                {getLocalizedCategoryName(c, locale)}
+              </Link>
+            ))}
+            <Link
+              href={`/${locale}/recherche`}
+              className="rounded-full border border-primary bg-primary-light px-3 py-1.5 text-sm font-medium text-primary-text transition-colors hover:opacity-90"
+            >
+              {tHub("breadcrumbSearch")}
+            </Link>
+          </div>
+        </section>
       )}
     </div>
   );
